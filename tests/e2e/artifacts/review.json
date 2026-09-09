@@ -1,0 +1,39 @@
+{
+  "decision": "APPROVE",
+  "summary": "No blocking issues. You can download this draft.",
+  "critical": 0,
+  "important": 0,
+  "minor": 3,
+  "findings": [
+    {
+      "reviewer": "Fact Reviewer",
+      "severity": "MINOR",
+      "scene_id": null,
+      "timestamp": null,
+      "problem": "Uncertain fact",
+      "evidence": "Sunlight reaches Earth's atmosphere and is scattered in all directions by all the gases and particles in the air. Blue light is scattered more than the other colors because it trav",
+      "recommended_fix": "Soften language or cite the source",
+      "confidence": 0.7
+    },
+    {
+      "reviewer": "Fact Reviewer",
+      "severity": "MINOR",
+      "scene_id": null,
+      "timestamp": null,
+      "problem": "Uncertain fact",
+      "evidence": "Gases and particles in Earth's atmosphere scatter sunlight in all directions. Blue light is scattered more than other colors because it travels as shorter, smaller waves. This is w",
+      "recommended_fix": "Soften language or cite the source",
+      "confidence": 0.7
+    },
+    {
+      "reviewer": "Technical Reviewer",
+      "severity": "MINOR",
+      "scene_id": null,
+      "timestamp": null,
+      "problem": "Possible silent section longer than 3 seconds",
+      "evidence": "silencedetect",
+      "recommended_fix": "Repair the render",
+      "confidence": 0.7
+    }
+  ]
+}
