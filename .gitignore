@@ -1,0 +1,15 @@
+node_modules/
+dist/
+web/dist/
+data/
+!data/music/.gitkeep
+.env
+*.log
+.DS_Store
+coverage/
+.vite/
+*.mp4
+!example-project/**/*.mp4
+!data/fixtures/**/*.mp4
+uploads/
+.tsx-cache/
