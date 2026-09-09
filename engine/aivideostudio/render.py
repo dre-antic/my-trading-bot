@@ -138,23 +138,47 @@ def concat_videos(clips: list[Path], dest: Path) -> Path:
 
 def mux(video: Path, audio: Path, dest: Path, captions_ass: Path | None, size: tuple[int, int]) -> Path:
     dest.parent.mkdir(parents=True, exist_ok=True)
-    parts = ["[1:a]aresample=44100,apad[a]"]
-    vmap = "0:v"
+    picture = video
     if captions_ass and captions_ass.exists():
-        cap = str(captions_ass).replace("\\", "/").replace(":", r"\:").replace("'", r"\'")
-        parts.insert(0, f"[0:v]subtitles='{cap}'[v]")
-        vmap = "[v]"
+        burned = dest.parent / "video_captioned.mp4"
+        cap = str(captions_ass.resolve()).replace("\\", "/").replace(":", r"\:").replace("'", r"\'")
+        fonts = _font_dir()
+        vf = f"subtitles='{cap}'"
+        if fonts:
+            vf = f"subtitles='{cap}':fontsdir='{fonts}'"
+        burn = subprocess.run(
+            [
+                "ffmpeg",
+                "-y",
+                "-i",
+                str(video),
+                "-vf",
+                vf,
+                "-c:v",
+                "libx264",
+                "-pix_fmt",
+                "yuv420p",
+                "-an",
+                str(burned),
+            ],
+            capture_output=True,
+            text=True,
+        )
+        if burn.returncode == 0 and burned.exists() and burned.stat().st_size > 1000:
+            picture = burned
+        else:
+            log.info("caption burn-in skipped (%s)", (burn.stderr or "")[-300:])
     cmd = [
         "ffmpeg",
         "-y",
         "-i",
-        str(video),
+        str(picture),
         "-i",
         str(audio),
         "-filter_complex",
-        ";".join(parts),
+        "[1:a]aresample=44100,apad[a]",
         "-map",
-        vmap,
+        "0:v",
         "-map",
         "[a]",
         "-c:v",
@@ -168,35 +192,20 @@ def mux(video: Path, audio: Path, dest: Path, captions_ass: Path | None, size: t
         "-shortest",
         str(dest),
     ]
-    proc = subprocess.run(cmd, capture_output=True, text=True)
-    if proc.returncode != 0:
-        log.info("mux with captions failed (%s); muxing without burn-in", proc.stderr[-400:] if proc.stderr else "")
-        cmd = [
-            "ffmpeg",
-            "-y",
-            "-i",
-            str(video),
-            "-i",
-            str(audio),
-            "-filter_complex",
-            "[1:a]aresample=44100,apad[a]",
-            "-map",
-            "0:v",
-            "-map",
-            "[a]",
-            "-c:v",
-            "libx264",
-            "-pix_fmt",
-            "yuv420p",
-            "-c:a",
-            "aac",
-            "-b:a",
-            "192k",
-            "-shortest",
-            str(dest),
-        ]
-        subprocess.run(cmd, check=True, capture_output=True)
+    subprocess.run(cmd, check=True, capture_output=True)
     return dest
+
+
+def _font_dir() -> str:
+    for path in (
+        "/usr/share/fonts/truetype/dejavu",
+        "/usr/share/fonts/truetype/liberation",
+        "/System/Library/Fonts/Supplemental",
+        "/System/Library/Fonts",
+    ):
+        if Path(path).exists():
+            return path.replace(":", r"\:")
+    return ""
 
 
 def extract_frame(video: Path, dest: Path, timestamp: float = 1.0) -> Path:

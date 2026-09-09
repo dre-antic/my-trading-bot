@@ -11,7 +11,7 @@ from .util import parse_json_object
 
 log = setup_logging()
 
-USER_AGENT = "AIVideoStudio/1.0 (local video production; research bot; contact: local-app)"
+USER_AGENT = "AIVideoStudio/1.0 (https://github.com/dre-antic/my-trading-bot; ai-video-studio-research)"
 
 
 class ProviderError(RuntimeError):

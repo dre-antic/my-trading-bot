@@ -3,8 +3,6 @@
 from __future__ import annotations
 
 import json
-import os
-import time
 from pathlib import Path
 
 import pytest
@@ -12,7 +10,7 @@ import pytest
 from aivideostudio import db, orchestrator
 from aivideostudio.app import CreateProjectIn, create_project
 from aivideostudio.paths import project_dir
-from aivideostudio.render import technical_qc, probe
+from aivideostudio.render import technical_qc
 
 
 @pytest.fixture
@@ -64,8 +62,9 @@ def test_end_to_end_sky_video(isolated):
     # restart survival: project row still there
     row = db.query_one("SELECT * FROM projects WHERE id=?", (pid,))
     assert row["status"] == "complete"
-    # copy artifact for humans
-    artifact_dir = Path("/workspace/tests/e2e/artifacts")
+    # Copy a playable artifact next to this test file (repo checkout), not a
+    # hardcoded /workspace path — GitHub Actions cannot create that directory.
+    artifact_dir = Path(__file__).resolve().parent / "artifacts"
     artifact_dir.mkdir(parents=True, exist_ok=True)
     dest = artifact_dir / "sky-why-blue.mp4"
     dest.write_bytes(final.read_bytes())
