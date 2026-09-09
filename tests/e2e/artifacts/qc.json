@@ -1,0 +1,17 @@
+{
+  "ok": true,
+  "duration": 27.8,
+  "size_bytes": 5332219,
+  "findings": [
+    {
+      "severity": "MINOR",
+      "problem": "Possible silent section longer than 3 seconds",
+      "evidence": "silencedetect"
+    }
+  ],
+  "format": "mov,mp4,m4a,3gp,3g2,mj2",
+  "video_codec": "h264",
+  "audio_codec": "aac",
+  "width": 1920,
+  "height": 1080
+}

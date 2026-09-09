@@ -1,0 +1,28 @@
+#!/bin/bash
+DIR="$(cd "$(dirname "$0")" && pwd)"
+CONTENTS="$(cd "$DIR/.." && pwd)"
+APP="$(cd "$CONTENTS/.." && pwd)"
+REPO="$(cd "$APP/../../.." && pwd)"
+
+if [ -x "$CONTENTS/Resources/venv/bin/python" ]; then
+  export PYTHONPATH="$CONTENTS/Resources/engine"
+  export AIVS_RESOURCES="$CONTENTS/Resources/resources"
+  exec "$CONTENTS/Resources/venv/bin/python" -m aivideostudio.launch
+fi
+
+if [ -x "$REPO/.venv/bin/python" ]; then
+  export PYTHONPATH="$REPO/engine"
+  cd "$REPO" || exit 1
+  exec "$REPO/.venv/bin/python" -m aivideostudio.launch
+fi
+
+if command -v python3 >/dev/null 2>&1; then
+  export PYTHONPATH="$REPO/engine"
+  cd "$REPO" || exit 1
+  exec python3 -m aivideostudio.launch
+fi
+
+if command -v osascript >/dev/null 2>&1; then
+  osascript -e 'display dialog "AI Video Studio could not find Python. See INSTALLATION.md." buttons {"OK"} default button 1'
+fi
+exit 1

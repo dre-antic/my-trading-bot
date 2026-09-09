@@ -1,0 +1,124 @@
+{
+  "templates": [
+    {
+      "id": "yt-documentary",
+      "name": "YouTube Documentary",
+      "platform": "youtube",
+      "duration": "5-10",
+      "genre": "documentary",
+      "tone": "serious",
+      "visual_style": "cinematic",
+      "caption_style": "clean",
+      "research_depth": "deep",
+      "prompt_hint": "Create a documentary about…"
+    },
+    {
+      "id": "yt-explainer",
+      "name": "YouTube Explainer",
+      "platform": "youtube",
+      "duration": "1-3",
+      "genre": "explainer",
+      "tone": "friendly",
+      "visual_style": "motion-graphics",
+      "caption_style": "youtube",
+      "research_depth": "standard",
+      "prompt_hint": "Explain…"
+    },
+    {
+      "id": "yt-list",
+      "name": "YouTube List Video",
+      "platform": "youtube",
+      "duration": "5-10",
+      "genre": "list",
+      "tone": "energetic",
+      "visual_style": "motion-graphics",
+      "caption_style": "youtube",
+      "research_depth": "standard",
+      "prompt_hint": "Create a list video about…"
+    },
+    {
+      "id": "yt-story",
+      "name": "YouTube Story",
+      "platform": "youtube",
+      "duration": "5-10",
+      "genre": "storytelling",
+      "tone": "dramatic",
+      "visual_style": "cinematic",
+      "caption_style": "clean",
+      "research_depth": "light",
+      "prompt_hint": "Tell a story about…"
+    },
+    {
+      "id": "yt-educational",
+      "name": "YouTube Educational",
+      "platform": "youtube",
+      "duration": "5-10",
+      "genre": "educational",
+      "tone": "clear",
+      "visual_style": "diagram",
+      "caption_style": "clean",
+      "research_depth": "deep",
+      "prompt_hint": "Teach…"
+    },
+    {
+      "id": "yt-news",
+      "name": "YouTube News/Informational",
+      "platform": "youtube",
+      "duration": "1-3",
+      "genre": "news",
+      "tone": "neutral",
+      "visual_style": "clean",
+      "caption_style": "youtube",
+      "research_depth": "deep",
+      "prompt_hint": "Report on…"
+    },
+    {
+      "id": "tiktok-short",
+      "name": "TikTok Short",
+      "platform": "tiktok",
+      "duration": "short",
+      "genre": "entertainment",
+      "tone": "punchy",
+      "visual_style": "dynamic",
+      "caption_style": "tiktok",
+      "research_depth": "light",
+      "prompt_hint": "Make a short about…"
+    },
+    {
+      "id": "yt-short",
+      "name": "YouTube Short",
+      "platform": "youtube_shorts",
+      "duration": "short",
+      "genre": "explainer",
+      "tone": "punchy",
+      "visual_style": "dynamic",
+      "caption_style": "shorts",
+      "research_depth": "light",
+      "prompt_hint": "Make a Short about…"
+    },
+    {
+      "id": "cinematic-story",
+      "name": "Cinematic Story",
+      "platform": "youtube",
+      "duration": "5-10",
+      "genre": "cinematic",
+      "tone": "cinematic",
+      "visual_style": "cinematic",
+      "caption_style": "clean",
+      "research_depth": "none",
+      "prompt_hint": "A cinematic story about…"
+    },
+    {
+      "id": "cartoon-story",
+      "name": "Cartoon Story",
+      "platform": "youtube",
+      "duration": "1-3",
+      "genre": "cartoon",
+      "tone": "playful",
+      "visual_style": "cartoon",
+      "caption_style": "dynamic",
+      "research_depth": "none",
+      "prompt_hint": "A cartoon story about…"
+    }
+  ]
+}
