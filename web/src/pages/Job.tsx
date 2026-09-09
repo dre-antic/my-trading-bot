@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { api, mediaUrl } from "../api";
+import { api } from "../api";
 
 const STAGES = [
   "research",
@@ -124,8 +124,12 @@ export function JobPage() {
       {(m.renderPath || m.previewPath) && (
         <div className="card">
           <h3>VIDEO READY</h3>
-          <video controls src={mediaUrl(m.renderPath || m.previewPath)} />
-          {m.youtube?.thumbnailPath && <p><img alt="thumbnail" src={mediaUrl(m.youtube.thumbnailPath)} style={{ maxWidth: 360 }} /></p>}
+          <video controls src={`/api/jobs/${id}/media/video`} />
+          {m.youtube?.thumbnailPath && (
+            <p>
+              <img alt="thumbnail" src={`/api/jobs/${id}/media/thumb`} style={{ maxWidth: 360 }} />
+            </p>
+          )}
         </div>
       )}
 

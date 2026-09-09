@@ -1,0 +1,37 @@
+[
+  {
+    "act": "Hook",
+    "beats": [
+      "Open on a striking claim",
+      "Promise the journey"
+    ]
+  },
+  {
+    "act": "Origins",
+    "beats": [
+      "Place, people, conditions",
+      "The first innovations"
+    ]
+  },
+  {
+    "act": "Transmission",
+    "beats": [
+      "How the sound traveled",
+      "Who carried it"
+    ]
+  },
+  {
+    "act": "Impact",
+    "beats": [
+      "What changed globally",
+      "What remains"
+    ]
+  },
+  {
+    "act": "Close",
+    "beats": [
+      "Callback to the hook",
+      "A precise, sourced takeaway"
+    ]
+  }
+]

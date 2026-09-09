@@ -66,7 +66,7 @@ export function planScenes(m: ProjectManifest): ScenePlan[] {
     : splitNarration(script.finalNarration || script.draft, Math.max(3, Math.min(8, Math.round(m.request.durationSec / 8))));
   const transitions: ScenePlan["transition"][] = ["fade_black", "crossfade", "cut", "crossfade", "fade_black"];
   const motions: ScenePlan["cameraMotion"][] = ["zoom_in", "pan_left", "zoom_out", "pan_right", "static"];
-  const scenes: ScenePlan[] = hints.map((h, i) => {
+  let scenes: ScenePlan[] = hints.map((h, i) => {
     const narration = h.narration.trim();
     return {
       id: `sc_${String(i + 1).padStart(2, "0")}`,
@@ -83,6 +83,13 @@ export function planScenes(m: ProjectManifest): ScenePlan[] {
       claimIds: m.research?.claims.slice(i * 2, i * 2 + 2).map((c) => c.id) ?? [],
     };
   });
+  const target = m.request.durationSec;
+  while (scenes.length > 2) {
+    const total = scenes.reduce((a, s) => a + s.estimatedDurationSec, 0);
+    if (total <= target * 1.35) break;
+    scenes.pop();
+  }
+  scenes = scenes.map((s, i) => ({ ...s, id: `sc_${String(i + 1).padStart(2, "0")}`, index: i }));
   const dir = path.join(projectDir(m.projectId), "storyboard");
   fs.mkdirSync(dir, { recursive: true });
   fs.writeFileSync(path.join(dir, "scenes.json"), JSON.stringify(scenes, null, 2));

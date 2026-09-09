@@ -283,11 +283,7 @@ export function heuristicComplete(user: string, system: string): string {
 
   if (task.includes("youtube package") || task.includes("thumbnailconcepts")) {
     return JSON.stringify({
-      titles: [
-        `${topic}: The Story They Don't Teach`,
-        `How ${topic} Changed Everything`,
-        `${topic} — A Visual Documentary`,
-      ],
+      titles: titleOptions(topic),
       description: buildDescription(topic, sources),
       tags: tagify(topic),
       thumbnailConcepts: ["Bold title over archival-style still", "Single subject + high contrast", "Map or cultural object close-up"],
@@ -370,6 +366,12 @@ function buildScenes(topic: string, facts: string[], sources: { id: string }[]) 
 function buildDescription(topic: string, sources: { title: string }[]): string {
   const cites = sources.map((s, i) => `${i + 1}. ${s.title}`).join("\n");
   return `${topic}\n\nA documentary produced with Aether Studio. Claims are tied to cited sources. Unverified statements are not presented as fact.\n\nSources:\n${cites || "See project research package."}\n\nChapters generated from the storyboard.`;
+}
+
+function titleOptions(topic: string): string[] {
+  const clean = topic.replace(/\.$/, "");
+  const second = /^how\b/i.test(clean) ? `${clean} — and what happened next` : `How ${clean} Changed Everything`;
+  return [`${clean}: The Story They Don't Teach`, second, `${clean} — A Visual Documentary`];
 }
 
 function tagify(topic: string): string[] {

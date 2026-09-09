@@ -1,0 +1,48 @@
+{
+  "titles": [
+    "How Jamaican music influenced the world: The Story They Don't Teach",
+    "How Jamaican music influenced the world — and what happened next",
+    "How Jamaican music influenced the world — A Visual Documentary"
+  ],
+  "description": "How Jamaican music influenced the world\n\nA documentary produced with Aether Studio. Claims are tied to cited sources. Unverified statements are not presented as fact.\n\nSources:\n1. : Music of Jamaica https://en.wikipedia.org/wiki/Music_of_Ja\n\nChapters generated from the storyboard.",
+  "tags": [
+    "how",
+    "jamaican",
+    "music",
+    "influenced",
+    "the",
+    "world",
+    "documentary",
+    "history",
+    "explained",
+    "faceless"
+  ],
+  "thumbnailConcepts": [
+    "Bold title over archival-style still",
+    "Single subject + high contrast",
+    "Map or cultural object close-up"
+  ],
+  "socialDescription": "A sourced documentary short on How Jamaican music influenced the world.",
+  "shortFormSuggestions": [
+    "Hook + one surprising fact + payoff in 45s"
+  ],
+  "chapters": [
+    {
+      "time": "0:00",
+      "title": "sc_01"
+    },
+    {
+      "time": "0:12",
+      "title": "sc_02"
+    },
+    {
+      "time": "0:15",
+      "title": "sc_03"
+    },
+    {
+      "time": "0:23",
+      "title": "sc_04"
+    }
+  ],
+  "thumbnailPath": "example-project/thumbnail/thumb.jpg"
+}

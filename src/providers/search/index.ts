@@ -15,6 +15,16 @@ export interface SearchHit {
 
 const UA = { "user-agent": config.userAgent, accept: "application/json" };
 
+function relevantToTopic(title: string, topic: string): boolean {
+  const stop = new Set(["that", "this", "with", "from", "under", "influence", "about"]);
+  const tWords = topic
+    .toLowerCase()
+    .split(/[^a-z0-9]+/)
+    .filter((w) => w.length > 3 && !stop.has(w));
+  const hay = title.toLowerCase();
+  return tWords.some((w) => hay.includes(w));
+}
+
 function rankUrl(url: string): 1 | 2 | 3 {
   const u = url.toLowerCase();
   if (
@@ -149,8 +159,9 @@ export async function searchTopic(topic: string, questions: string[]): Promise<S
   for (const q of queries) {
     try {
       const hits = await wikipediaSearch(q);
-      for (const h of hits.slice(0, 3)) {
+      for (const h of hits.slice(0, 5)) {
         if (seen.has(h.url)) continue;
+        if (!relevantToTopic(h.title, topic) && !relevantToTopic(h.snippet, topic)) continue;
         seen.add(h.url);
         const extract = await wikipediaExtract(h.title).catch(() => ({ extract: h.snippet, url: h.url, title: h.title }));
         sources.push({
@@ -170,6 +181,7 @@ export async function searchTopic(topic: string, questions: string[]): Promise<S
     try {
       for (const h of await wikidataSearch(q)) {
         if (seen.has(h.url)) continue;
+        if (!relevantToTopic(h.title, topic) && !relevantToTopic(h.snippet, topic)) continue;
         seen.add(h.url);
         sources.push({
           id: `src_${sources.length + 1}`,

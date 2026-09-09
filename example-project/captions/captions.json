@@ -1,0 +1,449 @@
+[
+  {
+    "startSec": 0,
+    "endSec": 3.4816288137931037,
+    "text": "The music of Jamaica includes Jamaican folk music",
+    "words": [
+      {
+        "word": "The",
+        "startSec": 0,
+        "endSec": 0.2486877724137931
+      },
+      {
+        "word": "music",
+        "startSec": 0.2486877724137931,
+        "endSec": 0.6631673931034483
+      },
+      {
+        "word": "of",
+        "startSec": 0.6631673931034483,
+        "endSec": 0.8289592413793103
+      },
+      {
+        "word": "Jamaica",
+        "startSec": 0.8289592413793103,
+        "endSec": 1.4092307103448276
+      },
+      {
+        "word": "includes",
+        "startSec": 1.4092307103448276,
+        "endSec": 2.072398103448276
+      },
+      {
+        "word": "Jamaican",
+        "startSec": 2.072398103448276,
+        "endSec": 2.7355654965517244
+      },
+      {
+        "word": "folk",
+        "startSec": 2.7355654965517244,
+        "endSec": 3.0671491931034485
+      },
+      {
+        "word": "music",
+        "startSec": 3.0671491931034485,
+        "endSec": 3.4816288137931037
+      }
+    ]
+  },
+  {
+    "startSec": 3.4816288137931037,
+    "endSec": 6.548778006896552,
+    "text": "and many popular genres, such as mento, ska,",
+    "words": [
+      {
+        "word": "and",
+        "startSec": 3.4816288137931037,
+        "endSec": 3.730316586206897
+      },
+      {
+        "word": "many",
+        "startSec": 3.730316586206897,
+        "endSec": 4.0619002827586215
+      },
+      {
+        "word": "popular",
+        "startSec": 4.0619002827586215,
+        "endSec": 4.642171751724138
+      },
+      {
+        "word": "genres,",
+        "startSec": 4.642171751724138,
+        "endSec": 5.222443220689655
+      },
+      {
+        "word": "such",
+        "startSec": 5.222443220689655,
+        "endSec": 5.554026917241379
+      },
+      {
+        "word": "as",
+        "startSec": 5.554026917241379,
+        "endSec": 5.719818765517242
+      },
+      {
+        "word": "mento,",
+        "startSec": 5.719818765517242,
+        "endSec": 6.217194310344828
+      },
+      {
+        "word": "ska,",
+        "startSec": 6.217194310344828,
+        "endSec": 6.548778006896552
+      }
+    ]
+  },
+  {
+    "startSec": 6.548778006896552,
+    "endSec": 10.859366062068965,
+    "text": "rocksteady, reggae, dub music, dancehall, reggae fusion and",
+    "words": [
+      {
+        "word": "rocksteady,",
+        "startSec": 6.548778006896552,
+        "endSec": 7.460633172413793
+      },
+      {
+        "word": "reggae,",
+        "startSec": 7.460633172413793,
+        "endSec": 8.04090464137931
+      },
+      {
+        "word": "dub",
+        "startSec": 8.04090464137931,
+        "endSec": 8.289592413793104
+      },
+      {
+        "word": "music,",
+        "startSec": 8.289592413793104,
+        "endSec": 8.78696795862069
+      },
+      {
+        "word": "dancehall,",
+        "startSec": 8.78696795862069,
+        "endSec": 9.6159272
+      },
+      {
+        "word": "reggae",
+        "startSec": 9.6159272,
+        "endSec": 10.113302744827585
+      },
+      {
+        "word": "fusion",
+        "startSec": 10.113302744827585,
+        "endSec": 10.610678289655171
+      },
+      {
+        "word": "and",
+        "startSec": 10.610678289655171,
+        "endSec": 10.859366062068965
+      }
+    ]
+  },
+  {
+    "startSec": 10.859366062068965,
+    "endSec": 12.019908999999998,
+    "text": "related styles.",
+    "words": [
+      {
+        "word": "related",
+        "startSec": 10.859366062068965,
+        "endSec": 11.439637531034482
+      },
+      {
+        "word": "styles.",
+        "startSec": 11.439637531034482,
+        "endSec": 12.019908999999998
+      }
+    ]
+  },
+  {
+    "startSec": 12.019909,
+    "endSec": 14.573353627450981,
+    "text": "Reggae is especially popular through the fame of",
+    "words": [
+      {
+        "word": "Reggae",
+        "startSec": 12.019909,
+        "endSec": 12.393583823529411
+      },
+      {
+        "word": "is",
+        "startSec": 12.393583823529411,
+        "endSec": 12.518142098039215
+      },
+      {
+        "word": "especially",
+        "startSec": 12.518142098039215,
+        "endSec": 13.140933470588235
+      },
+      {
+        "word": "popular",
+        "startSec": 13.140933470588235,
+        "endSec": 13.57688743137255
+      },
+      {
+        "word": "through",
+        "startSec": 13.57688743137255,
+        "endSec": 14.012841392156863
+      },
+      {
+        "word": "the",
+        "startSec": 14.012841392156863,
+        "endSec": 14.199678803921568
+      },
+      {
+        "word": "fame",
+        "startSec": 14.199678803921568,
+        "endSec": 14.448795352941177
+      },
+      {
+        "word": "of",
+        "startSec": 14.448795352941177,
+        "endSec": 14.573353627450981
+      }
+    ]
+  },
+  {
+    "startSec": 14.573353627450981,
+    "endSec": 15.196145000000001,
+    "text": "Bob Marley.",
+    "words": [
+      {
+        "word": "Bob",
+        "startSec": 14.573353627450981,
+        "endSec": 14.760191039215687
+      },
+      {
+        "word": "Marley.",
+        "startSec": 14.760191039215687,
+        "endSec": 15.196145000000001
+      }
+    ]
+  },
+  {
+    "startSec": 15.196145,
+    "endSec": 18.22218549180328,
+    "text": "Jamaican music's influence on music styles in other",
+    "words": [
+      {
+        "word": "Jamaican",
+        "startSec": 15.196145,
+        "endSec": 15.74633418032787
+      },
+      {
+        "word": "music's",
+        "startSec": 15.74633418032787,
+        "endSec": 16.227749713114754
+      },
+      {
+        "word": "influence",
+        "startSec": 16.227749713114754,
+        "endSec": 16.846712540983606
+      },
+      {
+        "word": "on",
+        "startSec": 16.846712540983606,
+        "endSec": 16.984259836065572
+      },
+      {
+        "word": "music",
+        "startSec": 16.984259836065572,
+        "endSec": 17.328128073770493
+      },
+      {
+        "word": "styles",
+        "startSec": 17.328128073770493,
+        "endSec": 17.740769959016394
+      },
+      {
+        "word": "in",
+        "startSec": 17.740769959016394,
+        "endSec": 17.87831725409836
+      },
+      {
+        "word": "other",
+        "startSec": 17.87831725409836,
+        "endSec": 18.22218549180328
+      }
+    ]
+  },
+  {
+    "startSec": 18.22218549180328,
+    "endSec": 21.935962459016395,
+    "text": "countries includes the practice of (Jamaican) toasting, which",
+    "words": [
+      {
+        "word": "countries",
+        "startSec": 18.22218549180328,
+        "endSec": 18.84114831967213
+      },
+      {
+        "word": "includes",
+        "startSec": 18.84114831967213,
+        "endSec": 19.3913375
+      },
+      {
+        "word": "the",
+        "startSec": 19.3913375,
+        "endSec": 19.59765844262295
+      },
+      {
+        "word": "practice",
+        "startSec": 19.59765844262295,
+        "endSec": 20.14784762295082
+      },
+      {
+        "word": "of",
+        "startSec": 20.14784762295082,
+        "endSec": 20.285394918032786
+      },
+      {
+        "word": "(Jamaican)",
+        "startSec": 20.285394918032786,
+        "endSec": 20.97313139344262
+      },
+      {
+        "word": "toasting,",
+        "startSec": 20.97313139344262,
+        "endSec": 21.592094221311477
+      },
+      {
+        "word": "which",
+        "startSec": 21.592094221311477,
+        "endSec": 21.935962459016395
+      }
+    ]
+  },
+  {
+    "startSec": 21.935962459016395,
+    "endSec": 23.58653,
+    "text": "was brought to New York City.",
+    "words": [
+      {
+        "word": "was",
+        "startSec": 21.935962459016395,
+        "endSec": 22.142283401639343
+      },
+      {
+        "word": "brought",
+        "startSec": 22.142283401639343,
+        "endSec": 22.62369893442623
+      },
+      {
+        "word": "to",
+        "startSec": 22.62369893442623,
+        "endSec": 22.761246229508195
+      },
+      {
+        "word": "New",
+        "startSec": 22.761246229508195,
+        "endSec": 22.967567172131147
+      },
+      {
+        "word": "York",
+        "startSec": 22.967567172131147,
+        "endSec": 23.242661762295082
+      },
+      {
+        "word": "City.",
+        "startSec": 23.242661762295082,
+        "endSec": 23.58653
+      }
+    ]
+  },
+  {
+    "startSec": 23.58653,
+    "endSec": 26.6592285,
+    "text": "British genres such as lovers rock, jungle music",
+    "words": [
+      {
+        "word": "British",
+        "startSec": 23.58653,
+        "endSec": 24.111137060975608
+      },
+      {
+        "word": "genres",
+        "startSec": 24.111137060975608,
+        "endSec": 24.56080025609756
+      },
+      {
+        "word": "such",
+        "startSec": 24.56080025609756,
+        "endSec": 24.860575719512195
+      },
+      {
+        "word": "as",
+        "startSec": 24.860575719512195,
+        "endSec": 25.01046345121951
+      },
+      {
+        "word": "lovers",
+        "startSec": 25.01046345121951,
+        "endSec": 25.460126646341465
+      },
+      {
+        "word": "rock,",
+        "startSec": 25.460126646341465,
+        "endSec": 25.834845975609756
+      },
+      {
+        "word": "jungle",
+        "startSec": 25.834845975609756,
+        "endSec": 26.284509170731706
+      },
+      {
+        "word": "music",
+        "startSec": 26.284509170731706,
+        "endSec": 26.6592285
+      }
+    ]
+  },
+  {
+    "startSec": 26.6592285,
+    "endSec": 29.731927,
+    "text": "and grime are also influenced by Jamaican music.",
+    "words": [
+      {
+        "word": "and",
+        "startSec": 26.6592285,
+        "endSec": 26.884060097560976
+      },
+      {
+        "word": "grime",
+        "startSec": 26.884060097560976,
+        "endSec": 27.258779426829268
+      },
+      {
+        "word": "are",
+        "startSec": 27.258779426829268,
+        "endSec": 27.483611024390243
+      },
+      {
+        "word": "also",
+        "startSec": 27.483611024390243,
+        "endSec": 27.78338648780488
+      },
+      {
+        "word": "influenced",
+        "startSec": 27.78338648780488,
+        "endSec": 28.532825146341466
+      },
+      {
+        "word": "by",
+        "startSec": 28.532825146341466,
+        "endSec": 28.682712878048783
+      },
+      {
+        "word": "Jamaican",
+        "startSec": 28.682712878048783,
+        "endSec": 29.28226380487805
+      },
+      {
+        "word": "music.",
+        "startSec": 29.28226380487805,
+        "endSec": 29.731927
+      }
+    ]
+  }
+]

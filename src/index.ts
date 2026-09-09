@@ -195,12 +195,37 @@ export async function buildServer() {
     req.raw.on("close", un);
   });
 
+  app.get("/api/jobs/:id/media/:kind", async (req, reply) => {
+    const { id, kind } = req.params as { id: string; kind: string };
+    const j = getJob(id);
+    if (!j) return reply.code(404).send({ error: "not found" });
+    const file =
+      kind === "thumb"
+        ? j.manifest.youtube?.thumbnailPath
+        : kind === "preview"
+          ? j.manifest.previewPath
+          : j.manifest.renderPath || j.manifest.previewPath;
+    if (!file || !fs.existsSync(file)) return reply.code(404).send({ error: "not found" });
+    const allowed =
+      path.resolve(file).startsWith(path.resolve(config.projectsDir)) ||
+      path.resolve(file).startsWith(path.resolve(config.dataDir));
+    if (!allowed) return reply.code(403).send({ error: "forbidden" });
+    const ext = path.extname(file).toLowerCase();
+    const type = ext === ".mp4" ? "video/mp4" : ext === ".jpg" || ext === ".jpeg" ? "image/jpeg" : "application/octet-stream";
+    return reply.type(type).send(fs.createReadStream(file));
+  });
+
   app.get("/media/*", async (req, reply) => {
-    const rel = decodeURIComponent((req.params as { "*": string })["*"]);
-    const full = path.resolve(rel.startsWith("projects") || rel.startsWith("data") ? rel : path.join(config.projectsDir, rel));
+    const rel = decodeURIComponent((req.params as { "*": string })["*"] ?? "");
+    const candidate = path.isAbsolute("/" + rel.replace(/^\/+/, "")) && rel.includes("projects")
+      ? path.resolve("/" + rel.replace(/^\/+/, ""))
+      : path.resolve(rel.startsWith("/") ? rel : path.join(config.projectsDir, rel));
+    const full = path.resolve(candidate);
     const allowed = full.startsWith(path.resolve(config.projectsDir)) || full.startsWith(path.resolve(config.dataDir));
     if (!allowed || !fs.existsSync(full)) return reply.code(404).send({ error: "not found" });
-    return reply.send(fs.createReadStream(full));
+    const ext = path.extname(full).toLowerCase();
+    const type = ext === ".mp4" ? "video/mp4" : ext === ".jpg" || ext === ".jpeg" ? "image/jpeg" : "application/octet-stream";
+    return reply.type(type).send(fs.createReadStream(full));
   });
 
   app.setNotFoundHandler((req, reply) => {

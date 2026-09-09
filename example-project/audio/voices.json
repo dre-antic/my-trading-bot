@@ -1,0 +1,30 @@
+[
+  {
+    "sceneId": "sc_01",
+    "path": "example-project/audio/sc_01.wav",
+    "durationSec": 12.019909,
+    "voice": "en-us+m3",
+    "provider": "espeak"
+  },
+  {
+    "sceneId": "sc_02",
+    "path": "example-project/audio/sc_02.wav",
+    "durationSec": 3.176236,
+    "voice": "en-us+m3",
+    "provider": "espeak"
+  },
+  {
+    "sceneId": "sc_03",
+    "path": "example-project/audio/sc_03.wav",
+    "durationSec": 8.390385,
+    "voice": "en-us+m3",
+    "provider": "espeak"
+  },
+  {
+    "sceneId": "sc_04",
+    "path": "example-project/audio/sc_04.wav",
+    "durationSec": 6.145397,
+    "voice": "en-us+m3",
+    "provider": "espeak"
+  }
+]
