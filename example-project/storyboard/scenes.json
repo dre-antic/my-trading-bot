@@ -1,0 +1,103 @@
+[
+  {
+    "id": "sc_01",
+    "index": 0,
+    "narration": "The music of Jamaica includes Jamaican folk music and many popular genres, such as mento, ska, rocksteady, reggae, dub music, dancehall, reggae fusion and related styles.",
+    "estimatedDurationSec": 10.4,
+    "visualObjective": "Cinematic establishing imagery matching the topic",
+    "visualKeywords": [
+      "jamaican",
+      "music",
+      "influenced",
+      "world",
+      "cinematic",
+      "establishing",
+      "imagery",
+      "matching"
+    ],
+    "preferredMediaType": "stock_video",
+    "transition": "fade_black",
+    "cameraMotion": "zoom_in",
+    "textOverlay": "How Jamaican music influenced the world",
+    "musicMood": "documentary",
+    "claimIds": [
+      "c1",
+      "c2"
+    ]
+  },
+  {
+    "id": "sc_02",
+    "index": 1,
+    "narration": "Reggae is especially popular through the fame of Bob Marley.",
+    "estimatedDurationSec": 4,
+    "visualObjective": "Relevant archival or cultural visuals; no random stock",
+    "visualKeywords": [
+      "jamaican",
+      "music",
+      "influenced",
+      "world",
+      "relevant",
+      "archival",
+      "cultural",
+      "visuals"
+    ],
+    "preferredMediaType": "stock_image",
+    "transition": "crossfade",
+    "cameraMotion": "pan_left",
+    "musicMood": "documentary",
+    "claimIds": [
+      "c3",
+      "c4"
+    ]
+  },
+  {
+    "id": "sc_03",
+    "index": 2,
+    "narration": "Jamaican music's influence on music styles in other countries includes the practice of (Jamaican) toasting, which was brought to New York City.",
+    "estimatedDurationSec": 8.8,
+    "visualObjective": "Relevant archival or cultural visuals; no random stock",
+    "visualKeywords": [
+      "jamaican",
+      "music",
+      "influenced",
+      "world",
+      "relevant",
+      "archival",
+      "cultural",
+      "visuals"
+    ],
+    "preferredMediaType": "stock_video",
+    "transition": "cut",
+    "cameraMotion": "zoom_out",
+    "musicMood": "documentary",
+    "claimIds": [
+      "c5",
+      "c6"
+    ]
+  },
+  {
+    "id": "sc_04",
+    "index": 3,
+    "narration": "British genres such as lovers rock, jungle music and grime are also influenced by Jamaican music.",
+    "estimatedDurationSec": 6.4,
+    "visualObjective": "Relevant archival or cultural visuals; no random stock",
+    "visualKeywords": [
+      "jamaican",
+      "music",
+      "influenced",
+      "world",
+      "relevant",
+      "archival",
+      "cultural",
+      "visuals"
+    ],
+    "preferredMediaType": "stock_image",
+    "transition": "crossfade",
+    "cameraMotion": "pan_right",
+    "musicMood": "documentary",
+    "claimIds": [
+      "c7",
+      "c8"
+    ]
+  }
+]

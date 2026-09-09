@@ -1,0 +1,92 @@
+{
+  "title": "How Jamaican music influenced the world",
+  "concept": "A sourced, faceless documentary that explains How Jamaican music influenced the world with a clear causal chain and no unverified claims.",
+  "hook": "The music of Jamaica includes Jamaican folk music and many popular genres, such as mento, ska, rocksteady, reggae, dub music, dancehall, reggae fusion and related styles.",
+  "outline": [
+    {
+      "act": "Hook",
+      "beats": [
+        "Open on a striking claim",
+        "Promise the journey"
+      ]
+    },
+    {
+      "act": "Origins",
+      "beats": [
+        "Place, people, conditions",
+        "The first innovations"
+      ]
+    },
+    {
+      "act": "Transmission",
+      "beats": [
+        "How the sound traveled",
+        "Who carried it"
+      ]
+    },
+    {
+      "act": "Impact",
+      "beats": [
+        "What changed globally",
+        "What remains"
+      ]
+    },
+    {
+      "act": "Close",
+      "beats": [
+        "Callback to the hook",
+        "A precise, sourced takeaway"
+      ]
+    }
+  ],
+  "draft": "The music of Jamaica includes Jamaican folk music and many popular genres, such as mento, ska, rocksteady, reggae, dub music, dancehall, reggae fusion and related styles. Reggae is especially popular through the fame of Bob Marley. Jamaican music's influence on music styles in other countries includes the practice of (Jamaican) toasting, which was brought to New York City. British genres such as lovers rock, jungle music and grime are also influenced by Jamaican music. Dub is a musical style that grew out of reggae in the late 1960s and early 1970s.",
+  "finalNarration": "The music of Jamaica includes Jamaican folk music and many popular genres, such as mento, ska, rocksteady, reggae, dub music, dancehall, reggae fusion and related styles. Reggae is especially popular through the fame of Bob Marley. Jamaican music's influence on music styles in other countries includes the practice of (Jamaican) toasting, which was brought to New York City. British genres such as lovers rock, jungle music and grime are also influenced by Jamaican music. Dub is a musical style that grew out of reggae in the late 1960s and early 1970s.",
+  "scenes": [
+    {
+      "heading": "Hook",
+      "narration": "The music of Jamaica includes Jamaican folk music and many popular genres, such as mento, ska, rocksteady, reggae, dub music, dancehall, reggae fusion and related styles.",
+      "visualObjective": "Cinematic establishing imagery matching the topic",
+      "sourceIds": [
+        "s1",
+        "s2"
+      ]
+    },
+    {
+      "heading": "Context",
+      "narration": "Reggae is especially popular through the fame of Bob Marley.",
+      "visualObjective": "Relevant archival or cultural visuals; no random stock",
+      "sourceIds": [
+        "s1",
+        "s2"
+      ]
+    },
+    {
+      "heading": "Turning point",
+      "narration": "Jamaican music's influence on music styles in other countries includes the practice of (Jamaican) toasting, which was brought to New York City.",
+      "visualObjective": "Relevant archival or cultural visuals; no random stock",
+      "sourceIds": [
+        "s1",
+        "s2"
+      ]
+    },
+    {
+      "heading": "Global reach",
+      "narration": "British genres such as lovers rock, jungle music and grime are also influenced by Jamaican music.",
+      "visualObjective": "Relevant archival or cultural visuals; no random stock",
+      "sourceIds": [
+        "s1",
+        "s2"
+      ]
+    },
+    {
+      "heading": "Close",
+      "narration": "Dub is a musical style that grew out of reggae in the late 1960s and early 1970s.",
+      "visualObjective": "Relevant archival or cultural visuals; no random stock",
+      "sourceIds": [
+        "s1",
+        "s2"
+      ]
+    }
+  ],
+  "wordCount": 91
+}

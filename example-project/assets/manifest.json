@@ -1,0 +1,58 @@
+[
+  {
+    "id": "sc_01_asset",
+    "sceneId": "sc_01",
+    "kind": "stock_image",
+    "path": "example-project/assets/sc_01.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:The_Heart_Truth_celebrity_fashion_show_-_Jully_Black_wears_a_red_gown_by_Lauren_Bagliore_-_Heart_and_Stroke_Foundation_-_Red_Dress_-_Thursday_February_8,_2012_%E2%80%93_Creative_Commons_(6820087780).jpg",
+    "title": "File:The Heart Truth celebrity fashion show - Jully Black wears a red gown by Lauren Bagliore - Heart and Stroke Foundation - Red Dress - Thursday February 8, 2012 – Creative Commons (6820087780).jpg",
+    "creator": "Jason Hargrove from New York",
+    "license": "CC BY 2.0",
+    "attribution": "Jason Hargrove from New York — CC BY 2.0 — Wikimedia Commons",
+    "width": 3935,
+    "height": 2618,
+    "relevance": 74.50555979967744
+  },
+  {
+    "id": "sc_02_asset",
+    "sceneId": "sc_02",
+    "kind": "stock_image",
+    "path": "example-project/assets/sc_02.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Jully_Black_wearing_Lauren_Bagliore_-_Heart_and_Stroke_Foundation_-_The_Heart_Truth_celebrity_fashion_show_-_Red_Dress_-_Red_Gown_-_Thursday_February_8,_2012_-_Creative_Commons_-a.jpg",
+    "title": "File:Jully Black wearing Lauren Bagliore - Heart and Stroke Foundation - The Heart Truth celebrity fashion show - Red Dress - Red Gown - Thursday February 8, 2012 - Creative Commons -a.jpg",
+    "creator": "Jason Hargrove from Toronto, Canada",
+    "license": "CC BY 2.0",
+    "attribution": "Jason Hargrove from Toronto, Canada — CC BY 2.0 — Wikimedia Commons",
+    "width": 1280,
+    "height": 852,
+    "relevance": 74.49139280125196
+  },
+  {
+    "id": "sc_03_asset",
+    "sceneId": "sc_03",
+    "kind": "stock_image",
+    "path": "example-project/assets/sc_03.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Jully_Black_wearing_Lauren_Bagliore_-_Heart_and_Stroke_Foundation_-_The_Heart_Truth_celebrity_fashion_show_-_Red_Dress_-_Red_Gown_-_Thursday_February_8,_2012_-_Creative_Commons_-b.jpg",
+    "title": "File:Jully Black wearing Lauren Bagliore - Heart and Stroke Foundation - The Heart Truth celebrity fashion show - Red Dress - Red Gown - Thursday February 8, 2012 - Creative Commons -b.jpg",
+    "creator": "Jason Hargrove from Toronto, Canada",
+    "license": "CC BY 2.0",
+    "attribution": "Jason Hargrove from Toronto, Canada — CC BY 2.0 — Wikimedia Commons",
+    "width": 1280,
+    "height": 852,
+    "relevance": 74.49139280125196
+  },
+  {
+    "id": "sc_04_asset",
+    "sceneId": "sc_04",
+    "kind": "public_domain",
+    "path": "example-project/assets/sc_04.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Kingman.jpg",
+    "title": "File:Kingman.jpg",
+    "creator": "KingHopeton",
+    "license": "Public domain",
+    "attribution": "KingHopeton — Public domain — Wikimedia Commons",
+    "width": 2447,
+    "height": 2248,
+    "relevance": 70.2149070778964
+  }
+]

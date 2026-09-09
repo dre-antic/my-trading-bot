@@ -1,0 +1,22 @@
+[
+  {
+    "id": "ffmpeg",
+    "license": "LGPL 2.1+",
+    "flagged": false
+  },
+  {
+    "id": "remotion",
+    "license": "Remotion License (not default renderer)",
+    "flagged": true
+  },
+  {
+    "id": "espeak-ng",
+    "license": "GPL-3.0",
+    "flagged": false
+  },
+  {
+    "id": "kokoro",
+    "license": "Apache-2.0",
+    "flagged": false
+  }
+]
