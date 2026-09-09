@@ -52,6 +52,10 @@ Expected. Set `ALLOW_PAID_PROVIDERS=true` and a budget in `.env` only if you int
 
 Not used. Do not `npm install remotion` unless you have read `docs/LICENSES.md` and have RAM to spare.
 
+## GitHub Actions: apt-get exit 100
+
+Hosted Ubuntu runners include Google Chrome’s apt repo. If that repo’s `Packages.gz` hash does not match, `apt-get update` fails before ffmpeg/espeak-ng install. The workflow removes that source list first. If CI still fails on apt, check the job log for a remaining third-party repo, not the tests themselves.
+
 ## Ports
 
 - `8787` API  
