@@ -1,44 +1,59 @@
 # Troubleshooting
 
+## I was using Terminal before (`python -m jarvis.launch`)
+
+That only starts the local server. It is not the Dock app. Run `./scripts/install-jarvis-macos.sh` once, then open **JARVIS** from Applications as in INSTALLATION.md.
+
+## I pressed Stop now and nothing happens
+
+Press **Resume** in the top bar, or type `continue`. Stop and Pause block new work on purpose. That is not a crash.
+
 ## The window does not open
 
-The engine may still be running. Open http://127.0.0.1:8745 in a browser. On Linux, a native window needs GTK webview; the browser UI is fully usable.
+Wait a few seconds. Then try Chrome or Safari: http://127.0.0.1:8787
 
-## “The video editor (FFmpeg) is missing”
+On this Intel Mac, JARVIS needs **Python 3.11** at `/usr/local/bin/python3.11`.
 
-Install FFmpeg, then reopen the app.
+```bash
+brew install python@3.11
+cd ~/Projects/jarvis-app
+./scripts/install-jarvis-macos.sh
+```
 
-- Mac: `brew install ffmpeg` (or use the setup wizard when it can)
-- Ubuntu: `sudo apt-get install ffmpeg`
+Do **not** use Homebrew Python 3.14. It can hang while compiling `cryptography` if extra packages are installed. JARVIS itself does not need that package. A leftover 3.14 `.venv` is also a problem — the installer replaces it.
 
-## The voice sounds robotic
+Check `~/Library/Logs/JARVIS.log` if double-click does nothing. A dialog should appear if JARVIS cannot find Python 3.11 or the project folder.
 
-That is the built-in eSpeak NG engine, which always works offline. For a more natural voice, install Piper or Kokoro later, or add a cloud TTS key in Settings. The studio will pick them up automatically.
+Dock double-click has **not** been verified from the Linux builder. If the icon bounces and quits, the log is the next thing to open.
 
-## Research looks thin
+## macOS says the app is damaged or unidentified
 
-Wikipedia may be blocked on your network. The script still runs, but it will mark facts as uncertain instead of inventing them. Check System status and your network.
+This build is not signed. Right-click **JARVIS** → **Open**. You only do this once.
 
-## A job failed with HTTP 502
+If that still fails, in Terminal:
 
-The friendly message is: “A generation service is temporarily unavailable. The system will retry automatically.” Open the task, click **Retry**. Local fallbacks run when the cloud is down.
+```bash
+xattr -cr ~/Applications/JARVIS.app
+```
 
-## Not enough disk or memory
+Then right-click Open again.
 
-The studio classifies your Mac as LOW / MEDIUM / HIGH. Heavy AI video should be sent to a remote GPU. Motion graphics, voice, captions, and editing stay local.
+## Cursor never starts
 
-## I closed the app in the middle of a render
+Expected until you install Cursor CLI and run `agent login`. Local building still works.
 
-Reopen the project. Finished stages are kept. The job continues from the last checkpoint.
+## It asked me about money
 
-## Commercial mode blocked a model
+Good. Automatic spending is $0.
 
-Open **Licenses & models**. If you understand the restriction and still want that model for a personal experiment, switch the project to Personal, or set an explicit override after reading the license. The studio will not do this silently.
+## Cloud / internet is down
 
-## API keys
+That is fine for local work: Projects files, missions, memory, Stop/Pause, System Doctor, and the local task-list builder. Research that needs the public web will say it could not reach sources. Paid cloud models stay off.
 
-Never put keys in git. Use Settings. If a key was pasted into a prompt by mistake, rotate it with the provider.
+## Docker
 
-## The test video has no sound
+JARVIS does not use Docker. You do not need it.
 
-Confirm eSpeak NG is installed (`espeak-ng --version`) and that FFmpeg can encode AAC. Then retry the first-run test.
+## A mission is stuck
+
+Press **Pause safely** or **Stop now**. Progress is saved on this Mac, not in the cloud.

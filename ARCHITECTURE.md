@@ -1,82 +1,53 @@
 # Architecture
 
-AI Video Studio is a local control center. The Mac (or Linux) app owns projects, the timeline, review, and render. Heavy neural video models are optional remote workers.
+JARVIS is a **local Mac application**. Cloud is optional inference, not the product.
 
 ```
-Mac / Linux desktop window (pywebview or Tauri)
-        │
-        ▼
-Local FastAPI app (127.0.0.1)
-        │
-        ▼
-SQLite + files on disk
-        │
-        ▼
-Production graph (checkpointed stages)
-        ├── Research engine
-        ├── Script engine + critic
-        ├── Story / scene planner
-        ├── Visual decision engine
-        ├── Image / motion-graphics / optional ComfyUI
-        ├── Shot-level video (Ken Burns or remote generator)
-        ├── Consistency metadata (bibles)
-        ├── Voice engine
-        ├── Music / SFX engine
-        ├── Editing (FFmpeg timeline)
-        ├── Captions
-        ├── Thumbnails + critic
-        ├── Review AI (separate reviewers + executive producer)
-        ├── Deterministic technical QC
-        └── Correction loop (smallest asset)
+You
+  → JARVIS.app (Dock)
+    → Local runtime / control plane on this Mac (127.0.0.1)
+      ├── files in ~/Projects
+      ├── Applications, browser, Cursor CLI, Git, Homebrew
+      ├── Keychain, microphone/speaker when the Mac allows it
+      ├── missions, memory, permissions (SQLite on disk)
+      ↓
+    Intelligence router
+      ├── local_mac — default, works with cloud AI down
+      ├── cloud_ai — paid models, off until you approve spend ($0 auto)
+      ├── remote_agent — Cursor ACP/CLI on this Mac
+      └── external_api — public HTTP research (untrusted data)
 ```
 
-## Why not LangGraph
+The window talks only to the local process. It is not a frontend for a cloud JARVIS.
 
-LangGraph is MIT, actively maintained (verified 2026-09-09), and a reasonable orchestrator. It was **not** adopted.
+## Pieces
 
-Reasons:
+| Piece | Job |
+| --- | --- |
+| JARVIS.app | Dock launcher. Starts Python 3.11 local runtime. Unsigned. |
+| Local runtime | Control plane on this computer |
+| GUI | Calm window on 127.0.0.1: Chat, Missions, Projects, History, Activity, System, Memory, Permissions, Providers, Settings |
+| Task router + intelligence router | What you asked, which plane, which worker |
+| Mission engine | Saved in local SQLite |
+| Provider registry | Local builder, optional Cursor, paid APIs disconnected by default |
+| Permission / security | Green / yellow / red. Web is untrusted. Unknown MCP denied |
+| Local coding worker | Real files and tests without cloud AI |
+| Cursor ACP | Optional `agent acp` on this Mac |
+| Cost manager | Automatic spend $0 |
+| SQLite | The only database. No Redis, Postgres, Kubernetes, Docker |
 
-1. Pause, resume, license gates, cost gates, and correction loops need to share the SQLite checkpoint already used for crash recovery.
-2. Bundling the LangChain stack would add moving parts without helping FFmpeg, TTS, or render.
-3. A small explicit stage graph is easier to test and to explain in the UI.
+## Why this stack
 
-The production graph lives in `engine/aivideostudio/orchestrator.py`.
+Target: **2013 Intel MacBook Pro, ~8 GB RAM, macOS Sequoia via OCLP**.
 
-## Desktop choice
+- Python **3.11** at `/usr/local/bin/python3.11` (Homebrew Intel). Avoid 3.14.
+- No Docker. No large local models.
+- JARVIS.app is a wrapper around the checkout at `~/Projects/jarvis-app`, not a copy of the whole disk.
 
-Evaluated Swift/SwiftUI, Tauri, Electron, and pywebview.
+## Cursor integration (researched 2026-09-15)
 
-| Option | Verdict |
-|---|---|
-| SwiftUI | Best native feel, but this repository must also run and test on Linux CI |
-| Electron | Heavy RAM, against the performance rule |
-| Tauri 2 | Apache-2.0/MIT, lightweight, preferred Mac wrapper (`packaging/` + `desktop/`) |
-| pywebview | Native Cocoa window on Mac, GTK on Linux, ships today |
+Official docs: https://cursor.com/docs/cli/acp — `agent acp` JSON-RPC over stdio.
 
-The engine always listens on localhost. Tauri or pywebview is only a window around it.
+## Hardware
 
-## Default compute (no GPU required)
-
-Consumer Macs often cannot run Wan / Hunyuan / FLUX locally. The Visual Decision Engine therefore prefers:
-
-- Motion graphics and diagrams (original, local, approved)
-- Wikimedia Commons stills when the file license is safe, with attribution
-- Ken Burns / camera moves via FFmpeg (shot-level, never one giant video model call)
-- Optional ComfyUI or OpenAI-compatible APIs when the user enables them
-
-Voice defaults to eSpeak NG (always-on subprocess, GPL binary not linked). Piper and Kokoro are preferred drop-in local voices when present. Music is an original procedural composer (ACE-Step is optional).
-
-## Data
-
-- Metadata: SQLite (`studio.sqlite` in Application Support)
-- Media: `projects/<id>/...` on disk
-- Secrets: encrypted vault + macOS Keychain/libsecret via `keyring`
-- Logs: redacted (API keys stripped)
-
-## Providers
-
-Interfaces: `LLMProvider`, research, image, video, TTS, music, SFX, captions. Each has fallbacks, bounded retries, and license checks in commercial mode.
-
-## Crash recovery
-
-Every finished stage writes files and a checkpoint name. Reopening the app continues from the next unfinished stage. Completed assets are not regenerated unless a change request marks them dirty.
+Cloud CI cannot click the Dock on the user's Mac. Mac-specific `open -a`, Keychain, and Gatekeeper are **implemented, not verified on that machine from here**.

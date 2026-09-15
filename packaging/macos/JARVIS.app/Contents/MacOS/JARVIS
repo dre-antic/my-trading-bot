@@ -1,0 +1,134 @@
+#!/bin/bash
+# JARVIS.app — local Mac runtime. Not a cloud frontend.
+# Prefers Python 3.11 at /usr/local/bin/python3.11 (Intel Homebrew).
+# Never uses Homebrew Python 3.14 (cryptography compile can hang).
+#
+# Keep this script as the bundle process. Replacing it with Homebrew Python
+# (via exec) makes LaunchServices treat the app as a Unix binary, so the
+# Dock icon can vanish and first-launch errors stay silent.
+
+set -euo pipefail
+
+export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin${PATH:+:$PATH}"
+
+HERE="$(cd "$(dirname "$0")" && pwd)"
+CONTENTS="$(cd "$HERE/.." && pwd)"
+RESOURCES="$CONTENTS/Resources"
+ROOT=""
+
+jarvis_dialog() {
+  local msg="$1"
+  echo "$msg" >&2
+  if command -v osascript >/dev/null 2>&1; then
+    osascript - "$msg" <<'APPLESCRIPT' >/dev/null 2>&1 || true
+on run argv
+  display dialog (item 1 of argv) buttons {"OK"} default button 1 with title "JARVIS"
+end run
+APPLESCRIPT
+  fi
+}
+
+if [[ -f "$RESOURCES/jarvis-root.txt" ]]; then
+  ROOT="$(tr -d '\r\n' < "$RESOURCES/jarvis-root.txt")"
+fi
+if [[ -z "$ROOT" || ! -d "$ROOT/jarvis" ]]; then
+  if [[ -d "$RESOURCES/app/jarvis" ]]; then
+    ROOT="$RESOURCES/app"
+  fi
+fi
+# Double-click of the copy inside the git clone (installer not run yet).
+if [[ -z "$ROOT" || ! -d "$ROOT/jarvis" ]]; then
+  REPO_CANDIDATE="$(cd "$HERE/../../../../.." && pwd)"
+  if [[ -d "$REPO_CANDIDATE/jarvis" && -f "$REPO_CANDIDATE/jarvis/launch.py" ]]; then
+    ROOT="$REPO_CANDIDATE"
+  fi
+fi
+if [[ -z "$ROOT" || ! -d "$ROOT/jarvis" ]]; then
+  if [[ -d "$HOME/Projects/jarvis-app/jarvis" ]]; then
+    ROOT="$HOME/Projects/jarvis-app"
+  fi
+fi
+
+if [[ -z "$ROOT" || ! -d "$ROOT/jarvis" ]]; then
+  jarvis_dialog "JARVIS could not find its files. Put the project at ~/Projects/jarvis-app and run scripts/install-jarvis-macos.sh once."
+  exit 1
+fi
+
+cd "$ROOT"
+export PYTHONPATH="$ROOT${PYTHONPATH:+:$PYTHONPATH}"
+export JARVIS_WORKSPACE="${JARVIS_WORKSPACE:-$HOME/Projects}"
+
+pick_python() {
+  if [[ -x "$ROOT/.venv/bin/python" ]]; then
+    ver="$("$ROOT/.venv/bin/python" -c 'import sys; print("%d.%d" % sys.version_info[:2])' 2>/dev/null || true)"
+    if [[ "$ver" == "3.11" ]]; then
+      echo "$ROOT/.venv/bin/python"
+      return
+    fi
+  fi
+  if [[ -x /usr/local/bin/python3.11 ]]; then
+    echo /usr/local/bin/python3.11
+    return
+  fi
+  if command -v python3.11 >/dev/null 2>&1; then
+    command -v python3.11
+    return
+  fi
+  if [[ -x "$ROOT/.venv/bin/python" ]]; then
+    ver="$("$ROOT/.venv/bin/python" -c 'import sys; print("%d.%d" % sys.version_info[:2])' 2>/dev/null || true)"
+    if [[ "$ver" == "3.12" || "$ver" == "3.13" ]]; then
+      echo "$ROOT/.venv/bin/python"
+      return
+    fi
+  fi
+  return 1
+}
+
+PY="$(pick_python || true)"
+if [[ -z "$PY" ]]; then
+  jarvis_dialog "JARVIS needs Python 3.11.
+
+In Terminal, once:
+brew install python@3.11
+
+Then run scripts/install-jarvis-macos.sh
+Do not use Python 3.14."
+  exit 1
+fi
+
+if [[ -d "$HOME/Library/Logs" ]]; then
+  LOG_DIR="$HOME/Library/Logs"
+  LOG="$LOG_DIR/JARVIS.log"
+else
+  LOG_DIR="$HOME/.jarvis/logs"
+  LOG="$LOG_DIR/jarvis.log"
+fi
+mkdir -p "$LOG_DIR"
+
+PY_PID=""
+STOPPING=0
+cleanup() {
+  STOPPING=1
+  if [[ -n "${PY_PID}" ]] && kill -0 "$PY_PID" 2>/dev/null; then
+    kill "$PY_PID" 2>/dev/null || true
+    wait "$PY_PID" 2>/dev/null || true
+  fi
+}
+trap cleanup EXIT INT TERM HUP
+
+set +e
+"$PY" -u -m jarvis.launch >>"$LOG" 2>&1 &
+PY_PID=$!
+wait "$PY_PID"
+STATUS=$?
+set -e
+PY_PID=""
+
+if [[ "$STOPPING" -eq 1 ]]; then
+  exit 0
+fi
+if [[ "$STATUS" -ne 0 ]]; then
+  jarvis_dialog "JARVIS quit unexpectedly. Open the log file:
+$LOG"
+  exit "$STATUS"
+fi
