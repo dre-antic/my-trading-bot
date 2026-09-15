@@ -2,23 +2,30 @@
 
 from __future__ import annotations
 
-import os
-import platform
-import shutil
-import sys
-from pathlib import Path
 from typing import Any
 
 from .paths import jarvis_home, workspace_root
+from .runtime import LocalMacRuntime
 
 
 class SystemDoctor:
+    def __init__(self, runtime: LocalMacRuntime | None = None) -> None:
+        self.runtime = runtime or LocalMacRuntime()
+
     def inspect(self) -> dict[str, Any]:
-        mem = _memory()
-        disk = shutil.disk_usage("/")
+        inv = self.runtime.inventory()
         issues: list[dict[str, str]] = []
-        cursor = shutil.which("agent") or shutil.which("cursor-agent")
-        if not cursor:
+        python = inv.get("python") or {}
+        if python.get("ok_for_jarvis") is False:
+            issues.append(
+                {
+                    "what": "This Python version is a poor fit",
+                    "why": "Homebrew Python 3.14 can hang compiling extra packages on this Intel Mac.",
+                    "how": "Use /usr/local/bin/python3.11. See Installation.",
+                    "risk": "low",
+                }
+            )
+        if not (inv.get("cursor") or {}).get("cli"):
             issues.append(
                 {
                     "what": "Cursor CLI is not installed",
@@ -27,12 +34,22 @@ class SystemDoctor:
                     "risk": "low",
                 }
             )
+        mem = inv.get("memory_bytes")
         if mem and mem < 7_500_000_000:
             issues.append(
                 {
                     "what": "This computer has limited memory",
                     "why": "Large local AI models would freeze an 8 GB Intel Mac.",
                     "how": "JARVIS keeps heavy work optional and remote. No action needed.",
+                    "risk": "info",
+                }
+            )
+        if inv.get("docker"):
+            issues.append(
+                {
+                    "what": "Docker is present",
+                    "why": "JARVIS does not need Docker. It will not start it for you.",
+                    "how": "Leave it closed to save RAM.",
                     "risk": "info",
                 }
             )
@@ -46,22 +63,12 @@ class SystemDoctor:
                     "risk": "low",
                 }
             )
-        return {
-            "os": f"{platform.system()} {platform.release()}",
-            "machine": platform.machine(),
-            "python": sys.version.split()[0],
-            "node": _version("node"),
-            "git": _version("git"),
-            "homebrew": bool(shutil.which("brew")),
-            "cursor_cli": cursor or "",
-            "docker": bool(shutil.which("docker")),
-            "browsers": [name for name in ("google-chrome", "chromium", "firefox", "safari") if shutil.which(name)],
-            "disk_free_gb": round(disk.free / 1e9, 1),
-            "memory_bytes": mem,
-            "jarvis_home": str(jarvis_home()),
-            "workspace": str(ws),
-            "issues": issues,
+        inv["issues"] = issues
+        inv["planes"] = {
+            "local_mac": True,
+            "cloud_ai": self.runtime.cloud_ai_status()["available"],
         }
+        return inv
 
     def autofix_low_risk(self) -> list[str]:
         done = []
@@ -73,23 +80,3 @@ class SystemDoctor:
         home.mkdir(parents=True, exist_ok=True)
         (home / "logs").mkdir(exist_ok=True)
         return done
-
-
-def _version(binary: str) -> str:
-    path = shutil.which(binary)
-    if not path:
-        return ""
-    try:
-        import subprocess
-
-        proc = subprocess.run([path, "--version"], capture_output=True, text=True, timeout=5)
-        return (proc.stdout or proc.stderr).splitlines()[0][:80]
-    except Exception:
-        return path
-
-
-def _memory() -> int | None:
-    try:
-        return os.sysconf("SC_PAGE_SIZE") * os.sysconf("SC_PHYS_PAGES")
-    except (ValueError, OSError, AttributeError):
-        return None

@@ -10,7 +10,7 @@ without you.
 | cursor-cli | `agent -p` print mode | Same | Same |
 | local-research | Public web pages | $0 | Used when the network works |
 | browser-local | Fetch pages | $0 | Connected for HTTP; click/type needs extra tools |
-| openai / anthropic | Cloud models | Paid | **Disconnected.** Keys go in the OS keychain from Settings, never in chat. Still $0 until you approve a charge |
+| openai / anthropic | Cloud models | Paid | **Disconnected.** Optional inference only. JARVIS is the local Mac app. Keys go in the OS keychain from Settings, never in chat. Still $0 until you approve a charge |
 
 ## Cursor on your Mac (what you approve later)
 

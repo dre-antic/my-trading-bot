@@ -74,8 +74,12 @@ async function loadView(name) {
   if (name === "system") {
     const data = await get("/api/system");
     const s = data.inspect || {};
-    el.innerHTML = heading("System doctor") + `<div class="card"><p>${esc(s.os)} · Python ${esc(s.python)}</p>
+    el.innerHTML = heading("System doctor") + `<div class="card">
+      <p>${esc(s.os || "")} · ${esc((s.machine) || "")}</p>
+      <p class="muted">Python: ${esc((s.python && s.python.running_version) || s.python || "")}</p>
+      <p class="muted">This is the local JARVIS runtime on this computer. Cloud AI is optional.</p>
       <p class="muted">Projects folder: ${esc(s.workspace)}</p>
+      <p class="muted">Hardware check from the cloud builder: not claimed. ${esc(s.note || "")}</p>
       ${(s.issues || []).map((i) => `<div class="card"><strong>${esc(i.what)}</strong><p>${esc(i.why)}</p><p class="muted">${esc(i.how)}</p></div>`).join("")}
       <button id="fix-low">Fix the easy things</button></div>`;
     document.getElementById("fix-low")?.addEventListener("click", async () => {
@@ -111,6 +115,7 @@ async function loadView(name) {
       ${["JARVIS", "ASSIST", "SAFE", "OBSERVE"].map((m) => `<button data-mode="${m}">${m}</button>`).join(" ")}
       <p class="muted">Workspace: ${esc(s.workspace)}</p>
       <p class="muted">Automatic spending: $0. Paid services always stop and ask.</p>
+      <p class="muted">JARVIS runs on this Mac. Cloud AI off still allows files, missions, memory, and the local builder.</p>
     </div>`;
     el.querySelectorAll("[data-mode]").forEach((b) => b.addEventListener("click", async () => {
       await post("/api/mode", { mode: b.dataset.mode });
@@ -154,6 +159,13 @@ async function post(url, body) {
 async function refreshStatus() {
   const s = await get("/api/status");
   document.getElementById("mode-label").textContent = (s.mode || "") + " mode";
+  const cloud = s.cloud_ai && s.cloud_ai.available;
+  const label = document.getElementById("runtime-label");
+  if (label) {
+    label.textContent = cloud
+      ? "This computer · local runtime · cloud AI on (approved)"
+      : "This computer · local runtime · cloud AI off (local tools still work)";
+  }
   observeBanner.hidden = !s.observe;
 }
 

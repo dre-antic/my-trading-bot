@@ -10,8 +10,9 @@ jarvis/                 # the product
   cursor_ctrl.py        # ACP + CLI adapter
   orchestrator.py       # manager
 packaging/macos/JARVIS.app
-scripts/launch-jarvis.sh
+scripts/install-jarvis-macos.sh
 scripts/build-jarvis-macos.sh
+scripts/launch-jarvis.sh
 tests/jarvis/
 engine/aivideostudio/   # older video studio project, not part of the JARVIS window
 ```
@@ -33,22 +34,25 @@ Video Studio tests (separate product) still live under `tests/unit`,
 - `JARVIS_HOME` — where the SQLite file and logs go (default `~/.jarvis`)
 - `JARVIS_WORKSPACE` — project sandbox (default `~/Projects`)
 - `JARVIS_PORT` — local port (default 8787)
+- `JARVIS_CLOUD_AI` — set to `1` only if you have approved cloud inference (default off)
 
 Never commit `.env` files or real keys.
+
+## Code style
+
+- Do not add Kubernetes, Redis, Postgres, or Docker
+- Do not add large local models
+- Prefer stdlib
+- If a paid API is missing, keep the adapter and show disconnected
 
 ## Packaging
 
 On a Mac:
 
 ```bash
-./scripts/build-jarvis-macos.sh
+./scripts/install-jarvis-macos.sh
 ```
 
-The result is **unsigned**. This environment cannot notarize with Apple.
-
-## Code style
-
-- Do not add Kubernetes, Redis, or Postgres
-- Do not add large local models
-- Prefer stdlib
-- If a paid API is missing, keep the adapter and show disconnected
+That creates `~/Applications/JARVIS.app` pointing at this folder and Python 3.11.
+The result is **unsigned**. This environment cannot notarize with Apple. Dock
+double-click has not been verified from the Linux builder.

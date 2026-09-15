@@ -1,13 +1,70 @@
 #!/bin/bash
-# JARVIS.app entry point. Unsigned. Runs the local JARVIS server and opens a window.
-DIR="$(cd "$(dirname "$0")/../Resources/app" && pwd)"
-if [[ ! -d "$DIR" ]]; then
-  DIR="$(cd "$(dirname "$0")/../../../.." && pwd)"
+# JARVIS.app — local Mac runtime. Not a cloud frontend.
+# Prefers Python 3.11 at /usr/local/bin/python3.11 (Intel Homebrew).
+# Never uses Homebrew Python 3.14 (cryptography compile can hang).
+
+set -euo pipefail
+
+HERE="$(cd "$(dirname "$0")" && pwd)"
+RESOURCES="$(cd "$HERE/../Resources" && pwd)"
+ROOT=""
+
+if [[ -f "$RESOURCES/jarvis-root.txt" ]]; then
+  ROOT="$(tr -d '\r\n' < "$RESOURCES/jarvis-root.txt")"
 fi
-cd "$DIR" || exit 1
-export PYTHONPATH="$DIR${PYTHONPATH:+:$PYTHONPATH}"
-PY="/usr/bin/python3"
-if [[ -x "$DIR/.venv/bin/python" ]]; then
-  PY="$DIR/.venv/bin/python"
+if [[ -z "$ROOT" || ! -d "$ROOT/jarvis" ]]; then
+  if [[ -d "$RESOURCES/app/jarvis" ]]; then
+    ROOT="$RESOURCES/app"
+  elif [[ -d "$HOME/Projects/jarvis-app/jarvis" ]]; then
+    ROOT="$HOME/Projects/jarvis-app"
+  fi
 fi
-exec "$PY" -m jarvis.launch
+
+if [[ -z "$ROOT" || ! -d "$ROOT/jarvis" ]]; then
+  if command -v osascript >/dev/null 2>&1; then
+    osascript -e 'display dialog "JARVIS could not find its files. Put the project at ~/Projects/jarvis-app and run scripts/install-jarvis-macos.sh once." buttons {"OK"} default button 1 with title "JARVIS"'
+  fi
+  echo "JARVIS project not found." >&2
+  exit 1
+fi
+
+cd "$ROOT"
+export PYTHONPATH="$ROOT${PYTHONPATH:+:$PYTHONPATH}"
+export JARVIS_WORKSPACE="${JARVIS_WORKSPACE:-$HOME/Projects}"
+
+pick_python() {
+  if [[ -x "$ROOT/.venv/bin/python" ]]; then
+    ver="$("$ROOT/.venv/bin/python" -c 'import sys; print("%d.%d" % sys.version_info[:2])' 2>/dev/null || true)"
+    if [[ "$ver" == "3.11" || "$ver" == "3.12" || "$ver" == "3.13" ]]; then
+      echo "$ROOT/.venv/bin/python"
+      return
+    fi
+  fi
+  if [[ -x /usr/local/bin/python3.11 ]]; then
+    echo /usr/local/bin/python3.11
+    return
+  fi
+  if command -v python3.11 >/dev/null 2>&1; then
+    command -v python3.11
+    return
+  fi
+  return 1
+}
+
+PY="$(pick_python || true)"
+if [[ -z "$PY" ]]; then
+  if command -v osascript >/dev/null 2>&1; then
+    osascript -e 'display dialog "JARVIS needs Python 3.11.\n\nIn Terminal, once:\nbrew install python@3.11\n\nDo not use Python 3.14." buttons {"OK"} default button 1 with title "JARVIS"'
+  fi
+  echo "Python 3.11 not found. brew install python@3.11" >&2
+  exit 1
+fi
+
+LOG_DIR="$HOME/Library/Logs"
+if [[ -d "$LOG_DIR" ]]; then
+  mkdir -p "$LOG_DIR"
+  exec "$PY" -m jarvis.launch >>"$LOG_DIR/JARVIS.log" 2>&1
+else
+  mkdir -p "$HOME/.jarvis/logs"
+  exec "$PY" -m jarvis.launch >>"$HOME/.jarvis/logs/jarvis.log" 2>&1
+fi

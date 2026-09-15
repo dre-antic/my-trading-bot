@@ -15,6 +15,7 @@ from .cursor_ctrl import CursorAdapter
 from .doctor import SystemDoctor
 from .downloads import DownloadGuard
 from .git_safety import GitSafety
+from .intelligence import IntelligenceRouter
 from .kernel import KERNEL
 from .mcp import McpRegistry
 from .memory import MemorySystem
@@ -28,6 +29,7 @@ from .recovery import RecoveryEngine
 from .research import ResearchAgent
 from .review import ReviewAgent
 from .router import TaskRouter
+from .runtime import LocalMacRuntime
 from .schedule import Scheduler
 from .security import SecurityEngine
 from .storage import Store
@@ -61,6 +63,8 @@ class App:
     downloads: DownloadGuard
     schedule: Scheduler
     trading: TradingGuard
+    runtime: LocalMacRuntime
+    intelligence: IntelligenceRouter
     kernel: object
 
 
@@ -86,6 +90,8 @@ def create_app(store: Store | None = None) -> App:
     verification = VerificationEngine(coding)
     recovery = RecoveryEngine(missions)
     agents = AgentOrchestrator(coding, cursor, research, browser, computer, review)
+    runtime = LocalMacRuntime(security)
+    intelligence = IntelligenceRouter(runtime)
     orchestrator = Orchestrator(
         missions,
         router,
@@ -102,6 +108,8 @@ def create_app(store: Store | None = None) -> App:
         tools,
         notifications,
         cursor,
+        intelligence,
+        runtime,
     )
     return App(
         store=store,
@@ -116,7 +124,7 @@ def create_app(store: Store | None = None) -> App:
         cost=cost,
         providers=providers,
         tools=tools,
-        doctor=SystemDoctor(),
+        doctor=SystemDoctor(runtime),
         credentials=CredentialManager(store),
         notifications=notifications,
         mcp=McpRegistry(store, security),
@@ -126,5 +134,7 @@ def create_app(store: Store | None = None) -> App:
         downloads=DownloadGuard(security),
         schedule=Scheduler(store),
         trading=TradingGuard(permissions),
+        runtime=runtime,
+        intelligence=intelligence,
         kernel=KERNEL,
     )

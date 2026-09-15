@@ -31,6 +31,22 @@ class ComputerAgent:
             "detail": "This computer is not macOS. Mac app control is disconnected. Local processes can still be launched for tests.",
         }
 
+    def list_applications(self) -> dict[str, Any]:
+        if self.platform != "Darwin":
+            return {
+                "ok": True,
+                "applications": [],
+                "disconnected": True,
+                "detail": "Application listing is a Mac feature. This computer is not macOS.",
+            }
+        names: list[str] = []
+        from pathlib import Path
+
+        for root in (Path("/Applications"), Path.home() / "Applications"):
+            if root.is_dir():
+                names.extend(p.stem for p in sorted(root.glob("*.app")))
+        return {"ok": True, "applications": names, "disconnected": False}
+
     def launch_app(self, name: str, mission_id: str | None = None) -> dict[str, Any]:
         verdict = self.permissions.evaluate(
             "launch_permitted_app",

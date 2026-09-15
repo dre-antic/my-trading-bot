@@ -21,6 +21,8 @@ from .security import SecurityEngine
 from .tools import ToolRegistry
 from .types import AutonomyMode, HaltKind, MissionStatus, MemoryKind
 from .verification import VerificationEngine
+from .intelligence import IntelligenceRouter
+from .runtime import LocalMacRuntime
 
 
 class Orchestrator:
@@ -41,6 +43,8 @@ class Orchestrator:
         tools: ToolRegistry,
         notifications: Notifications,
         cursor: CursorAdapter,
+        intelligence: IntelligenceRouter | None = None,
+        runtime: LocalMacRuntime | None = None,
     ) -> None:
         self.missions = missions
         self.router = router
@@ -57,9 +61,12 @@ class Orchestrator:
         self.tools = tools
         self.notifications = notifications
         self.cursor = cursor
+        self.runtime = runtime or LocalMacRuntime()
+        self.intelligence = intelligence or IntelligenceRouter(self.runtime)
 
     def handle_text(self, text: str) -> dict[str, Any]:
         route = self.router.route(text)
+        plane = self.intelligence.decide(route)
         if route.intent == "halt":
             if "pause" in text.lower():
                 KERNEL.pause_safely()
@@ -95,7 +102,13 @@ class Orchestrator:
             result="queued",
         )
         ran = self.run_mission(mission["id"])
-        return {"kind": "mission", "route": route.__dict__, "mission": ran, "reply": self._reply(ran)}
+        return {
+            "kind": "mission",
+            "route": route.__dict__,
+            "plane": plane.__dict__,
+            "mission": ran,
+            "reply": self._reply(ran),
+        }
 
     def run_mission(self, mission_id: str) -> dict[str, Any]:
         mission = self.missions.get(mission_id)
@@ -114,6 +127,8 @@ class Orchestrator:
                 "tools": route.tools,
                 "verification": route.verification,
                 "notes": route.notes,
+                "plane": self.intelligence.decide(route).__dict__,
+                "cloud_ai_required": False,
             },
             tools=route.tools,
             agents=[route.worker],

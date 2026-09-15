@@ -20,16 +20,19 @@ deleting important files, publishing, trading — it stops and asks.
 
 ## Open the app (normal use)
 
-**On a Mac**
+**On a Mac (Dock)**
 
-1. Put **JARVIS** in your Applications folder (see Installation below).
-2. Double-click it, or open it from the Dock.
-3. Type what you want. Press Send.
+Follow [INSTALLATION.md](INSTALLATION.md) once. That puts **JARVIS.app** in your
+Applications folder. Then:
 
-You should not need Terminal for everyday use.
+1. Right-click **JARVIS** → **Open** the first time (unsigned).
+2. Drag it to the **Dock**.
+3. Click it like any other Mac app and type what you want.
 
-This copy is **not signed** by Apple. The first time macOS may say the app is
-from an unidentified developer. Right-click the app and choose **Open**.
+That app is the **local JARVIS on this computer**. It is not a website for a
+cloud JARVIS. Cloud AI is optional and off by default.
+
+You should not need Terminal after the one-time install.
 
 **On this Linux computer (development)**
 

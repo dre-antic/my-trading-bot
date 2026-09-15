@@ -1,49 +1,43 @@
 # Troubleshooting
 
+## I was using Terminal before (`python -m jarvis.launch`)
+
+That only starts the local server. It is not the Dock app. Run `./scripts/install-jarvis-macos.sh` once, then open **JARVIS** from Applications as in INSTALLATION.md.
+
 ## The window does not open
 
-Open a browser to http://127.0.0.1:8787 while JARVIS is running.
+Wait a few seconds. Then try Safari: http://127.0.0.1:8787
 
-On a Mac, Python 3 must be installed (it usually is). If double-clicking does
-nothing, install Python from python.org or Xcode Command Line Tools, then try
-again.
+On this Intel Mac, JARVIS needs **Python 3.11** at `/usr/local/bin/python3.11`.
 
-Use **Python 3.11 or newer, with official wheels** (3.11–3.13 is the safe
-range). Homebrew Python 3.14 may compile `cryptography` from source and appear
-to hang. Prefer `python3.11` / `python3.12` / `python3.13` when creating the
-venv.
+```bash
+brew install python@3.11
+```
+
+Do **not** use Homebrew Python 3.14. It can hang while compiling `cryptography` if extra packages are installed. JARVIS itself does not need that package.
+
+Check `~/Library/Logs/JARVIS.log` if double-click does nothing.
 
 ## macOS says the app is damaged or unidentified
 
-This build is not signed. Right-click **JARVIS** → **Open**. You only do this
-once.
+This build is not signed. Right-click **JARVIS** → **Open**. You only do this once.
 
 ## Cursor never starts
 
-That is expected until you install Cursor CLI and run `agent login`. JARVIS
-should say it is disconnected and may still build simple apps locally. If it
-claims Cursor succeeded without the CLI, that would be a bug — please report it.
+Expected until you install Cursor CLI and run `agent login`. Local building still works.
 
 ## It asked me about money
 
-Good. Automatic spending is $0. If you did not mean to pay, choose Reject.
+Good. Automatic spending is $0.
 
-## It will not read a password file
+## Cloud / internet is down
 
-Good. Those paths are protected. You would have to approve that exact file on
-purpose.
+That is fine for local work: Projects files, missions, memory, Stop/Pause, System Doctor, and the local task-list builder. Research that needs the public web will say it could not reach sources. Paid cloud models stay off.
+
+## Docker
+
+JARVIS does not use Docker. You do not need it.
 
 ## A mission is stuck
 
-Press **Pause safely** or **Stop now**. Open **Missions**. You can resume later;
-progress is saved in a local file, not in the cloud.
-
-## System Doctor
-
-Open **System**. It lists what is missing and how to fix the easy things (for
-example, creating the Projects folder).
-
-## Voice does not hear me
-
-Typing always works. Speech-to-text is not connected unless a free local engine
-is added later. JARVIS will not call a paid voice API on its own.
+Press **Pause safely** or **Stop now**. Progress is saved on this Mac, not in the cloud.

@@ -54,10 +54,12 @@ class JarvisHandler(SimpleHTTPRequestHandler):
         app = self.app
         if path == "/api/status":
             doctor = app.doctor.inspect()
+            runtime = app.runtime.snapshot()
             return self._send(
                 200,
                 {
                     "name": "JARVIS",
+                    "product": "local-mac-runtime",
                     "mode": KERNEL.mode.value,
                     "halt": KERNEL.halt.value,
                     "observe": KERNEL.observe_active,
@@ -66,8 +68,16 @@ class JarvisHandler(SimpleHTTPRequestHandler):
                     "cost": app.cost.totals(),
                     "voice": app.voice.status(),
                     "system": doctor,
+                    "runtime": runtime,
+                    "cloud_ai": runtime["cloud_ai"],
                 },
             )
+        if path == "/api/runtime":
+            return self._send(200, app.runtime.snapshot())
+        if path == "/api/runtime/workspace":
+            return self._send(200, app.runtime.list_workspace())
+        if path == "/api/runtime/applications":
+            return self._send(200, {"applications": app.runtime.list_applications(), "mac": app.runtime.is_mac()})
         if path == "/api/missions":
             return self._send(200, app.missions.list())
         if path.startswith("/api/missions/") and path.count("/") == 3:
@@ -91,7 +101,7 @@ class JarvisHandler(SimpleHTTPRequestHandler):
             missions = app.missions.list(20)
             return self._send(200, {"notifications": notes, "missions": missions})
         if path == "/api/system":
-            return self._send(200, {"inspect": app.doctor.inspect(), "fixes": []})
+            return self._send(200, {"inspect": app.doctor.inspect(), "runtime": app.runtime.snapshot(), "fixes": []})
         if path == "/api/mcp":
             return self._send(200, app.mcp.list())
         if path == "/api/credentials":

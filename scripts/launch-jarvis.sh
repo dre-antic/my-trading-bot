@@ -7,4 +7,7 @@ if [[ -f .venv/bin/activate ]]; then
   source .venv/bin/activate
 fi
 export PYTHONPATH="$ROOT${PYTHONPATH:+:$PYTHONPATH}"
+if command -v python3.11 >/dev/null 2>&1; then
+  exec python3.11 -m jarvis.launch "$@"
+fi
 exec python3 -m jarvis.launch "$@"

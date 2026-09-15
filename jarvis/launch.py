@@ -8,14 +8,15 @@ import socket
 import sys
 import threading
 import time
-import webbrowser
 
 from .api import make_server
 from .app import create_app
 from .doctor import SystemDoctor
 from .kernel import KERNEL
 from .paths import ensure_layout
+from .runtime import LocalMacRuntime
 from .types import AutonomyMode
+from .window import open_local_window
 
 DEFAULT_PORT = 8787
 
@@ -39,11 +40,14 @@ def main(argv: list[str] | None = None) -> None:
     args = parser.parse_args(argv)
     ensure_layout()
     KERNEL.set_mode(AutonomyMode(args.mode))
-    SystemDoctor().autofix_low_risk()
+    runtime = LocalMacRuntime()
+    SystemDoctor(runtime).autofix_low_risk()
     app = create_app()
     port = _free_port(args.port)
     httpd = make_server("127.0.0.1", port, app)
     url = f"http://127.0.0.1:{port}"
+    print(f"JARVIS local runtime is ready at {url}", file=sys.stderr)
+    print("Cloud AI is not required for basic local work.", file=sys.stderr)
 
     def _window() -> None:
         for _ in range(50):
@@ -60,12 +64,12 @@ def main(argv: list[str] | None = None) -> None:
             webview.create_window("JARVIS", url, width=1280, height=860, min_size=(960, 640))
             webview.start()
             httpd.shutdown()
+            return
         except Exception:
-            webbrowser.open(url)
+            open_local_window(url)
 
     if not args.no_window:
         threading.Thread(target=_window, daemon=True).start()
-    print(f"JARVIS is ready at {url}", file=sys.stderr)
     try:
         httpd.serve_forever()
     except KeyboardInterrupt:
