@@ -172,14 +172,10 @@ class ProviderRegistry:
         compatible.sort(key=lambda p: (p.paid, p.health != ProviderHealth.HEALTHY, p.name))
         for provider in compatible:
             if provider.paid and not allow_paid:
-                spend = self.cost.evaluate(provider.name, f"use:{capability}", 0.01, approved=False)
-                if not spend.allowed:
-                    continue
+                self.cost.evaluate(provider.name, f"use:{capability}", 0.01, approved=False)
+                continue
             if provider.health in {ProviderHealth.HEALTHY, ProviderHealth.NEEDS_AUTH, ProviderHealth.DEGRADED}:
-                if provider.paid and not allow_paid:
-                    continue
                 return provider
             if provider.health == ProviderHealth.DISCONNECTED and not provider.paid:
-                # usable as an adapter in disconnected state
                 return provider
-        return compatible[0] if compatible else None
+        return None

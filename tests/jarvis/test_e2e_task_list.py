@@ -39,9 +39,11 @@ def test_build_task_list_end_to_end(app, jarvis_env: Path):
     assert "coding" in kinds
     assert "review" in kinds
     # No secrets in mission json
+    from jarvis.secrets import looks_like_secret
+
     blob = json.dumps(mission)
     assert "BEGIN PRIVATE KEY" not in blob
-    assert "sk-" not in blob
+    assert not looks_like_secret(blob)
 
 
 def test_stop_cancels_running_mission(app):

@@ -88,7 +88,12 @@ class Orchestrator:
                 "computer": shot,
             }
         mission = self.missions.create(text, mode=KERNEL.mode.value)
-        self.audit.record("mission_create", mission_id=mission["id"], action="create", result="queued")
+        self.audit.record(
+            "create",
+            mission_id=mission["id"],
+            agent="orchestrator",
+            result="queued",
+        )
         ran = self.run_mission(mission["id"])
         return {"kind": "mission", "route": route.__dict__, "mission": ran, "reply": self._reply(ran)}
 
