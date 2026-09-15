@@ -35,7 +35,7 @@ def start_server(port: int, open_window: bool = True) -> None:
 
     config = uvicorn.Config(
         "aivideostudio.app:app",
-        host="127.0.0.1",
+        host=os.environ.get("AIVS_HOST", "127.0.0.1"),
         port=port,
         log_level="info",
         factory=False,

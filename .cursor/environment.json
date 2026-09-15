@@ -4,7 +4,7 @@
   "terminals": [
     {
       "name": "studio-server",
-      "command": "cd \"$(git rev-parse --show-toplevel)\" && source .venv/bin/activate && AIVS_HEADLESS=1 AIVS_PORT=8745 ./scripts/launch.sh --no-window",
+      "command": "cd \"$(git rev-parse --show-toplevel)\" && source .venv/bin/activate && AIVS_HEADLESS=1 AIVS_HOST=0.0.0.0 AIVS_PORT=8745 ./scripts/launch.sh --no-window",
       "description": "AI Video Studio local engine + web UI (http://127.0.0.1:8745). Runs headless (no native window)."
     }
   ],
