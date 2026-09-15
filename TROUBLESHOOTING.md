@@ -4,6 +4,10 @@
 
 That only starts the local server. It is not the Dock app. Run `./scripts/install-jarvis-macos.sh` once, then open **JARVIS** from Applications as in INSTALLATION.md.
 
+## I pressed Stop now and nothing happens
+
+Press **Resume** in the top bar, or type `continue`. Stop and Pause block new work on purpose. That is not a crash.
+
 ## The window does not open
 
 Wait a few seconds. Then try Chrome or Safari: http://127.0.0.1:8787

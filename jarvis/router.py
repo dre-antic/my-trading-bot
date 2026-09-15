@@ -44,11 +44,14 @@ EXPLAIN_HINTS = ("explain", "what is this project", "how does it work", "what's 
 OBSERVE_HINTS = ("watch what i'm doing", "watch what i am doing", "observe")
 TAKEOVER_HINTS = ("take over",)
 STOP_HINTS = ("stop now", "stop jarvis", "pause safely")
+RESUME_EXACT = {"resume", "continue", "go on", "start again"}
+HALT_EXACT = {"stop", "stop now", "stop jarvis", "pause", "pause safely", "please stop"}
 
 
 class TaskRouter:
     def route(self, text: str) -> RouteDecision:
         lowered = (text or "").strip().lower()
+        normalized = lowered.rstrip(".!").strip()
         if not lowered:
             return RouteDecision(
                 intent="empty",
@@ -63,7 +66,7 @@ class TaskRouter:
                 needs_approval=False,
                 notes="No request.",
             )
-        if any(h in lowered for h in STOP_HINTS):
+        if normalized in HALT_EXACT or any(h in lowered for h in STOP_HINTS):
             return RouteDecision(
                 "halt",
                 "trivial",
@@ -76,6 +79,20 @@ class TaskRouter:
                 True,
                 False,
                 notes="Stop or pause JARVIS.",
+            )
+        if normalized in RESUME_EXACT:
+            return RouteDecision(
+                "resume",
+                "trivial",
+                ["control"],
+                "kernel",
+                ["resume"],
+                [],
+                RiskLevel.GREEN,
+                [],
+                True,
+                False,
+                notes="Clear halt and wait for the next goal.",
             )
         if any(h in lowered for h in TAKEOVER_HINTS):
             return RouteDecision(
@@ -140,7 +157,7 @@ class TaskRouter:
                 ["computer_use"],
                 "computer",
                 ["launch_permitted_app"],
-                ["launch_permitted_app"],
+                ["computer_control"],
                 RiskLevel.YELLOW,
                 ["screenshot"],
                 False,

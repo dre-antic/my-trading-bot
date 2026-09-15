@@ -189,9 +189,9 @@ class MissionEngine:
 
     def cancel(self, mission_id: str) -> dict[str, Any]:
         mission = self.get(mission_id)
-        if MissionStatus(mission["status"]) in TERMINAL_STATUSES and mission["status"] != MissionStatus.FAILED.value:
-            if mission["status"] == MissionStatus.CANCELLED.value:
-                return mission
+        status = MissionStatus(mission["status"])
+        if status in {MissionStatus.COMPLETED, MissionStatus.CANCELLED}:
+            return mission
         return self.set_status(mission_id, MissionStatus.CANCELLED)
 
     def active(self) -> list[dict[str, Any]]:

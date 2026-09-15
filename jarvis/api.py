@@ -149,11 +149,20 @@ class JarvisHandler(SimpleHTTPRequestHandler):
         if path.endswith("/approve"):
             approval_id = path.split("/")[-2]
             row = app.permissions.decide(approval_id, ApprovalDecision.APPROVE)
-            return self._send(200, dict(row) | {"status": "APPROVE"})
+            payload = dict(row) | {"status": "APPROVE"}
+            mission_id = payload.get("mission_id")
+            if mission_id:
+                KERNEL.clear_halt()
+                payload["mission"] = app.orchestrator.run_mission(str(mission_id))
+            return self._send(200, payload)
         if path.endswith("/reject"):
             approval_id = path.split("/")[-2]
             row = app.permissions.decide(approval_id, ApprovalDecision.REJECT)
-            return self._send(200, dict(row) | {"status": "REJECT"})
+            payload = dict(row) | {"status": "REJECT"}
+            mission_id = payload.get("mission_id")
+            if mission_id:
+                payload["mission"] = app.orchestrator.run_mission(str(mission_id))
+            return self._send(200, payload)
         if path.startswith("/api/missions/") and path.endswith("/resume"):
             mission_id = path.split("/")[3]
             KERNEL.clear_halt()

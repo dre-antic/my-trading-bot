@@ -50,10 +50,11 @@ def test_ssh_key_denied(app, jarvis_env: Path):
     assert verdict.needs_approval
 
 
-def test_git_push_blocked(app):
-    result = app.git.request_publish("push")
-    assert result["allowed"] is False
-    assert result["requires_confirmation"]
+def test_git_push_merge_release_blocked(app):
+    for action in ("push", "merge", "release"):
+        result = app.git.request_publish(action)
+        assert result["allowed"] is False
+        assert result["requires_confirmation"]
 
 
 def test_trading_never_auto_executes(app):

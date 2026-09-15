@@ -8,6 +8,7 @@
 </head>
 <body>
   <div id="observe-banner" hidden>Observing — I can see the screen. Nothing is recorded in the background. <button data-act="observe-stop">Stop observing</button></div>
+  <div id="halt-banner" hidden>JARVIS is stopped. Nothing new will run. <button data-act="resume">Resume</button></div>
   <header class="top">
     <div class="brand">
       <div class="mark" aria-hidden="true"></div>
@@ -20,6 +21,7 @@
     <div class="halt">
       <button class="danger" data-act="stop">Stop now</button>
       <button data-act="pause">Pause safely</button>
+      <button data-act="resume" id="resume-btn" hidden>Resume</button>
     </div>
   </header>
   <div class="shell">

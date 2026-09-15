@@ -42,6 +42,8 @@ main { padding: 1.4rem 1.8rem 2rem; overflow: auto; }
 .steps li.now { color: var(--ink); }
 #observe-banner { background: #3a2a12; color: #f3e2c0; padding: .6rem 1rem; display: flex; gap: 1rem; align-items: center; justify-content: center; }
 #observe-banner[hidden] { display: none !important; }
+#halt-banner { background: #3a1c1c; color: #f3d4d4; padding: .6rem 1rem; display: flex; gap: 1rem; align-items: center; justify-content: center; }
+#halt-banner[hidden] { display: none !important; }
 .approval { border-color: #5a4630; }
 .muted { color: var(--muted); }
 pre { white-space: pre-wrap; font-family: ui-monospace, monospace; font-size: .82rem; color: var(--muted); }

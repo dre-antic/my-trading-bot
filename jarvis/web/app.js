@@ -3,6 +3,7 @@ const navs = document.querySelectorAll("button.nav");
 const transcript = document.getElementById("transcript");
 const prompt = document.getElementById("prompt");
 const observeBanner = document.getElementById("observe-banner");
+const haltBanner = document.getElementById("halt-banner");
 
 function show(name) {
   views.forEach((v) => v.classList.toggle("on", v.id === "view-" + name));
@@ -17,6 +18,7 @@ document.querySelectorAll("[data-act]").forEach((b) => {
     const act = b.dataset.act;
     if (act === "stop") await post("/api/stop");
     if (act === "pause") await post("/api/pause");
+    if (act === "resume") await post("/api/resume");
     if (act === "observe-stop") await post("/api/observe/stop");
     await refreshStatus();
   });
@@ -129,8 +131,10 @@ function approvalCard(item) {
     <div class="row"><h3>${esc(item.action)}</h3><span class="pill">${esc(item.risk)}</span></div>
     <p><strong>Target</strong> ${esc(item.target)}</p>
     <p><strong>Why</strong> ${esc(item.why)}</p>
+    <p><strong>Risk</strong> ${esc(item.risk)}</p>
     <p><strong>Cost</strong> ${esc(item.cost)}</p>
     <p><strong>Can this be undone?</strong> ${esc(item.reversibility)}</p>
+    ${item.data_json && item.data_json !== "{}" ? `<p><strong>Data</strong> ${esc(item.data_json)}</p>` : ""}
     <button data-approve="${item.id}">Approve</button>
     <button data-reject="${item.id}">Reject</button>
   </div>`;
@@ -167,6 +171,15 @@ async function refreshStatus() {
       : "This computer · local runtime · cloud AI off (local tools still work)";
   }
   observeBanner.hidden = !s.observe;
+  const halted = s.halt && s.halt !== "NONE";
+  if (haltBanner) {
+    haltBanner.hidden = !halted;
+    const haltText = s.halt === "PAUSE_SAFELY" ? "JARVIS is paused. Work is saved." : "JARVIS is stopped. Nothing new will run.";
+    const textNode = haltBanner.childNodes[0];
+    if (textNode) textNode.textContent = haltText + " ";
+  }
+  const resumeBtn = document.getElementById("resume-btn");
+  if (resumeBtn) resumeBtn.hidden = !halted;
 }
 
 refreshStatus();

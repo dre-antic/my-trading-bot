@@ -59,6 +59,23 @@ class PermissionEngine:
         "download_file",
         "browser_login",
         "mcp_install",
+        "computer_control",
+    }
+    SAFE_READ_ACTIONS = {
+        "web_research",
+        "public_browse",
+        "read_project_file",
+        "analyze_logs",
+        "research",
+        "code_inspection",
+        "inspect_git",
+        "inspect_diff",
+        "explain",
+        "observe_screen",
+        "list_projects",
+        "memory_read",
+        "system_inspect",
+        "mission_status",
     }
     RED_ACTIONS = {
         "spend_money",
@@ -120,17 +137,20 @@ class PermissionEngine:
                     False, RiskLevel.YELLOW, False, "Observe mode does not take actions."
                 )
         risk = self.classify(action, target)
-        if KERNEL.mode == AutonomyMode.SAFE and risk != RiskLevel.GREEN:
+        if KERNEL.mode == AutonomyMode.SAFE and action not in self.SAFE_READ_ACTIONS:
             return PermissionVerdict(
                 False,
                 risk,
-                True,
-                "Safe mode blocks consequential actions.",
+                False,
+                "Safe mode only allows research, read, and explain. Switch to Assist to act.",
             )
         if risk == RiskLevel.GREEN:
             return PermissionVerdict(True, risk, False, "Green actions run automatically.", auto=True)
+        existing = self._existing_decision(mission_id, action, risk)
+        if existing is not None:
+            return existing
         if risk == RiskLevel.RED:
-            approval_id = self._create_approval(
+            approval_id = self._reuse_or_create_approval(
                 mission_id, action, target, why, data or {}, cost, risk, reversibility
             )
             return PermissionVerdict(
@@ -140,8 +160,7 @@ class PermissionEngine:
                 "Red actions always require explicit confirmation.",
                 approval_id=approval_id,
             )
-        # YELLOW
-        if KERNEL.mode == AutonomyMode.JARVIS:
+        if KERNEL.mode == AutonomyMode.JARVIS and risk == RiskLevel.YELLOW:
             return PermissionVerdict(
                 True,
                 risk,
@@ -149,7 +168,7 @@ class PermissionEngine:
                 "Jarvis mode auto-allows yellow engineering actions (not spending or secrets).",
                 auto=True,
             )
-        approval_id = self._create_approval(
+        approval_id = self._reuse_or_create_approval(
             mission_id, action, target, why, data or {}, cost, risk, reversibility
         )
         return PermissionVerdict(
@@ -159,6 +178,50 @@ class PermissionEngine:
             "Yellow actions need approval in Assist mode.",
             approval_id=approval_id,
         )
+
+    def for_mission(self, mission_id: str) -> list[dict[str, Any]]:
+        with self.store.connect() as conn:
+            rows = conn.execute(
+                "SELECT * FROM approvals WHERE mission_id = ? ORDER BY created_at DESC",
+                (mission_id,),
+            ).fetchall()
+            return [dict(r) for r in rows]
+
+    def _existing_decision(self, mission_id: str | None, action: str, risk: RiskLevel) -> PermissionVerdict | None:
+        if not mission_id:
+            return None
+        for row in self.for_mission(mission_id):
+            if row.get("action") != action:
+                continue
+            if row.get("status") == ApprovalDecision.APPROVE.value:
+                return PermissionVerdict(True, risk, False, "User approved this action.")
+            if row.get("status") == ApprovalDecision.REJECT.value:
+                return PermissionVerdict(False, risk, False, "User rejected this action.")
+            # Pending approvals are reused later; Jarvis mode may auto-allow yellow.
+        return None
+
+    def _reuse_or_create_approval(
+        self,
+        mission_id: str | None,
+        action: str,
+        target: str,
+        why: str,
+        data: dict[str, Any],
+        cost: str,
+        risk: RiskLevel,
+        reversibility: str,
+    ) -> str:
+        if mission_id:
+            with self.store.connect() as conn:
+                row = conn.execute(
+                    """SELECT id FROM approvals
+                       WHERE mission_id = ? AND action = ? AND status = ?
+                       ORDER BY created_at DESC LIMIT 1""",
+                    (mission_id, action, ApprovalDecision.PENDING.value),
+                ).fetchone()
+                if row:
+                    return str(row["id"])
+        return self._create_approval(mission_id, action, target, why, data, cost, risk, reversibility)
 
     def _create_approval(
         self,

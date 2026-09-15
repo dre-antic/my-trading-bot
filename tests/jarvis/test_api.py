@@ -22,11 +22,20 @@ def test_http_chat_and_status(app):
         payload = chat.read().decode("utf-8")
         assert chat.status == 200
         assert "mission" in payload or "reply" in payload
+        conn.request("POST", "/api/stop")
+        assert conn.getresponse().status == 200
+        conn.request("POST", "/api/chat", body='{"text":"Explain this project to me."}', headers={"Content-Type": "application/json"})
+        stopped = conn.getresponse()
+        stopped_body = stopped.read().decode("utf-8")
+        assert stopped.status == 200
+        assert "mission" not in stopped_body or '"kind": "halt"' in stopped_body or "stopped" in stopped_body.lower()
+        conn.request("POST", "/api/resume")
+        assert conn.getresponse().status == 200
         conn.request("GET", "/")
         page = conn.getresponse()
         html = page.read().decode("utf-8")
         assert "What would you like me to do?" in html
-        conn.request("POST", "/api/stop")
-        assert conn.getresponse().status == 200
+        assert "Resume" in html
+        assert "halt-banner" in html
     finally:
         httpd.shutdown()

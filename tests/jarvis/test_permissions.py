@@ -23,6 +23,14 @@ def test_safe_mode_blocks_yellow(app):
     assert not verdict.allowed
 
 
+def test_safe_mode_does_not_write_project_files(app):
+    KERNEL.set_mode(AutonomyMode.SAFE)
+    verdict = app.permissions.evaluate("create_project_file", target="app.py", why="build")
+    assert not verdict.allowed
+    built = app.orchestrator.handle_text("Build me a simple task-list application")
+    assert built["mission"]["status"] != "COMPLETED"
+
+
 def test_approve_reject(app):
     verdict = app.permissions.evaluate("upload", target="file", why="share")
     assert verdict.approval_id

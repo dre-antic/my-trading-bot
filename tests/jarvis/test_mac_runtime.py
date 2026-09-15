@@ -76,6 +76,7 @@ def test_app_launcher_pins_python311():
     launch_py = Path("jarvis/launch.py").read_text(encoding="utf-8")
     assert "JARVIS_USE_WEBVIEW" in launch_py
     assert Path("packaging/macos/JARVIS.app/Contents/Resources/.keep").exists()
+    assert launcher.find('== "3.11"') < launcher.find("3.12")
 
 
 def test_open_local_window_rejects_remote_url():

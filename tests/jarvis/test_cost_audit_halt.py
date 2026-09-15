@@ -25,6 +25,10 @@ def test_audit_redacts_and_records(app):
     assert rows
     blob = " ".join(str(v) for v in rows[0].values())
     assert "sk-abcdefghijklmnopqrstuvwxyz99" not in blob
+    with app.store.connect() as conn:
+        raw = conn.execute("SELECT result FROM audit_log ORDER BY id DESC LIMIT 1").fetchone()["result"]
+    assert "sk-abcdefghijklmnopqrstuvwxyz99" not in raw
+    assert "[REDACTED]" in raw
 
 
 def test_stop_and_pause_kernel(app):
