@@ -19,7 +19,7 @@ engine/aivideostudio/   # older video studio project, not part of the JARVIS win
 ## Run tests
 
 ```bash
-python3 -m venv .venv
+python3.11 -m venv .venv   # 3.11–3.13; wheels available. Avoid Homebrew 3.14.
 source .venv/bin/activate
 pip install -e ".[dev]"
 pytest tests/jarvis -q

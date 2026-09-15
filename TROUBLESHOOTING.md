@@ -8,6 +8,11 @@ On a Mac, Python 3 must be installed (it usually is). If double-clicking does
 nothing, install Python from python.org or Xcode Command Line Tools, then try
 again.
 
+Use **Python 3.11 or newer, with official wheels** (3.11–3.13 is the safe
+range). Homebrew Python 3.14 may compile `cryptography` from source and appear
+to hang. Prefer `python3.11` / `python3.12` / `python3.13` when creating the
+venv.
+
 ## macOS says the app is damaged or unidentified
 
 This build is not signed. Right-click **JARVIS** → **Open**. You only do this

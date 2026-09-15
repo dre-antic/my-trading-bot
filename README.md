@@ -34,7 +34,7 @@ from an unidentified developer. Right-click the app and choose **Open**.
 **On this Linux computer (development)**
 
 ```bash
-python3 -m venv .venv
+python3.11 -m venv .venv   # 3.11–3.13 with wheels. Homebrew 3.14 may hang.
 source .venv/bin/activate
 pip install -e ".[dev]"
 ./scripts/launch-jarvis.sh

@@ -128,6 +128,7 @@ class Orchestrator:
         )
 
         if KERNEL.mode == AutonomyMode.OBSERVE:
+            self.missions.set_status(mission_id, MissionStatus.EXECUTING)
             self.missions.set_status(mission_id, MissionStatus.COMPLETED)
             self.missions.update_fields(mission_id, result={"explained": True, "acted": False})
             return self.missions.get(mission_id)
@@ -157,6 +158,7 @@ class Orchestrator:
         if route.intent in {"browser", "computer"}:
             return self._simple_worker(mission_id, route.intent, mission["objective"])
 
+        self.missions.set_status(mission_id, MissionStatus.EXECUTING)
         self.missions.set_status(mission_id, MissionStatus.COMPLETED)
         self.missions.update_fields(
             mission_id,
@@ -174,6 +176,8 @@ class Orchestrator:
         ingested = self.security.ingest_untrusted("research", str(result.get("answer") or ""))
         if ingested["injection_detected"]:
             result["answer"] = "I ignored instruction-like text from the web."
+        # RESEARCHING → REVIEWING is illegal. Compile the answer, then review.
+        self.missions.set_status(mission_id, MissionStatus.EXECUTING)
         self.missions.set_status(mission_id, MissionStatus.REVIEWING)
         self.missions.add_evidence(mission_id, {"kind": "research", "summary": "Research complete", "data": {"citations": result.get("citations")}})
         self.missions.set_status(mission_id, MissionStatus.COMPLETED)
