@@ -27,6 +27,7 @@ def test_lifecycle_and_invalid_transition(app):
 
 def test_researching_cannot_jump_to_reviewing(app):
     """The Mac crash: RESEARCHING → REVIEWING is not a legal hop."""
+    assert MissionStatus.REVIEWING not in ALLOWED_TRANSITIONS[MissionStatus.RESEARCHING]
     engine = app.missions
     mission = engine.create("Research this company.")
     engine.set_status(mission["id"], MissionStatus.UNDERSTANDING)

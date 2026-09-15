@@ -2,8 +2,11 @@
 
 from pathlib import Path
 
+import pytest
+
 from jarvis.intelligence import IntelligenceRouter
 from jarvis.types import MemoryKind
+from jarvis.window import open_local_window
 
 
 def test_inventory_does_not_assume_apple_silicon(app):
@@ -51,10 +54,30 @@ def test_app_launcher_pins_python311():
     launcher = Path("packaging/macos/JARVIS.app/Contents/MacOS/JARVIS").read_text(encoding="utf-8")
     assert "python3.11" in launcher
     assert "3.14" in launcher
+    assert 'exec "$PY"' not in launcher
+    assert "cd \"$HERE/../Resources\"" not in launcher
+    assert "trap " in launcher
+    assert "/usr/local/bin" in launcher
     install = Path("scripts/install-jarvis-macos.sh").read_text(encoding="utf-8")
     assert "Dock" in install
     assert "python3.11" in install
     assert "Right-click" in install
+    assert "venv --clear" in install
+    assert "xattr" in install
     build = Path("scripts/build-jarvis-macos.sh").read_text(encoding="utf-8")
     assert "jarvis-root.txt" in build
     assert "rsync" not in build
+    launch_sh = Path("scripts/launch-jarvis.sh").read_text(encoding="utf-8")
+    assert "python3.11" in launch_sh
+    assert "3.14" in launch_sh
+    window = Path("jarvis/window.py").read_text(encoding="utf-8")
+    assert "/usr/bin/open" in window
+    assert "--app=" not in window
+    launch_py = Path("jarvis/launch.py").read_text(encoding="utf-8")
+    assert "JARVIS_USE_WEBVIEW" in launch_py
+    assert Path("packaging/macos/JARVIS.app/Contents/Resources/.keep").exists()
+
+
+def test_open_local_window_rejects_remote_url():
+    with pytest.raises(ValueError, match="local address"):
+        open_local_window("https://example.com")

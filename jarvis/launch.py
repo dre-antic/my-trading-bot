@@ -58,15 +58,21 @@ def main(argv: list[str] | None = None) -> None:
                 time.sleep(0.1)
         if args.no_window:
             return
-        try:
-            import webview
+        # pywebview must run on the main thread on macOS. Dock launch runs this
+        # helper in a daemon thread, so importing it by default can hang and
+        # never open Chrome/Safari. Opt in with JARVIS_USE_WEBVIEW=1.
+        use_webview = os.environ.get("JARVIS_USE_WEBVIEW", "").strip().lower() in {"1", "true", "yes"}
+        if use_webview:
+            try:
+                import webview
 
-            webview.create_window("JARVIS", url, width=1280, height=860, min_size=(960, 640))
-            webview.start()
-            httpd.shutdown()
-            return
-        except Exception:
-            open_local_window(url)
+                webview.create_window("JARVIS", url, width=1280, height=860, min_size=(960, 640))
+                webview.start()
+                httpd.shutdown()
+                return
+            except Exception:
+                pass
+        open_local_window(url)
 
     if not args.no_window:
         threading.Thread(target=_window, daemon=True).start()

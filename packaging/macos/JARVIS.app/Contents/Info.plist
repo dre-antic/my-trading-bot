@@ -26,5 +26,10 @@
   <string>JARVIS only uses the microphone if you turn on voice later. Typing always works.</string>
   <key>NSAppleEventsUsageDescription</key>
   <string>JARVIS may control other Mac apps when you ask it to, and only after it explains the action.</string>
+  <key>LSEnvironment</key>
+  <dict>
+    <key>PATH</key>
+    <string>/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+  </dict>
 </dict>
 </plist>

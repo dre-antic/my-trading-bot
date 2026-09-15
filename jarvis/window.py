@@ -14,17 +14,25 @@ def open_local_window(url: str) -> str:
     if platform.system() != "Darwin":
         webbrowser.open(url)
         return "webbrowser"
+    opener = "/usr/bin/open" if Path("/usr/bin/open").exists() else "open"
+    # Chrome app-mode via open --args is unreliable when Chrome is already
+    # running, which is the usual Dock case on this Mac. Open the local URL
+    # in Chrome (or Safari) instead.
     chrome = Path("/Applications/Google Chrome.app")
     if chrome.exists():
         subprocess.Popen(
-            ["open", "-na", "Google Chrome", "--args", f"--app={url}"],
+            [opener, "-a", "Google Chrome", url],
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
         )
-        return "chrome-app"
+        return "chrome"
     safari = Path("/Applications/Safari.app")
     if safari.exists():
-        subprocess.Popen(["open", "-a", "Safari", url], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        subprocess.Popen(
+            [opener, "-a", "Safari", url],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
         return "safari"
-    webbrowser.open(url)
-    return "webbrowser"
+    subprocess.Popen([opener, url], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    return "macos-open"

@@ -30,7 +30,11 @@ Then run the installer again.
 7. If macOS says the developer cannot be verified, click **Open**. This build is not signed. That is expected.
 8. Drag **JARVIS** to the **Dock** if you want it there.
 
+The installer recreates `.venv` with Python 3.11 (it replaces a leftover 3.14 venv) and clears macOS quarantine on JARVIS.app when it can.
+
 After that, click JARVIS in the Dock like any other app. You should not need Terminal.
+
+If you only used `python -m jarvis.launch` before, that is still Terminal, not Dock. You still need the installer once.
 
 The window is the local JARVIS on this Mac. Cloud AI is off unless you later approve a paid provider. Files, missions, memory, and the local builder still work if the internet or cloud AI is down.
 
