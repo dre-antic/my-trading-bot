@@ -1,0 +1,47 @@
+:root {
+  --bg: #12141a;
+  --panel: #1a1d26;
+  --ink: #ece7dc;
+  --muted: #9a9386;
+  --line: #2a2e3a;
+  --gold: #d4b483;
+  --danger: #c45c5c;
+  --ok: #7ea882;
+  --focus: #ead9b2;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: var(--bg); color: var(--ink); font: 16px/1.5 "Iowan Old Style", Palatino, Georgia, serif; }
+button, input { font: inherit; }
+button { background: var(--panel); color: var(--ink); border: 1px solid var(--line); border-radius: 999px; padding: .45rem 1rem; cursor: pointer; }
+button:hover { border-color: var(--gold); }
+button.danger { border-color: var(--danger); color: #f3d4d4; }
+button.nav { display: block; width: 100%; text-align: left; background: transparent; border: 0; border-radius: 10px; padding: .55rem .8rem; color: var(--muted); }
+button.nav.on, button.nav:hover { background: #222632; color: var(--ink); }
+.top { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.4rem; border-bottom: 1px solid var(--line); }
+.brand { display: flex; gap: .8rem; align-items: center; }
+.mark { width: 2.1rem; height: 2.1rem; border-radius: 50%; background: radial-gradient(circle at 30% 30%, #fff6, var(--gold) 42%, #5c4a2e); box-shadow: 0 0 24px #d4b48355; }
+.quiet { color: var(--muted); font-size: .85rem; }
+.halt { display: flex; gap: .5rem; }
+.shell { display: grid; grid-template-columns: 11.5rem 1fr; min-height: calc(100% - 4.6rem); }
+nav { padding: 1rem .7rem; border-right: 1px solid var(--line); }
+main { padding: 1.4rem 1.8rem 2rem; overflow: auto; }
+.view { display: none; }
+.view.on { display: block; }
+.transcript { min-height: 22rem; display: flex; flex-direction: column; gap: .8rem; margin-bottom: 1rem; }
+.bubble { max-width: 40rem; padding: .9rem 1.1rem; border-radius: 1.1rem; background: var(--panel); border: 1px solid var(--line); }
+.bubble.user { align-self: flex-end; background: #262113; border-color: #3d3420; }
+#composer { display: flex; gap: .6rem; position: sticky; bottom: 0; padding-top: .4rem; background: var(--bg); }
+#composer input { flex: 1; background: var(--panel); border: 1px solid var(--line); color: var(--ink); border-radius: 999px; padding: .75rem 1.1rem; }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 1rem; padding: 1rem 1.1rem; margin: 0 0 .8rem; }
+.card h2, .card h3 { margin: 0 0 .4rem; font-weight: 500; }
+.row { display: flex; justify-content: space-between; gap: 1rem; align-items: baseline; }
+.pill { font-size: .75rem; letter-spacing: .04em; text-transform: uppercase; color: var(--gold); }
+.steps { list-style: none; padding: 0; }
+.steps li { padding: .25rem 0; color: var(--muted); }
+.steps li.done { color: var(--ok); }
+.steps li.now { color: var(--ink); }
+#observe-banner { background: #3a2a12; color: #f3e2c0; padding: .6rem 1rem; display: flex; gap: 1rem; align-items: center; justify-content: center; }
+#observe-banner[hidden] { display: none !important; }
+.approval { border-color: #5a4630; }
+.muted { color: var(--muted); }
+pre { white-space: pre-wrap; font-family: ui-monospace, monospace; font-size: .82rem; color: var(--muted); }

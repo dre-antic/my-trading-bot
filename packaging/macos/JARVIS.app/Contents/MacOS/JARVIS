@@ -1,0 +1,13 @@
+#!/bin/bash
+# JARVIS.app entry point. Unsigned. Runs the local JARVIS server and opens a window.
+DIR="$(cd "$(dirname "$0")/../Resources/app" && pwd)"
+if [[ ! -d "$DIR" ]]; then
+  DIR="$(cd "$(dirname "$0")/../../../.." && pwd)"
+fi
+cd "$DIR" || exit 1
+export PYTHONPATH="$DIR${PYTHONPATH:+:$PYTHONPATH}"
+PY="/usr/bin/python3"
+if [[ -x "$DIR/.venv/bin/python" ]]; then
+  PY="$DIR/.venv/bin/python"
+fi
+exec "$PY" -m jarvis.launch

@@ -1,42 +1,54 @@
 # Development
 
+This is for someone changing JARVIS. Everyday use is in the README.
+
 ## Layout
 
 ```
-engine/aivideostudio/   production engine + FastAPI + UI files
-resources/              models.json, templates, icon
-desktop/                optional Tauri wrapper
-packaging/macos/        .app template and launcher
-tests/                  unit, integration, failure, e2e
-scripts/                launch / setup / macOS build
+jarvis/                 # the product
+  web/                  # the window
+  cursor_ctrl.py        # ACP + CLI adapter
+  orchestrator.py       # manager
+packaging/macos/JARVIS.app
+scripts/launch-jarvis.sh
+scripts/build-jarvis-macos.sh
+tests/jarvis/
+engine/aivideostudio/   # older video studio project, not part of the JARVIS window
 ```
 
-## Run
+## Run tests
 
 ```bash
+python3 -m venv .venv
 source .venv/bin/activate
 pip install -e ".[dev]"
-./scripts/launch.sh --no-window
-# UI: http://127.0.0.1:8745
-pytest -q
+pytest tests/jarvis -q
 ```
 
-Set `AIVS_DATA_DIR` to keep test databases off your real library folder.
+Video Studio tests (separate product) still live under `tests/unit`,
+`tests/integration`, and `tests/e2e`.
 
-## Adding a provider
+## Environment variables
 
-1. Implement the interface in `providers.py` (or a sibling module).
-2. Add a `resources/models.json` record with **repository** and **weights** licenses.
-3. Wire fallbacks. Never hard-code a single vendor in the orchestrator.
-4. If status is `NON_COMMERCIAL`, `UNKNOWN`, `REVIEW_REQUIRED`, or `BLOCKED`, commercial projects must refuse it unless the user overrides on the license screen.
+- `JARVIS_HOME` — where the SQLite file and logs go (default `~/.jarvis`)
+- `JARVIS_WORKSPACE` — project sandbox (default `~/Projects`)
+- `JARVIS_PORT` — local port (default 8787)
 
-## Do not
+Never commit `.env` files or real keys.
 
-- Commit `.venv`, `*.sqlite`, API keys, or generated MP4s except the documented e2e artifact if you choose to keep it.
-- Log secrets (the redacting logger is required).
-- Call a model the registry marks unsafe for the project’s usage mode.
-- Regenerate unrelated scenes when a user only changes voice or captions.
+## Packaging
 
-## Style
+On a Mac:
 
-Keep user-facing strings in plain English. Technical detail belongs under a disclosure, a log file, or DEVELOPMENT.md — not the main buttons.
+```bash
+./scripts/build-jarvis-macos.sh
+```
+
+The result is **unsigned**. This environment cannot notarize with Apple.
+
+## Code style
+
+- Do not add Kubernetes, Redis, or Postgres
+- Do not add large local models
+- Prefer stdlib
+- If a paid API is missing, keep the adapter and show disconnected

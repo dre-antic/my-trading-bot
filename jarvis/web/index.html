@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>JARVIS</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div id="observe-banner" hidden>Observing — I can see the screen. Nothing is recorded in the background. <button data-act="observe-stop">Stop observing</button></div>
+  <header class="top">
+    <div class="brand">
+      <div class="mark" aria-hidden="true"></div>
+      <div>
+        <strong>JARVIS</strong>
+        <div class="quiet" id="mode-label">Assist mode</div>
+      </div>
+    </div>
+    <div class="halt">
+      <button class="danger" data-act="stop">Stop now</button>
+      <button data-act="pause">Pause safely</button>
+    </div>
+  </header>
+  <div class="shell">
+    <nav>
+      <button class="nav on" data-view="chat">Chat</button>
+      <button class="nav" data-view="missions">Missions</button>
+      <button class="nav" data-view="projects">Projects</button>
+      <button class="nav" data-view="history">History</button>
+      <button class="nav" data-view="activity">Activity</button>
+      <button class="nav" data-view="system">System</button>
+      <button class="nav" data-view="memory">Memory</button>
+      <button class="nav" data-view="permissions">Permissions</button>
+      <button class="nav" data-view="providers">Providers</button>
+      <button class="nav" data-view="settings">Settings</button>
+    </nav>
+    <main>
+      <section id="view-chat" class="view on">
+        <div id="transcript" class="transcript">
+          <div class="bubble jarvis">What would you like me to do?</div>
+        </div>
+        <form id="composer">
+          <input id="prompt" autocomplete="off" placeholder="Research a company, build an app, explain a project…">
+          <button type="submit">Send</button>
+        </form>
+      </section>
+      <section id="view-missions" class="view"></section>
+      <section id="view-projects" class="view"></section>
+      <section id="view-history" class="view"></section>
+      <section id="view-activity" class="view"></section>
+      <section id="view-system" class="view"></section>
+      <section id="view-memory" class="view"></section>
+      <section id="view-permissions" class="view"></section>
+      <section id="view-providers" class="view"></section>
+      <section id="view-settings" class="view"></section>
+    </main>
+  </div>
+  <script src="/app.js"></script>
+</body>
+</html>

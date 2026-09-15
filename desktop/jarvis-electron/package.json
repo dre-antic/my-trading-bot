@@ -1,0 +1,10 @@
+{
+  "name": "jarvis-desktop",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Optional lightweight Electron window for JARVIS. The real brain is the local Python app.",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  }
+}

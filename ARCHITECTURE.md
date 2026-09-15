@@ -1,82 +1,65 @@
 # Architecture
 
-AI Video Studio is a local control center. The Mac (or Linux) app owns projects, the timeline, review, and render. Heavy neural video models are optional remote workers.
+JARVIS is the manager. Other tools are workers that can be swapped.
 
 ```
-Mac / Linux desktop window (pywebview or Tauri)
-        │
-        ▼
-Local FastAPI app (127.0.0.1)
-        │
-        ▼
-SQLite + files on disk
-        │
-        ▼
-Production graph (checkpointed stages)
-        ├── Research engine
-        ├── Script engine + critic
-        ├── Story / scene planner
-        ├── Visual decision engine
-        ├── Image / motion-graphics / optional ComfyUI
-        ├── Shot-level video (Ken Burns or remote generator)
-        ├── Consistency metadata (bibles)
-        ├── Voice engine
-        ├── Music / SFX engine
-        ├── Editing (FFmpeg timeline)
-        ├── Captions
-        ├── Thumbnails + critic
-        ├── Review AI (separate reviewers + executive producer)
-        ├── Deterministic technical QC
-        └── Correction loop (smallest asset)
+You
+  → JARVIS window (this computer only)
+    → Task router
+      → Mission engine (saved in a local SQLite file)
+        → Permission + security checks
+          → A worker (research, coding, browser, Mac control, review)
+            → Verification + independent review
+              → Evidence in the mission
 ```
 
-## Why not LangGraph
+## Pieces
 
-LangGraph is MIT, actively maintained (verified 2026-09-09), and a reasonable orchestrator. It was **not** adopted.
+| Piece | Job |
+| --- | --- |
+| GUI | Calm window: Chat, Missions, Projects, History, Activity, System, Memory, Permissions, Providers, Settings |
+| Task router | Decides what you asked for and which worker should help |
+| Mission engine | Keeps state: queued → … → completed / failed / paused / cancelled |
+| Provider registry | Lists local builder, Cursor ACP/CLI, optional paid APIs (disconnected until you approve) |
+| Tool registry | Every tool names its risk and side effects |
+| Permission engine | Green / yellow / red |
+| Security engine | Treats the web as untrusted data. Unknown MCP servers are denied |
+| Project Brain | Durable notes about each project |
+| Memory | Searchable notes. Secrets are refused |
+| Cursor adapter | Real ACP JSON-RPC client for `agent acp`, plus `agent -p` |
+| Local coding worker | Writes real files and tests when Cursor is not connected |
+| Browser / computer | HTTP fetch now; Mac Accessibility/AppleScript when running on macOS |
+| Cost manager | Automatic spend $0 |
+| Audit log | Human-readable. Credentials redacted |
+| Recovery | Bounded retries. No infinite loops |
+| System Doctor | Explains what is wrong in plain language |
+| SQLite | The only database. No Redis, Postgres, or Kubernetes |
 
-Reasons:
+## Why this stack
 
-1. Pause, resume, license gates, cost gates, and correction loops need to share the SQLite checkpoint already used for crash recovery.
-2. Bundling the LangChain stack would add moving parts without helping FFmpeg, TTS, or render.
-3. A small explicit stage graph is easier to test and to explain in the UI.
+The target machine is an older **Intel MacBook Pro with about 8 GB of RAM**.
 
-The production graph lives in `engine/aivideostudio/orchestrator.py`.
+- Python 3.12 standard library for the brain and a local web window
+- Optional `pywebview` native window, or a thin Electron shell if you already have it
+- Heavy AI stays optional and remote. Nothing here downloads a large local model
+- JARVIS.app is an unsigned Mac wrapper that starts the same program
 
-## Desktop choice
+## Cursor integration (researched 2026-09-15)
 
-Evaluated Swift/SwiftUI, Tauri, Electron, and pywebview.
+Official docs: https://cursor.com/docs/cli/acp
 
-| Option | Verdict |
-|---|---|
-| SwiftUI | Best native feel, but this repository must also run and test on Linux CI |
-| Electron | Heavy RAM, against the performance rule |
-| Tauri 2 | Apache-2.0/MIT, lightweight, preferred Mac wrapper (`packaging/` + `desktop/`) |
-| pywebview | Native Cocoa window on Mac, GTK on Linux, ships today |
+1. Spawn `agent acp`
+2. JSON-RPC 2.0, one JSON object per line, over stdin/stdout
+3. `initialize` → `authenticate` (`cursor_login`) → `session/new` or `session/load` → `session/prompt`
+4. Handle `session/update` and `session/request_permission` (`allow-once` / `allow-always` / `reject-once`)
+5. `session/cancel` to stop
 
-The engine always listens on localhost. Tauri or pywebview is only a window around it.
+Print mode: `agent -p --output-format json`.
 
-## Default compute (no GPU required)
+JARVIS does not mouse-click the Cursor IDE when this interface exists.
 
-Consumer Macs often cannot run Wan / Hunyuan / FLUX locally. The Visual Decision Engine therefore prefers:
+## Hardware inspected in this build environment
 
-- Motion graphics and diagrams (original, local, approved)
-- Wikimedia Commons stills when the file license is safe, with attribution
-- Ken Burns / camera moves via FFmpeg (shot-level, never one giant video model call)
-- Optional ComfyUI or OpenAI-compatible APIs when the user enables them
-
-Voice defaults to eSpeak NG (always-on subprocess, GPL binary not linked). Piper and Kokoro are preferred drop-in local voices when present. Music is an original procedural composer (ACE-Step is optional).
-
-## Data
-
-- Metadata: SQLite (`studio.sqlite` in Application Support)
-- Media: `projects/<id>/...` on disk
-- Secrets: encrypted vault + macOS Keychain/libsecret via `keyring`
-- Logs: redacted (API keys stripped)
-
-## Providers
-
-Interfaces: `LLMProvider`, research, image, video, TTS, music, SFX, captions. Each has fallbacks, bounded retries, and license checks in commercial mode.
-
-## Crash recovery
-
-Every finished stage writes files and a checkpoint name. Reopening the app continues from the next unfinished stage. Completed assets are not regenerated unless a change request marks them dirty.
+This copy was built on **Linux x86_64**, not the user’s Intel Mac. There is no
+self-hosted Mac worker attached. The app is written to run on that Mac; Mac
+window control and Apple signing could not be verified here.

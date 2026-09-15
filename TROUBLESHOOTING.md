@@ -2,43 +2,43 @@
 
 ## The window does not open
 
-The engine may still be running. Open http://127.0.0.1:8745 in a browser. On Linux, a native window needs GTK webview; the browser UI is fully usable.
+Open a browser to http://127.0.0.1:8787 while JARVIS is running.
 
-## “The video editor (FFmpeg) is missing”
+On a Mac, Python 3 must be installed (it usually is). If double-clicking does
+nothing, install Python from python.org or Xcode Command Line Tools, then try
+again.
 
-Install FFmpeg, then reopen the app.
+## macOS says the app is damaged or unidentified
 
-- Mac: `brew install ffmpeg` (or use the setup wizard when it can)
-- Ubuntu: `sudo apt-get install ffmpeg`
+This build is not signed. Right-click **JARVIS** → **Open**. You only do this
+once.
 
-## The voice sounds robotic
+## Cursor never starts
 
-That is the built-in eSpeak NG engine, which always works offline. For a more natural voice, install Piper or Kokoro later, or add a cloud TTS key in Settings. The studio will pick them up automatically.
+That is expected until you install Cursor CLI and run `agent login`. JARVIS
+should say it is disconnected and may still build simple apps locally. If it
+claims Cursor succeeded without the CLI, that would be a bug — please report it.
 
-## Research looks thin
+## It asked me about money
 
-Wikipedia may be blocked on your network. The script still runs, but it will mark facts as uncertain instead of inventing them. Check System status and your network.
+Good. Automatic spending is $0. If you did not mean to pay, choose Reject.
 
-## A job failed with HTTP 502
+## It will not read a password file
 
-The friendly message is: “A generation service is temporarily unavailable. The system will retry automatically.” Open the task, click **Retry**. Local fallbacks run when the cloud is down.
+Good. Those paths are protected. You would have to approve that exact file on
+purpose.
 
-## Not enough disk or memory
+## A mission is stuck
 
-The studio classifies your Mac as LOW / MEDIUM / HIGH. Heavy AI video should be sent to a remote GPU. Motion graphics, voice, captions, and editing stay local.
+Press **Pause safely** or **Stop now**. Open **Missions**. You can resume later;
+progress is saved in a local file, not in the cloud.
 
-## I closed the app in the middle of a render
+## System Doctor
 
-Reopen the project. Finished stages are kept. The job continues from the last checkpoint.
+Open **System**. It lists what is missing and how to fix the easy things (for
+example, creating the Projects folder).
 
-## Commercial mode blocked a model
+## Voice does not hear me
 
-Open **Licenses & models**. If you understand the restriction and still want that model for a personal experiment, switch the project to Personal, or set an explicit override after reading the license. The studio will not do this silently.
-
-## API keys
-
-Never put keys in git. Use Settings. If a key was pasted into a prompt by mistake, rotate it with the provider.
-
-## The test video has no sound
-
-Confirm eSpeak NG is installed (`espeak-ng --version`) and that FFmpeg can encode AAC. Then retry the first-run test.
+Typing always works. Speech-to-text is not connected unless a free local engine
+is added later. JARVIS will not call a paid voice API on its own.

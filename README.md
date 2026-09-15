@@ -1,69 +1,80 @@
-# AI Video Studio
+# JARVIS
 
-A native-feeling video production studio for Mac. You describe the video you want. The application researches, writes, plans scenes, generates visuals, records narration, composes original music, edits, captions, reviews, and renders a real MP4.
+JARVIS is a personal helper for your Mac.
 
-You do **not** need Terminal, Python, Docker, ComfyUI, or GPU knowledge for normal use.
+You open one app, say what you want in ordinary language, and JARVIS figures out
+how to do it. You do not need to know programming, terminals, APIs, or agents.
 
-## What you get
+## What you can ask
 
-- A desktop window (macOS or Linux) with a dark studio interface
-- New Project → prompt, platform, duration, Simple/Advanced → **Create video**
-- A full production pipeline that writes files to disk and a SQLite project database
-- Playable H.264 MP4 output, captions (SRT/VTT/ASS), thumbnails, research citations, and license records
-- Optional cloud / ComfyUI / Ollama providers behind Settings — never required for the base studio
+- “Research this company.”
+- “What happened today?”
+- “Build me a simple task-list application.”
+- “Explain this project to me.”
+- “Take over and finish this.”
+- “Stop.”
+
+JARVIS turns a goal into a **mission**. It plans, does the work, checks the
+result, and shows you proof. If something needs your say-so — spending money,
+deleting important files, publishing, trading — it stops and asks.
 
 ## Open the app (normal use)
 
-**On a Mac, after installing the application:**
+**On a Mac**
 
-1. Open **Applications**
-2. Double-click **AI Video Studio**
-   or click it in the **Dock**
+1. Put **JARVIS** in your Applications folder (see Installation below).
+2. Double-click it, or open it from the Dock.
+3. Type what you want. Press Send.
 
-That is the intended everyday launch. You should not need Terminal.
+You should not need Terminal for everyday use.
 
-**On this computer (development / Linux):**
+This copy is **not signed** by Apple. The first time macOS may say the app is
+from an unidentified developer. Right-click the app and choose **Open**.
+
+**On this Linux computer (development)**
 
 ```bash
-cd /path/to/ai-video-studio
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -e ".[dev]"
-./scripts/launch.sh
+./scripts/launch-jarvis.sh
 ```
 
-`./scripts/launch.sh` starts the studio and opens a native window when possible. Use `./scripts/launch.sh --no-window` if you only want the local web UI at http://127.0.0.1:8745
+Then open http://127.0.0.1:8787 if a window does not appear.
 
-## First-run wizard
+## How it spends money
 
-The first launch walks through:
+It doesn’t, unless you approve a specific paid action.
 
-1. Welcome  
-2. Check this computer  
-3. Required components (FFmpeg, voice engine)  
-4. Optional models (none required)  
-5. A short test video  
+Automatic spending is **$0**. JARVIS will not silently switch to a paid AI
+company to “make it work.”
 
-If a step fails, the app explains it in plain language.
+## Where your files live
 
-## Requirements
+Work happens in a **Projects** folder (`~/Projects` on a Mac). JARVIS is not
+supposed to wander through passwords, SSH keys, or `.env` files.
 
-- macOS 12+ (Apple Silicon or Intel) or Linux for development
-- FFmpeg (the setup path detects it; on Mac, the packaging script can install via Homebrew when you allow it)
-- Disk space for projects (videos are stored as files, not inside the database)
+## Cursor
 
-No paid API key is required. Optional keys are entered in **Settings → AI providers** and stored encrypted on this computer.
+If Cursor’s official command-line tool (`agent`) is installed and signed in,
+JARVIS talks to it with the **Agent Client Protocol** (`agent acp`) — not by
+clicking the Cursor window. If Cursor is missing, JARVIS says so and can still
+build simple projects with its local builder. It will not pretend Cursor ran.
 
-## Tests
+## AI Video Studio and trading
 
-```bash
-source .venv/bin/activate
-pytest tests/unit tests/failure tests/integration -q
-pytest tests/e2e -q
-```
+Older video-studio and trading-bot files in this repository are **projects
+JARVIS can manage**. They are not baked into JARVIS. JARVIS never places a
+trade by itself.
 
-The end-to-end test produces a real MP4 about why the sky appears blue.
+## Learn more
 
-## License of this application
+- [ARCHITECTURE.md](ARCHITECTURE.md) — how the pieces fit
+- [SECURITY.md](SECURITY.md) — what is protected
+- [PERMISSIONS.md](PERMISSIONS.md) — when it asks you
+- [PROVIDERS.md](PROVIDERS.md) — Cursor, local tools, paid APIs
+- [DEVELOPMENT.md](DEVELOPMENT.md) — for people changing the code
+- [TROUBLESHOOTING.md](TROUBLESHOOTING.md) — when something is stuck
+- [JARVIS_PROJECT_BRAIN.md](JARVIS_PROJECT_BRAIN.md) — how JARVIS remembers a project
 
-MIT for the studio source. Third-party tools keep their own licenses — see `LICENSES.md`, `THIRD_PARTY_NOTICES.md`, and `MODEL_REGISTRY.md`.
+Video Studio’s own guide is saved under [docs/ai-video-studio/](docs/ai-video-studio/).
