@@ -23,7 +23,7 @@ button.nav.on, button.nav:hover { background: #222632; color: var(--ink); }
 .quiet { color: var(--muted); font-size: .85rem; }
 .halt { display: flex; gap: .5rem; }
 .shell { display: grid; grid-template-columns: 11.5rem 1fr; min-height: calc(100% - 4.6rem); }
-nav { padding: 1rem .7rem; border-right: 1px solid var(--line); }
+nav { padding: 1rem .7rem; border-right: 1px solid var(--line); overflow: auto; }
 main { padding: 1.4rem 1.8rem 2rem; overflow: auto; }
 .view { display: none; }
 .view.on { display: block; }

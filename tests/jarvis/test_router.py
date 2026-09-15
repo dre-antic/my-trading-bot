@@ -22,3 +22,5 @@ def test_computer_and_takeover_and_stop(app):
     assert stop.intent == "halt"
     assert app.router.route("Stop.").intent == "halt"
     assert app.router.route("continue").intent == "resume"
+    learn = app.router.route("Remember I prefer short answers.")
+    assert learn.intent == "learn"

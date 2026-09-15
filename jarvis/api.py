@@ -6,10 +6,12 @@ import json
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Any
-from urllib.parse import urlparse
+from urllib.parse import parse_qs, urlparse
 
 from .app import App, create_app
+from .credentials import CredentialDenied
 from .kernel import KERNEL
+from .learning import LearningDenied
 from .paths import workspace_root
 from .secrets import redact
 from .types import ApprovalDecision, AutonomyMode, MemoryKind
@@ -70,6 +72,9 @@ class JarvisHandler(SimpleHTTPRequestHandler):
                     "system": doctor,
                     "runtime": runtime,
                     "cloud_ai": runtime["cloud_ai"],
+                    "learning": app.learning.snapshot(),
+                    "computer_use": runtime.get("computer_use") or app.runtime.computer_use_honesty(),
+                    "coding_path": app.intelligence.coding_path(),
                 },
             )
         if path == "/api/runtime":
@@ -78,6 +83,12 @@ class JarvisHandler(SimpleHTTPRequestHandler):
             return self._send(200, app.runtime.list_workspace())
         if path == "/api/runtime/applications":
             return self._send(200, {"applications": app.runtime.list_applications(), "mac": app.runtime.is_mac()})
+        if path == "/api/runtime/file":
+            qs = parse_qs(parsed.query)
+            rel = (qs.get("path") or [""])[0]
+            return self._send(200, app.runtime.read_workspace_file(rel))
+        if path == "/api/learning":
+            return self._send(200, app.learning.snapshot())
         if path == "/api/missions":
             return self._send(200, app.missions.list())
         if path.startswith("/api/missions/") and path.count("/") == 3:
@@ -146,7 +157,7 @@ class JarvisHandler(SimpleHTTPRequestHandler):
             return self._send(200, {"observe": False})
         if path == "/api/system/fix":
             return self._send(200, {"done": app.doctor.autofix_low_risk()})
-        if path.endswith("/approve"):
+        if path.startswith("/api/permissions/") and path.endswith("/approve"):
             approval_id = path.split("/")[-2]
             row = app.permissions.decide(approval_id, ApprovalDecision.APPROVE)
             payload = dict(row) | {"status": "APPROVE"}
@@ -155,7 +166,7 @@ class JarvisHandler(SimpleHTTPRequestHandler):
                 KERNEL.clear_halt()
                 payload["mission"] = app.orchestrator.run_mission(str(mission_id))
             return self._send(200, payload)
-        if path.endswith("/reject"):
+        if path.startswith("/api/permissions/") and path.endswith("/reject"):
             approval_id = path.split("/")[-2]
             row = app.permissions.decide(approval_id, ApprovalDecision.REJECT)
             payload = dict(row) | {"status": "REJECT"}
@@ -163,6 +174,30 @@ class JarvisHandler(SimpleHTTPRequestHandler):
             if mission_id:
                 payload["mission"] = app.orchestrator.run_mission(str(mission_id))
             return self._send(200, payload)
+        if path.startswith("/api/learning/") and path.endswith("/accept"):
+            proposal_id = path.split("/")[3]
+            try:
+                return self._send(200, app.learning.accept(proposal_id))
+            except LearningDenied as exc:
+                return self._send(403, {"error": str(exc), "applied": False})
+            except KeyError:
+                return self._send(404, {"error": "missing"})
+        if path.startswith("/api/learning/") and path.endswith("/reject"):
+            proposal_id = path.split("/")[3]
+            try:
+                return self._send(200, app.learning.reject(proposal_id))
+            except KeyError:
+                return self._send(404, {"error": "missing"})
+        if path == "/api/learning/teach":
+            try:
+                return self._send(200, app.learning.teach(body.get("text") or ""))
+            except LearningDenied as exc:
+                return self._send(403, {"error": str(exc), "applied": False})
+        if path == "/api/credentials":
+            try:
+                return self._send(200, app.credentials.save_secret(body.get("provider") or "", body.get("secret") or ""))
+            except CredentialDenied as exc:
+                return self._send(400, {"error": str(exc)})
         if path.startswith("/api/missions/") and path.endswith("/resume"):
             mission_id = path.split("/")[3]
             KERNEL.clear_halt()

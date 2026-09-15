@@ -23,12 +23,16 @@ class ComputerAgent:
                 "os": "Darwin",
                 "platform": "macOS",
                 "methods": ["official API", "osascript", "open"],
+                "computer_use_working": False,
+                "role": "yellow_gui_fallback",
                 "detail": "Mac automation uses AppleScript / `open` first. Coordinate clicking and Cursor computer-use are not claimed.",
             }
         return {
             "connected": False,
             "os": self.platform,
             "platform": self.platform,
+            "computer_use_working": False,
+            "role": "yellow_gui_fallback",
             "methods": [],
             "detail": "This computer is not macOS. Mac app control is disconnected. Local processes can still be launched for tests.",
         }

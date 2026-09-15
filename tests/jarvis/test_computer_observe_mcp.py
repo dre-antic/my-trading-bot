@@ -24,6 +24,8 @@ def test_computer_status_matches_this_os(app):
     assert "open" in status["methods"]
     assert "osascript" in status["methods"]
     assert "pyautogui" not in status["methods"]
+    assert status["computer_use_working"] is False
+    assert status["role"] == "yellow_gui_fallback"
     assert "coordinate" not in status["detail"].lower() or "not claimed" in status["detail"].lower()
     # Observe/screenshot is still honest: this is not Cursor computer-use clicking.
     assert shot.get("ok") is False

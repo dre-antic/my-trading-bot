@@ -43,8 +43,10 @@ def test_cloud_ai_down_local_functions_still_work(app, monkeypatch):
 def test_intelligence_router_planes(app):
     router = IntelligenceRouter(app.runtime)
     coding = router.decide(app.router.route("Build me a web application"))
-    assert coding.plane == "local_mac"
+    assert coding.plane in {"local_mac", "remote_agent"}
     assert coding.cloud_ai_required is False
+    path = router.coding_path()
+    assert path["computer_use"] is False
     research = router.decide(app.router.route("Research this company."))
     assert research.cloud_ai_required is False
     assert research.plane in {"external_api", "local_mac"}

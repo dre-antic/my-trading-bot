@@ -162,6 +162,28 @@ CREATE TABLE IF NOT EXISTS credential_meta (
     last_success TEXT,
     keyring_ref TEXT NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS learning_observations (
+    id TEXT PRIMARY KEY,
+    ts TEXT NOT NULL,
+    kind TEXT NOT NULL,
+    summary TEXT NOT NULL,
+    data_json TEXT NOT NULL DEFAULT '{}',
+    mission_id TEXT
+);
+
+CREATE TABLE IF NOT EXISTS learning_proposals (
+    id TEXT PRIMARY KEY,
+    observation_id TEXT,
+    ts TEXT NOT NULL,
+    domain TEXT NOT NULL,
+    title TEXT NOT NULL,
+    body TEXT NOT NULL,
+    protected INTEGER NOT NULL DEFAULT 0,
+    immutable INTEGER NOT NULL DEFAULT 0,
+    status TEXT NOT NULL,
+    applied INTEGER NOT NULL DEFAULT 0
+);
 """
 
 

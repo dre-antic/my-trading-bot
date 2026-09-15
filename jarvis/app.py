@@ -17,6 +17,7 @@ from .downloads import DownloadGuard
 from .git_safety import GitSafety
 from .intelligence import IntelligenceRouter
 from .kernel import KERNEL
+from .learning import LearningStore
 from .mcp import McpRegistry
 from .memory import MemorySystem
 from .missions import MissionEngine
@@ -65,6 +66,7 @@ class App:
     trading: TradingGuard
     runtime: LocalMacRuntime
     intelligence: IntelligenceRouter
+    learning: LearningStore
     kernel: object
 
 
@@ -92,6 +94,7 @@ def create_app(store: Store | None = None) -> App:
     agents = AgentOrchestrator(coding, cursor, research, browser, computer, review)
     runtime = LocalMacRuntime(security)
     intelligence = IntelligenceRouter(runtime)
+    learning = LearningStore(store, memory)
     orchestrator = Orchestrator(
         missions,
         router,
@@ -110,6 +113,7 @@ def create_app(store: Store | None = None) -> App:
         cursor,
         intelligence,
         runtime,
+        learning,
     )
     return App(
         store=store,
@@ -136,5 +140,6 @@ def create_app(store: Store | None = None) -> App:
         trading=TradingGuard(permissions),
         runtime=runtime,
         intelligence=intelligence,
+        learning=learning,
         kernel=KERNEL,
     )

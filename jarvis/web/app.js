@@ -81,6 +81,7 @@ async function loadView(name) {
       <p class="muted">Python: ${esc((s.python && s.python.running_version) || s.python || "")}</p>
       <p class="muted">This is the local JARVIS runtime on this computer. Cloud AI is optional.</p>
       <p class="muted">Projects folder: ${esc(s.workspace)}</p>
+      <p class="muted">Computer Use: yellow GUI fallback. Clicks are not claimed. Coding uses Cursor ACP/CLI or the local builder.</p>
       <p class="muted">Hardware check from the cloud builder: not claimed. ${esc(s.note || "")}</p>
       ${(s.issues || []).map((i) => `<div class="card"><strong>${esc(i.what)}</strong><p>${esc(i.why)}</p><p class="muted">${esc(i.how)}</p></div>`).join("")}
       <button id="fix-low">Fix the easy things</button></div>`;
@@ -93,6 +94,25 @@ async function loadView(name) {
     const items = await get("/api/memory");
     el.innerHTML = heading("Memory") + `<p class="muted">You can look at, change, or delete what I remember. Secrets are never stored here.</p>` +
       items.map((m) => card(m.title, m.body, m.kind)).join("") || empty("Empty.");
+  }
+  if (name === "learning") {
+    const data = await get("/api/learning");
+    const pending = (data.pending || []).map(learningCard).join("");
+    const blocked = (data.blocked || []).map((p) => card(p.title, p.body, `${p.domain} · blocked`)).join("");
+    const obs = (data.observations || []).map((o) => card(o.kind, o.summary, o.ts)).join("");
+    el.innerHTML = heading("Learning") +
+      `<p class="muted">I observe, then propose. I ask before protected changes. I cannot change spending or security, even if you tap Accept.</p>` +
+      heading("Waiting for you") + (pending || empty("Nothing proposed.")) +
+      heading("Blocked (spend / security)") + (blocked || empty("None.")) +
+      heading("Recent observations") + (obs || empty("None."));
+    el.querySelectorAll("[data-learn-accept]").forEach((b) => b.addEventListener("click", async () => {
+      await post(`/api/learning/${b.dataset.learnAccept}/accept`);
+      loadView("learning");
+    }));
+    el.querySelectorAll("[data-learn-reject]").forEach((b) => b.addEventListener("click", async () => {
+      await post(`/api/learning/${b.dataset.learnReject}/reject`);
+      loadView("learning");
+    }));
   }
   if (name === "permissions") {
     const items = await get("/api/permissions");
@@ -117,6 +137,7 @@ async function loadView(name) {
       ${["JARVIS", "ASSIST", "SAFE", "OBSERVE"].map((m) => `<button data-mode="${m}">${m}</button>`).join(" ")}
       <p class="muted">Workspace: ${esc(s.workspace)}</p>
       <p class="muted">Automatic spending: $0. Paid services always stop and ask.</p>
+      <p class="muted">Learning cannot change spending or security. Those stay in Permissions.</p>
       <p class="muted">JARVIS runs on this Mac. Cloud AI off still allows files, missions, memory, and the local builder.</p>
     </div>`;
     el.querySelectorAll("[data-mode]").forEach((b) => b.addEventListener("click", async () => {
@@ -124,6 +145,16 @@ async function loadView(name) {
       refreshStatus();
     }));
   }
+}
+
+function learningCard(item) {
+  const accept = item.immutable ? "" : `<button data-learn-accept="${item.id}">Accept</button>`;
+  return `<div class="card">
+    <div class="row"><h3>${esc(item.title)}</h3><span class="pill">${esc(item.domain)} · ${esc(item.status)}</span></div>
+    <p>${esc(item.body)}</p>
+    ${accept}
+    <button data-learn-reject="${item.id}">Reject</button>
+  </div>`;
 }
 
 function approvalCard(item) {

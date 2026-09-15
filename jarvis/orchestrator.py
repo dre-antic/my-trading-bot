@@ -9,6 +9,7 @@ from .audit import AuditLog
 from .cost import CostManager
 from .cursor_ctrl import CursorAdapter
 from .kernel import KERNEL
+from .learning import LearningDenied, LearningStore
 from .memory import MemorySystem
 from .missions import MissionEngine
 from .notifications import Notifications
@@ -45,6 +46,7 @@ class Orchestrator:
         cursor: CursorAdapter,
         intelligence: IntelligenceRouter | None = None,
         runtime: LocalMacRuntime | None = None,
+        learning: LearningStore | None = None,
     ) -> None:
         self.missions = missions
         self.router = router
@@ -63,6 +65,7 @@ class Orchestrator:
         self.cursor = cursor
         self.runtime = runtime or LocalMacRuntime()
         self.intelligence = intelligence or IntelligenceRouter(self.runtime)
+        self.learning = learning
 
     def handle_text(self, text: str) -> dict[str, Any]:
         route = self.router.route(text)
@@ -97,6 +100,19 @@ class Orchestrator:
                 "reply": "Observe mode is on. A visible indicator should stay on until you press Stop. I will not record silently.",
                 "computer": shot,
             }
+        if route.intent == "learn":
+            if not self.learning:
+                return {"kind": "learning", "plane": plane.__dict__, "reply": "Learning storage is not available."}
+            try:
+                taught = self.learning.teach(text)
+            except LearningDenied as exc:
+                return {
+                    "kind": "learning",
+                    "plane": plane.__dict__,
+                    "applied": False,
+                    "reply": str(exc),
+                }
+            return {"kind": "learning", "plane": plane.__dict__, **taught}
         if route.intent == "empty":
             return {"kind": "empty", "plane": plane.__dict__, "reply": "Tell me a goal — research, build, explain, or take over a project."}
         if KERNEL.is_stopped() or KERNEL.should_pause():
@@ -118,6 +134,11 @@ class Orchestrator:
             result="queued",
         )
         ran = self.run_mission(mission["id"])
+        if self.learning and ran.get("id"):
+            try:
+                self.learning.note_mission(ran)
+            except Exception:
+                pass
         return {
             "kind": "mission",
             "route": route.__dict__,

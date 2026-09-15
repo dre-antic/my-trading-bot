@@ -6,6 +6,7 @@ work still runs.
 
 from __future__ import annotations
 
+import shutil
 from dataclasses import dataclass
 
 from .runtime import LocalMacRuntime
@@ -13,12 +14,14 @@ from .types import RouteDecision
 
 LOCAL_INTENTS = {
     "halt",
+    "resume",
     "takeover",
     "observe",
     "explain",
     "coding",
     "general",
     "computer",
+    "learn",
 }
 EXTERNAL_INTENTS = {"research", "browser"}
 CLOUD_ONLY_INTENTS: set[str] = set()  # nothing local is allowed to require a paid LLM
@@ -51,18 +54,28 @@ class IntelligenceRouter:
                 "No local feature may hard-require a paid model.",
             )
         if intent == "coding":
+            cursor = shutil.which("agent") or shutil.which("cursor-agent")
             return PlaneDecision(
                 intent,
-                "local_mac",
+                "remote_agent" if cursor else "local_mac",
                 "coding",
                 False,
                 "local-coding worker",
-                "Coding runs on this computer. Cursor ACP is optional. Cloud LLM is not required.",
+                "Coding uses Cursor ACP/CLI when the agent binary is present, else the local builder. Computer Use is not the coding path.",
+            )
+        if intent == "learn":
+            return PlaneDecision(
+                intent,
+                "local_mac",
+                "learning",
+                False,
+                "local SQLite learning store",
+                "Observe → propose → ask. Learning cannot change spend or security.",
             )
         if intent == "research":
             return PlaneDecision(
                 intent,
-                "external_api" if not cloud else "external_api",
+                "external_api",
                 "research",
                 False,
                 "public HTTP or honest disconnect",
@@ -74,8 +87,8 @@ class IntelligenceRouter:
                 "local_mac",
                 "computer",
                 False,
-                "disconnected-honest on non-Mac",
-                "Mac control stays on this machine.",
+                "open/osascript only; clicks not claimed",
+                "Computer Use is a yellow GUI fallback. Click automation is not claimed. A separate Mac agent is recovering it.",
             )
         if intent == "browser":
             return PlaneDecision(
@@ -94,3 +107,12 @@ class IntelligenceRouter:
             "local runtime",
             "Default plane is this Mac.",
         )
+
+    def coding_path(self) -> dict[str, str | bool]:
+        cursor = shutil.which("agent") or shutil.which("cursor-agent") or ""
+        return {
+            "primary": "cursor-acp" if cursor else "local-coding",
+            "fallback": "local-coding",
+            "computer_use": False,
+            "detail": "Keep Cursor ACP/CLI as the coding path. Computer Use is not used to write code.",
+        }

@@ -43,6 +43,7 @@ BROWSER_HINTS = ("browse", "open the page", "website test", "screenshot the page
 EXPLAIN_HINTS = ("explain", "what is this project", "how does it work", "what's broken", "what's left")
 OBSERVE_HINTS = ("watch what i'm doing", "watch what i am doing", "observe")
 TAKEOVER_HINTS = ("take over",)
+LEARN_PREFIXES = ("remember ", "learn that ", "don't forget ", "do not forget ")
 STOP_HINTS = ("stop now", "stop jarvis", "pause safely")
 RESUME_EXACT = {"resume", "continue", "go on", "start again"}
 HALT_EXACT = {"stop", "stop now", "stop jarvis", "pause", "pause safely", "please stop"}
@@ -107,6 +108,20 @@ class TaskRouter:
                 True,
                 False,
                 notes="Continue the current mission autonomously.",
+            )
+        if any(normalized.startswith(p) for p in LEARN_PREFIXES):
+            return RouteDecision(
+                "learn",
+                "easy",
+                ["memory", "learning"],
+                "learning",
+                ["memory_write_safe"],
+                ["memory_write_safe"],
+                RiskLevel.GREEN,
+                ["ask_if_protected"],
+                True,
+                False,
+                notes="Observe → propose → ask. Cannot change spend or security.",
             )
         if any(h in lowered for h in OBSERVE_HINTS):
             return RouteDecision(

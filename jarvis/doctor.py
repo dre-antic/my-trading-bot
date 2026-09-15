@@ -63,10 +63,34 @@ class SystemDoctor:
                     "risk": "low",
                 }
             )
+        issues.append(
+            {
+                "what": "Computer Use click automation is not claimed",
+                "why": "A separate Mac agent is recovering Cursor Computer Use. JARVIS only uses open/osascript as a yellow GUI fallback.",
+                "how": "Coding still uses Cursor ACP/CLI or the local builder. Do not expect clicks to work.",
+                "risk": "info",
+            }
+        )
+        if not inv.get("keychain"):
+            issues.append(
+                {
+                    "what": "macOS Keychain is not available on this computer",
+                    "why": "Secrets are never written to SQLite as a fallback.",
+                    "how": "On the Mac, API keys stay in Keychain. Here they stay disconnected.",
+                    "risk": "info",
+                }
+            )
         inv["issues"] = issues
+        inv["computer_use"] = self.runtime.computer_use_honesty()
+        inv["coding_path"] = {
+            "primary": "cursor-acp if agent CLI exists else local-coding",
+            "computer_use": False,
+        }
         inv["planes"] = {
             "local_mac": True,
             "cloud_ai": self.runtime.cloud_ai_status()["available"],
+            "remote_agent": bool((inv.get("cursor") or {}).get("cli")),
+            "external_api": True,
         }
         return inv
 

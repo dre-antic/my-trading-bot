@@ -78,7 +78,18 @@ class LocalMacRuntime:
             "jarvis_home": str(jarvis_home()),
             "keychain": self.is_mac(),
             "hardware_verified": False,
-            "note": "Inventory is from this computer. Dock launch on the 2013 Intel Mac is not verified from the cloud builder.",
+            "note": "Inventory is from this computer. User reported open JARVIS.app + HTTP 200 on the 2013 Mac. Computer Use clicks are not claimed.",
+            "computer_use": self.computer_use_honesty(),
+        }
+
+    def computer_use_honesty(self) -> dict[str, Any]:
+        return {
+            "working": False,
+            "clicks": False,
+            "role": "yellow_gui_fallback",
+            "coding_path": False,
+            "methods_claimed": ["open", "osascript"] if self.is_mac() else [],
+            "detail": "Computer Use is a yellow GUI fallback (open/osascript). Click automation is not claimed. A separate Mac agent is recovering it. Coding uses Cursor ACP/CLI or the local builder.",
         }
 
     def python_status(self) -> dict[str, Any]:
@@ -139,7 +150,11 @@ class LocalMacRuntime:
             Capability("keychain", "local_mac", mac, False, "Secrets stay in macOS Keychain when keyring is available."),
             Capability("voice_speak", "local_mac", bool(shutil.which("say") or shutil.which("espeak") or shutil.which("espeak-ng")), False, "say on Mac, optional espeak elsewhere."),
             Capability("homebrew", "local_mac", self.homebrew_status()["present"], False, "Detect brew. Installs are yellow and must be approved."),
-            Capability("cursor_acp", "remote_agent", bool(shutil.which("agent") or shutil.which("cursor-agent")), False, "Local Cursor CLI/ACP. Disconnected until installed."),
+            Capability("cursor_acp", "remote_agent", bool(shutil.which("agent") or shutil.which("cursor-agent")), False, "Local Cursor CLI/ACP. Disconnected until installed. This is the coding path."),
+            Capability("computer_use_fallback", "local_mac", mac, False, "Yellow GUI fallback: open/osascript only. Click automation is not claimed."),
+            Capability("computer_use_clicks", "local_mac", False, False, "Not claimed. Recovered by a separate Mac agent."),
+            Capability("browser_http", "external_api", True, False, "Public HTTP fetch. Not Playwright clicking."),
+            Capability("learning", "local_mac", True, False, "Observe → propose → ask. Cannot change spend or security."),
             Capability("public_http_research", "external_api", True, False, "Optional $0 public HTTP. Not a cloud LLM."),
             Capability("cloud_llm", "cloud_ai", cloud, True, "OpenAI/Anthropic stay disconnected until you approve spend."),
         ]
@@ -191,6 +206,11 @@ class LocalMacRuntime:
             "capabilities": caps,
             "cloud_ai": self.cloud_ai_status(),
             "works_with_cloud_ai_down": self.local_when_cloud_down(),
+            "computer_use": self.computer_use_honesty(),
+            "coding_path": {
+                "primary": "cursor-acp if agent CLI exists else local-coding",
+                "computer_use": False,
+            },
             "planes": {
                 "local_mac": "This computer: files, apps, git, missions, GUI.",
                 "cloud_ai": "Optional paid inference. Off by default. $0 auto spend.",

@@ -37,5 +37,6 @@ def test_http_chat_and_status(app):
         assert "What would you like me to do?" in html
         assert "Resume" in html
         assert "halt-banner" in html
+        assert 'data-view="learning"' in html
     finally:
         httpd.shutdown()
