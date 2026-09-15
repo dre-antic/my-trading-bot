@@ -20,12 +20,14 @@ class ComputerAgent:
         if self.platform == "Darwin":
             return {
                 "connected": True,
+                "os": "Darwin",
                 "platform": "macOS",
                 "methods": ["official API", "osascript", "open"],
-                "detail": "Mac automation uses AppleScript / `open` first, never coordinate clicking.",
+                "detail": "Mac automation uses AppleScript / `open` first. Coordinate clicking and Cursor computer-use are not claimed.",
             }
         return {
             "connected": False,
+            "os": self.platform,
             "platform": self.platform,
             "methods": [],
             "detail": "This computer is not macOS. Mac app control is disconnected. Local processes can still be launched for tests.",
