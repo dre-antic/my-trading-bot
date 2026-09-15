@@ -31,3 +31,4 @@ secrets/
 *.sqlite
 *.sqlite-journal
 .python-version
+.playwright-mcp/
