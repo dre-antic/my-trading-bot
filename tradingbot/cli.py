@@ -46,7 +46,13 @@ def main(argv: list[str] | None = None) -> int:
         criteria = compile_strategy(extracted.text, filename=extracted.filename)
         market = FixtureMarket() if args.demo else PublicBinanceMarket()
         candles = market.ohlcv(criteria.symbols[0], criteria.timeframe)
-        outcome = run_scan(strategy_id="cli", criteria=criteria, candles=candles, broker=PaperBroker())
+        outcome = run_scan(
+            strategy_id="cli",
+            criteria=criteria,
+            candles=candles,
+            broker=PaperBroker(),
+            tape="demo" if args.demo else "live",
+        )
         print(outcome.message)
         print(json.dumps(outcome.as_dict(), indent=2))
         return 0

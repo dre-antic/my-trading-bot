@@ -156,6 +156,10 @@ class Store:
                 rows = conn.execute("SELECT * FROM trades ORDER BY created_at DESC").fetchall()
         return [_trade_row(row) for row in rows]
 
+    def clear_trades(self) -> None:
+        with self.connect() as conn:
+            conn.execute("DELETE FROM trades")
+
     def save_scan(self, strategy_id: str, result: dict) -> None:
         with self.connect() as conn:
             conn.execute(

@@ -18,3 +18,5 @@ data/
 .python-version
 dist/
 build/
+.playwright-mcp/
+desk-*.png

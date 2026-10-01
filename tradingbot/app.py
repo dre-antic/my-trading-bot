@@ -73,13 +73,9 @@ def create_app() -> FastAPI:
         items = []
         if EXAMPLES_DIR.exists():
             for path in sorted(EXAMPLES_DIR.glob("*.md")):
-                items.append(
-                    {
-                        "slug": path.stem,
-                        "name": path.stem.replace("_", " ").title(),
-                        "text": path.read_text(encoding="utf-8"),
-                    }
-                )
+                text = path.read_text(encoding="utf-8")
+                heading = next((line.lstrip("# ").strip() for line in text.splitlines() if line.strip()), path.stem)
+                items.append({"slug": path.stem, "name": heading, "text": text})
         return items
 
     @app.get("/api/strategies")
@@ -130,7 +126,8 @@ def create_app() -> FastAPI:
     def reset_desk() -> dict:
         global broker
         broker = PaperBroker()
-        _persist_broker()
+        store.set_state("broker", broker.snapshot())
+        store.clear_trades()
         return broker.snapshot()
 
     @app.post("/api/strategies/{strategy_id}/scan")
@@ -155,6 +152,7 @@ def create_app() -> FastAPI:
             criteria=criteria,
             candles=candles,
             broker=broker,
+            tape="demo" if demo else "live",
         )
         result = outcome.as_dict()
         result["demo"] = demo

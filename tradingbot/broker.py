@@ -26,6 +26,7 @@ class PaperBroker:
         price: float,
         quote_amount: float,
         reason: list[str],
+        tape: str = "live",
     ) -> TradeRecord:
         if quote_amount > self.cash:
             quote_amount = self.cash
@@ -41,6 +42,7 @@ class PaperBroker:
             "quote_amount": quote_amount,
             "strategy_id": strategy_id,
             "opened_at": utc_now(),
+            "tape": tape,
         }
         trade = TradeRecord(
             id=uuid4().hex[:12],

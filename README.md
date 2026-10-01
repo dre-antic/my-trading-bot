@@ -21,9 +21,9 @@ pip install -e ".[dev]"
 
 Open [http://127.0.0.1:8765](http://127.0.0.1:8765).
 
-- Drop your style document on the left, or click **Load “Rsi Mean Reversion”** to use the bundled example.
+- Drop your style document on the left, or click **Load “RSI Mean Reversion”** to use the bundled example.
 - Read the criteria ticket in the middle. That ticket is the contract the bot is allowed to trade.
-- **Try demo tape** runs a falling price series so the RSI example can actually fire a paper buy. **Scan live market** uses public Binance candles (no API key).
+- **Try demo tape** runs a falling price series so the RSI example can actually fire a paper buy. **Scan live market** uses public candles (Binance, then Coinbase, then Kraken) and does not need an API key. Reset the paper account before switching from the demo tape to live prices.
 
 You can also compile a file in the terminal:
 

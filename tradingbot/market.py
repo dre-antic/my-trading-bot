@@ -59,10 +59,10 @@ class CcxtMarket:
         return float(ticker["last"])
 
 
-class PublicBinanceMarket:
-    """Public klines. No API key required."""
+class PublicMarket:
+    """Public candles. No API key. Tries Binance, then Coinbase, then Kraken."""
 
-    INTERVALS = {
+    BINANCE_INTERVALS = {
         "1m": "1m",
         "5m": "5m",
         "15m": "15m",
@@ -72,35 +72,109 @@ class PublicBinanceMarket:
         "1d": "1d",
         "1w": "1w",
     }
+    COINBASE_GRANULARITY = {"1m": 60, "5m": 300, "15m": 900, "1h": 3600, "1d": 86400}
+    KRAKEN_INTERVALS = {"1m": 1, "5m": 5, "15m": 15, "30m": 30, "1h": 60, "4h": 240, "1d": 1440, "1w": 10080}
+    HEADERS = {"User-Agent": "my-trading-bot/0.1"}
 
     def __init__(self) -> None:
         import httpx
 
         self._httpx = httpx
 
-    def _pair(self, symbol: str) -> str:
-        return symbol.replace("/", "").upper()
-
     def ohlcv(self, symbol: str, timeframe: str, limit: int = 120) -> list[dict[str, Any]]:
-        interval = self.INTERVALS.get(timeframe, "1h")
-        url = "https://api.binance.com/api/v3/klines"
-        response = self._httpx.get(
-            url,
-            params={"symbol": self._pair(symbol), "interval": interval, "limit": limit},
-            timeout=20.0,
-        )
-        response.raise_for_status()
-        raw = [[row[0], row[1], row[2], row[3], row[4], row[5]] for row in response.json()]
-        return candles_to_dicts(raw)
+        errors: list[str] = []
+        for name, loader in (
+            ("binance", self._binance),
+            ("coinbase", self._coinbase),
+            ("kraken", self._kraken),
+        ):
+            try:
+                candles = loader(symbol, timeframe, limit)
+                if candles:
+                    return candles
+            except Exception as exc:
+                errors.append(f"{name}: {exc}")
+        raise RuntimeError("Could not fetch public candles. " + " | ".join(errors))
 
     def ticker_price(self, symbol: str) -> float:
-        response = self._httpx.get(
-            "https://api.binance.com/api/v3/ticker/price",
-            params={"symbol": self._pair(symbol)},
-            timeout=20.0,
-        )
+        return float(self.ohlcv(symbol, "1h", limit=2)[-1]["close"])
+
+    def _get(self, url: str, params: dict[str, Any] | None = None):
+        response = self._httpx.get(url, params=params, timeout=20.0, headers=self.HEADERS)
         response.raise_for_status()
-        return float(response.json()["price"])
+        return response.json()
+
+    def _binance(self, symbol: str, timeframe: str, limit: int) -> list[dict[str, Any]]:
+        interval = self.BINANCE_INTERVALS.get(timeframe, "1h")
+        payload = self._get(
+            "https://api.binance.com/api/v3/klines",
+            {"symbol": symbol.replace("/", "").upper(), "interval": interval, "limit": limit},
+        )
+        raw = [[row[0], row[1], row[2], row[3], row[4], row[5]] for row in payload]
+        return candles_to_dicts(raw)
+
+    def _coinbase(self, symbol: str, timeframe: str, limit: int) -> list[dict[str, Any]]:
+        granularity = self.COINBASE_GRANULARITY.get(timeframe)
+        if granularity is None:
+            raise ValueError(f"Coinbase has no {timeframe} candles")
+        base, quote = symbol.split("/")
+        products = [f"{base}-{quote}"]
+        if quote == "USDT":
+            products.append(f"{base}-USD")
+        last_error: Exception | None = None
+        payload = None
+        for product in products:
+            try:
+                payload = self._get(
+                    f"https://api.exchange.coinbase.com/products/{product}/candles",
+                    {"granularity": granularity},
+                )
+                break
+            except Exception as exc:
+                last_error = exc
+        if payload is None:
+            raise last_error or RuntimeError("Coinbase product not found")
+        rows = []
+        for row in reversed(payload):
+            rows.append(
+                {
+                    "timestamp": int(row[0]) * 1000,
+                    "low": float(row[1]),
+                    "high": float(row[2]),
+                    "open": float(row[3]),
+                    "close": float(row[4]),
+                    "volume": float(row[5]),
+                }
+            )
+        return rows[-limit:]
+
+    def _kraken(self, symbol: str, timeframe: str, limit: int) -> list[dict[str, Any]]:
+        interval = self.KRAKEN_INTERVALS.get(timeframe, 60)
+        base, quote = symbol.split("/")
+        kraken_base = "XBT" if base == "BTC" else base
+        payload = self._get(
+            "https://api.kraken.com/0/public/OHLC",
+            {"pair": f"{kraken_base}{quote}", "interval": interval},
+        )
+        if payload.get("error"):
+            raise RuntimeError(", ".join(payload["error"]))
+        series = next(value for key, value in payload["result"].items() if key != "last")
+        rows = []
+        for row in series:
+            rows.append(
+                {
+                    "timestamp": int(row[0]) * 1000,
+                    "open": float(row[1]),
+                    "high": float(row[2]),
+                    "low": float(row[3]),
+                    "close": float(row[4]),
+                    "volume": float(row[6]),
+                }
+            )
+        return rows[-limit:]
+
+
+PublicBinanceMarket = PublicMarket
 
 
 class FixtureMarket:

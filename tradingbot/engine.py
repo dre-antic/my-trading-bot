@@ -35,9 +35,17 @@ def run_scan(
     criteria: StrategyCriteria,
     candles: list[dict[str, Any]],
     broker: PaperBroker,
+    tape: str = "live",
 ) -> ScanOutcome:
     symbol = criteria.symbols[0]
     position = broker.position(symbol)
+    if position and position.get("tape", "live") != tape:
+        return ScanOutcome(
+            evaluate_strategy(criteria, candles, position=None),
+            None,
+            "blocked",
+            "A paper position is open on a different tape. Reset the paper account before mixing demo and live prices.",
+        )
     evaluation = evaluate_strategy(criteria, candles, position=position)
 
     if evaluation.entry_ready:
@@ -54,6 +62,7 @@ def run_scan(
             price=evaluation.price,
             quote_amount=criteria.risk.quote_amount,
             reason=evaluation.reasons or [item.description for item in evaluation.entry_results if item.passed],
+            tape=tape,
         )
         return ScanOutcome(
             evaluation,

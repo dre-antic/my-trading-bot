@@ -40,3 +40,30 @@ def test_second_entry_blocked_when_max_positions_filled():
     assert first.action == "buy"
     again = run_scan(strategy_id="s1", criteria=criteria, candles=falling_market(), broker=broker)
     assert again.action == "wait"
+
+
+def test_demo_position_is_not_marked_against_live_prices():
+    text = """
+    BTC/USDT 1h
+    Buy when RSI is below 30.
+    $10 per trade.
+    """
+    criteria = compile_strategy(text)
+    broker = PaperBroker()
+    demo = run_scan(
+        strategy_id="s1",
+        criteria=criteria,
+        candles=falling_market(),
+        broker=broker,
+        tape="demo",
+    )
+    assert demo.action == "buy"
+    live = run_scan(
+        strategy_id="s1",
+        criteria=criteria,
+        candles=rising_market(),
+        broker=broker,
+        tape="live",
+    )
+    assert live.action == "blocked"
+    assert broker.has_position("BTC/USDT")
