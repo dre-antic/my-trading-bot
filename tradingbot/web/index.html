@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>My Trading Bot — Style to Criteria</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <span class="mark">▣</span>
+      <div>
+        <strong>My Trading Bot</strong>
+        <span class="sub">Upload your style. Trade only those rules.</span>
+      </div>
+    </div>
+    <div class="status" id="account-status">Paper cash —</div>
+  </header>
+
+  <main class="floor">
+    <section class="panel" id="style-panel">
+      <h2>1. Trading style</h2>
+      <p class="lede">Start here. Drop the document that describes how you trade. The bot reads it and turns the language into checks it can run before it enters a trade.</p>
+
+      <form id="upload-form">
+        <label class="drop" id="drop">
+          <input type="file" id="file" accept=".txt,.md,.pdf,.docx" />
+          <strong>Upload a style document</strong>
+          <span>PDF, Word, Markdown, or text</span>
+        </label>
+      </form>
+
+      <label class="field">
+        Paste the same rules
+        <textarea id="style-text" rows="8" placeholder="I trade Bitcoin on the 1 hour chart. Buy when RSI is below 30..."></textarea>
+      </label>
+      <div class="row">
+        <button type="button" class="primary" id="compile-btn">Compile into criteria</button>
+      </div>
+
+      <div class="examples" id="examples"></div>
+      <ul class="style-list" id="style-list"></ul>
+    </section>
+
+    <section class="panel" id="criteria-panel">
+      <h2>2. Trade criteria</h2>
+      <p class="lede" id="criteria-lede">Nothing compiled yet. After you upload a style, this ticket is what the bot is allowed to trade.</p>
+      <div id="criteria-ticket" class="ticket empty">Waiting for a style document.</div>
+    </section>
+
+    <section class="panel" id="desk-panel">
+      <h2>3. Desk</h2>
+      <p class="lede">The bot only takes a trade when every compiled entry rule is true on the latest candle.</p>
+      <div class="row wrap">
+        <button type="button" class="primary" id="scan-live" disabled>Scan live market</button>
+        <button type="button" id="scan-demo" disabled>Try demo tape</button>
+        <button type="button" class="ghost" id="reset-desk">Reset paper account</button>
+      </div>
+      <div id="scan-result" class="scan empty">No scan yet.</div>
+      <h3>Paper fills</h3>
+      <ol class="fills" id="fills"></ol>
+    </section>
+  </main>
+
+  <p class="fineprint">Paper trading only. This is software for turning a written style into checkable rules — not financial advice, and not a live-order router.</p>
+  <script src="/app.js"></script>
+</body>
+</html>
