@@ -28,7 +28,7 @@ export default function DashboardPage() {
         <Stat label="Drawdown" value={`${port.drawdown ?? "0"}%`} />
         <Stat label="Open orders" value={String(data?.openOrders ?? 0)} />
       </div>
-      <div className="grid" style={{ gridTemplateColumns: "1fr 1fr", marginTop: 16 }}>
+      <div className="grid split" style={{ marginTop: 16 }}>
         <div className="card">
           <h3>Risk and bot status</h3>
           <p>Constitution is active. Risk Firewall is deterministic software. AI cannot disable it.</p>
@@ -48,10 +48,11 @@ export default function DashboardPage() {
 function Stat({ label, value, signed }: { label: string; value?: string; signed?: boolean }) {
   const n = Number(value ?? 0);
   const cls = signed ? (n < 0 ? "neg" : n > 0 ? "pos" : "") : "";
+  const shown = value == null || value === "" || Number.isNaN(n) ? "—" : n.toFixed(2);
   return (
     <div className="card">
       <div className="stat">{label}</div>
-      <div className={`value mono ${cls}`}>{value ?? "—"}</div>
+      <div className={`value mono ${cls}`}>{shown}</div>
     </div>
   );
 }

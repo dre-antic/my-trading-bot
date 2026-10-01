@@ -1,0 +1,54 @@
+- generic [active] [ref=f1e1]:
+  - generic [ref=f1e2]:
+    - complementary [ref=f1e3]:
+      - generic [ref=f1e4]:
+        - generic [ref=f1e5]: Command Center
+        - strong [ref=f1e6]: AI Trading Desk
+      - navigation [ref=f1e7]:
+        - link "Dashboard" [ref=f1e8] [cursor=pointer]:
+          - /url: /dashboard
+        - link "Opportunities" [ref=f1e9] [cursor=pointer]:
+          - /url: /opportunities
+        - link "Positions" [ref=f1e10] [cursor=pointer]:
+          - /url: /positions
+        - link "Orders" [ref=f1e11] [cursor=pointer]:
+          - /url: /orders
+        - link "Strategies" [ref=f1e12] [cursor=pointer]:
+          - /url: /strategies
+        - link "Backtests" [ref=f1e13] [cursor=pointer]:
+          - /url: /backtests
+        - link "Research" [ref=f1e14] [cursor=pointer]:
+          - /url: /research
+        - link "AI Desk" [ref=f1e15] [cursor=pointer]:
+          - /url: /ai
+        - link "Journal" [ref=f1e16] [cursor=pointer]:
+          - /url: /journal
+        - link "Brokers" [ref=f1e17] [cursor=pointer]:
+          - /url: /brokers
+        - link "Alerts" [ref=f1e18] [cursor=pointer]:
+          - /url: /alerts
+        - link "System" [ref=f1e19] [cursor=pointer]:
+          - /url: /status
+        - link "Settings" [ref=f1e20] [cursor=pointer]:
+          - /url: /settings
+    - main [ref=f1e21]:
+      - generic [ref=f1e22]:
+        - generic [ref=f1e23]:
+          - generic [ref=f1e24]: demo
+          - generic [ref=f1e25]: assisted
+        - generic [ref=f1e26]: Equity 99996.42025 USD · LIVE off · Autonomous off
+      - heading "Positions" [level=1] [ref=f1e27]
+      - paragraph [ref=f1e28]: Paper/demo values only. Closing submits a reduce-only paper market order.
+      - table [ref=f1e29]:
+        - rowgroup [ref=f1e30]:
+          - row [ref=f1e31]:
+            - columnheader "Instrument" [ref=f1e32]
+            - columnheader "Qty" [ref=f1e33]
+            - columnheader "Avg" [ref=f1e34]
+            - columnheader "Mkt" [ref=f1e35]
+            - columnheader "uP/L" [ref=f1e36]
+            - columnheader [ref=f1e37]
+        - rowgroup
+      - paragraph [ref=f1e58]: No open positions.
+  - button "Open Next.js Dev Tools" [ref=f1e53] [cursor=pointer]
+  - alert [ref=f1e57]

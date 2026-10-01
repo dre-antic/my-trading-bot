@@ -8,8 +8,10 @@ export async function GET() {
 export async function POST(req: Request) {
   const body = (await req.json()) as { strategyId?: string };
   return withUser((user) => {
-    const strategyId = body.strategyId ?? listStrategies(user.userId)[0]?.strategyId;
-    if (!strategyId) throw new Error("no strategy available");
-    return { candidates: scanStrategy(user.userId, strategyId) };
+    if (body.strategyId) return { candidates: scanStrategy(user.userId, body.strategyId) };
+    const strategies = listStrategies(user.userId);
+    if (!strategies.length) throw new Error("no strategy available");
+    const candidates = strategies.flatMap((s) => scanStrategy(user.userId, s.strategyId));
+    return { candidates };
   });
 }

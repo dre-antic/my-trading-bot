@@ -452,6 +452,9 @@ export function decideCandidate(
     audit({ userId, action: "candidate.watch", entity: "candidate", entityId: candidateId });
     return { candidate };
   }
+  if (candidate.status === "EXECUTED") {
+    throw new Error("This candidate was already executed. Approve again would create a duplicate order.");
+  }
   if (decision === "REJECT") {
     candidate.status = "REJECTED";
     saveCandidate(candidate);

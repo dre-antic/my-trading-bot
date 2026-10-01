@@ -74,7 +74,7 @@ export function educationalStrategies(now: string): StrategyDefinition[] {
     educational: true,
     lifecycle: "DRAFT" as const,
     compatibleRegimes: ["any"],
-    positionSizing: { method: "percent_account_risk" as const, riskPct: "0.5" },
+    positionSizing: { method: "percent_account_risk" as const, riskPct: "0.1" },
     stop: { kind: "percent" as const, value: "2" },
     target: { kind: "rr" as const, value: "2" },
     timeoutBars: 30,

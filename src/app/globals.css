@@ -76,6 +76,10 @@ h1, h2, h3 { font-family: var(--font-fraunces), Georgia, serif; font-weight: 560
 
 .grid { display: grid; gap: 14px; }
 .grid.stats { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
+.grid.split { grid-template-columns: 1fr 1fr; }
+@media (max-width: 860px) {
+  .grid.split { grid-template-columns: 1fr; }
+}
 .card {
   background: linear-gradient(180deg, var(--panel), #10161e);
   border: 1px solid var(--line);
