@@ -1,69 +1,61 @@
-# AI Video Studio
+# My Trading Bot
 
-A native-feeling video production studio for Mac. You describe the video you want. The application researches, writes, plans scenes, generates visuals, records narration, composes original music, edits, captions, reviews, and renders a real MP4.
+Upload the document that describes how you trade. The bot reads that style, turns it into checkable entry and exit criteria, and will only take a **paper trade** when those criteria are true on the latest candle.
 
-You do **not** need Terminal, Python, Docker, ComfyUI, or GPU knowledge for normal use.
+That is the whole product:
 
-## What you get
+1. You write (or already have) a trading style in a PDF, Word file, Markdown file, or pasted text.
+2. The compiler extracts the market, timeframe, indicators, comparisons, stops, and size.
+3. The desk loads candles, evaluates every compiled rule, and records a paper fill only when the rules pass.
 
-- A desktop window (macOS or Linux) with a dark studio interface
-- New Project → prompt, platform, duration, Simple/Advanced → **Create video**
-- A full production pipeline that writes files to disk and a SQLite project database
-- Playable H.264 MP4 output, captions (SRT/VTT/ASS), thumbnails, research citations, and license records
-- Optional cloud / ComfyUI / Ollama providers behind Settings — never required for the base studio
+Live exchange orders are **not** sent. This version is a paper desk so you can see the style → criteria → trade path without spending money.
 
-## Open the app (normal use)
-
-**On a Mac, after installing the application:**
-
-1. Open **Applications**
-2. Double-click **AI Video Studio**
-   or click it in the **Dock**
-
-That is the intended everyday launch. You should not need Terminal.
-
-**On this computer (development / Linux):**
+## Start here
 
 ```bash
-cd /path/to/ai-video-studio
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -e ".[dev]"
 ./scripts/launch.sh
 ```
 
-`./scripts/launch.sh` starts the studio and opens a native window when possible. Use `./scripts/launch.sh --no-window` if you only want the local web UI at http://127.0.0.1:8745
+Open [http://127.0.0.1:8765](http://127.0.0.1:8765).
 
-## First-run wizard
+- Drop your style document on the left, or click **Load “RSI Mean Reversion”** to use the bundled example.
+- Read the criteria ticket in the middle. That ticket is the contract the bot is allowed to trade.
+- **Try demo tape** runs a falling price series so the RSI example can actually fire a paper buy. **Scan live market** uses public candles (Binance, then Coinbase, then Kraken) and does not need an API key. Reset the paper account before switching from the demo tape to live prices.
 
-The first launch walks through:
+You can also compile a file in the terminal:
 
-1. Welcome  
-2. Check this computer  
-3. Required components (FFmpeg, voice engine)  
-4. Optional models (none required)  
-5. A short test video  
+```bash
+python -m tradingbot.cli compile examples/rsi_mean_reversion.md
+python -m tradingbot.cli scan examples/rsi_mean_reversion.md --demo
+```
 
-If a step fails, the app explains it in plain language.
+## What language the compiler understands
 
-## Requirements
+Write the style the way you would explain it to a junior trader. Concrete numbers compile. Vague language is kept as a warning.
 
-- macOS 12+ (Apple Silicon or Intel) or Linux for development
-- FFmpeg (the setup path detects it; on Mac, the packaging script can install via Homebrew when you allow it)
-- Disk space for projects (videos are stored as files, not inside the database)
+Examples that become real rules:
 
-No paid API key is required. Optional keys are entered in **Settings → AI providers** and stored encrypted on this computer.
+- “I trade Bitcoin on the 1 hour chart”
+- “Buy when the 14-period RSI drops below 30 and price is above the 200 EMA”
+- “Sell when RSI goes above 70”
+- “Stop loss 2%. Take profit 4%.”
+- “$10 USDT per trade. One position at a time.”
+- “Price crosses above the 50 EMA”
+- “MACD line crosses above the signal line”
+- “Golden cross”
+- “Volume is above average”
+
+If a line cannot be compiled, it still appears on the ticket as **Uncompiled** so you can rewrite it.
 
 ## Tests
 
 ```bash
-source .venv/bin/activate
-pytest tests/unit tests/failure tests/integration -q
-pytest tests/e2e -q
+pytest -q
 ```
 
-The end-to-end test produces a real MP4 about why the sky appears blue.
+## Safety
 
-## License of this application
-
-MIT for the studio source. Third-party tools keep their own licenses — see `LICENSES.md`, `THIRD_PARTY_NOTICES.md`, and `MODEL_REGISTRY.md`.
+Paper account only. `ENABLE_LIVE_TRADING` is accepted as an environment flag so you can see that live routing is off. Do not treat compiled rules or paper fills as advice.
