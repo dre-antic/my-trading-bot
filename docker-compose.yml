@@ -1,0 +1,44 @@
+services:
+  web:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_PATH: /data/atcc.sqlite
+      SESSION_SECRET: change-me-to-a-long-random-string-at-least-32-chars
+      ATCC_DISPLAY_MODE: paper
+      ATCC_LIVE_ENABLED: "false"
+      ATCC_AUTONOMOUS_ENABLED: "false"
+      AI_DAILY_LIMIT_USD: "0"
+      AI_MONTHLY_LIMIT_USD: "0"
+    volumes:
+      - atcc-data:/data
+  worker:
+    build: .
+    command: npm run start:worker
+    environment:
+      DATABASE_PATH: /data/atcc.sqlite
+      SESSION_SECRET: change-me-to-a-long-random-string-at-least-32-chars
+      ATCC_LIVE_ENABLED: "false"
+      ATCC_AUTONOMOUS_ENABLED: "false"
+    volumes:
+      - atcc-data:/data
+    depends_on:
+      - web
+  postgres:
+    image: postgres:16
+    profiles: ["postgres"]
+    environment:
+      POSTGRES_USER: atcc
+      POSTGRES_PASSWORD: atcc
+      POSTGRES_DB: atcc
+    ports:
+      - "5432:5432"
+  redis:
+    image: redis:7
+    profiles: ["redis"]
+    ports:
+      - "6379:6379"
+
+volumes:
+  atcc-data:

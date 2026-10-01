@@ -1,82 +1,47 @@
 # Architecture
 
-AI Video Studio is a local control center. The Mac (or Linux) app owns projects, the timeline, review, and render. Heavy neural video models are optional remote workers.
+## Processes
+
+| Process | Role | Status |
+|---|---|---|
+| Next.js web + API | Control plane, PWA, REST | Implemented |
+| Worker (`src/worker`) | Durable job table consumer | Implemented |
+| SQLite | Default store for local/dev/test | Implemented |
+| PostgreSQL | Compose profile for production-shaped deploys | Schema not yet ported; do not claim ready |
+| Redis | Optional queue | Not wired; jobs persist in SQLite |
+
+## Module map
 
 ```
-Mac / Linux desktop window (pywebview or Tauri)
-        │
-        ▼
-Local FastAPI app (127.0.0.1)
-        │
-        ▼
-SQLite + files on disk
-        │
-        ▼
-Production graph (checkpointed stages)
-        ├── Research engine
-        ├── Script engine + critic
-        ├── Story / scene planner
-        ├── Visual decision engine
-        ├── Image / motion-graphics / optional ComfyUI
-        ├── Shot-level video (Ken Burns or remote generator)
-        ├── Consistency metadata (bibles)
-        ├── Voice engine
-        ├── Music / SFX engine
-        ├── Editing (FFmpeg timeline)
-        ├── Captions
-        ├── Thumbnails + critic
-        ├── Review AI (separate reviewers + executive producer)
-        ├── Deterministic technical QC
-        └── Correction loop (smallest asset)
+src/core        Pure domain: money, constitution, DSL, risk, paper, backtest, AI catalog
+src/db          SQLite schema, migrate, seed
+src/server      Auth, sessions, trading service, Alpaca adapter, jobs
+src/app         Next.js UI + route handlers
+src/worker      Background loop
+src/ui          Client helpers
 ```
 
-## Why not LangGraph
+The trading engine is a TypeScript port inspired by LEAN/Hummingbot *concepts* (universal order, connector interface, evented fills). LEAN is **not** vendored. See `TRADING_ENGINE.md`.
 
-LangGraph is MIT, actively maintained (verified 2026-09-09), and a reasonable orchestrator. It was **not** adopted.
+## Safety pipeline
 
-Reasons:
+Every executable proposal is a `TradeCandidate`, then:
 
-1. Pause, resume, license gates, cost gates, and correction loops need to share the SQLite checkpoint already used for crash recovery.
-2. Bundling the LangChain stack would add moving parts without helping FFmpeg, TTS, or render.
-3. A small explicit stage graph is easier to test and to explain in the UI.
+1. Strategy compliance (DSL)
+2. Portfolio intelligence
+3. Deterministic Risk Firewall
+4. Human decision (`APPROVE` / `REJECT` / `WATCH`)
+5. Broker adapter (paper only in this build)
+6. Journal + audit
 
-The production graph lives in `engine/aivideostudio/orchestrator.py`.
+Research, signal, proposal, approval, and execution are separate states.
 
-## Desktop choice
+## Multi-tenant boundary
 
-Evaluated Swift/SwiftUI, Tauri, Electron, and pywebview.
+Rows are keyed by `user_id`. API handlers load only the session user. This is application-level isolation, not separate databases.
 
-| Option | Verdict |
-|---|---|
-| SwiftUI | Best native feel, but this repository must also run and test on Linux CI |
-| Electron | Heavy RAM, against the performance rule |
-| Tauri 2 | Apache-2.0/MIT, lightweight, preferred Mac wrapper (`packaging/` + `desktop/`) |
-| pywebview | Native Cocoa window on Mac, GTK on Linux, ships today |
+## Modes
 
-The engine always listens on localhost. Tauri or pywebview is only a window around it.
-
-## Default compute (no GPU required)
-
-Consumer Macs often cannot run Wan / Hunyuan / FLUX locally. The Visual Decision Engine therefore prefers:
-
-- Motion graphics and diagrams (original, local, approved)
-- Wikimedia Commons stills when the file license is safe, with attribution
-- Ken Burns / camera moves via FFmpeg (shot-level, never one giant video model call)
-- Optional ComfyUI or OpenAI-compatible APIs when the user enables them
-
-Voice defaults to eSpeak NG (always-on subprocess, GPL binary not linked). Piper and Kokoro are preferred drop-in local voices when present. Music is an original procedural composer (ACE-Step is optional).
-
-## Data
-
-- Metadata: SQLite (`studio.sqlite` in Application Support)
-- Media: `projects/<id>/...` on disk
-- Secrets: encrypted vault + macOS Keychain/libsecret via `keyring`
-- Logs: redacted (API keys stripped)
-
-## Providers
-
-Interfaces: `LLMProvider`, research, image, video, TTS, music, SFX, captions. Each has fallbacks, bounded retries, and license checks in commercial mode.
-
-## Crash recovery
-
-Every finished stage writes files and a checkpoint name. Reopening the app continues from the next unfinished stage. Completed assets are not regenerated unless a change request marks them dirty.
+- Display: `demo` | `paper` | `live` (live blocked unless `ATCC_LIVE_ENABLED=true` **and** in-app flag)
+- Trading: `research` | `assisted` | `autonomous` (autonomous blocked unless `ATCC_AUTONOMOUS_ENABLED=true`)
+- Defaults: LIVE off, AUTONOMOUS off, approval on

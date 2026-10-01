@@ -1,0 +1,12 @@
+{
+  "name": "AI Trading Command Center",
+  "short_name": "ATCC",
+  "start_url": "/dashboard",
+  "display": "standalone",
+  "background_color": "#0b0e12",
+  "theme_color": "#0b0e12",
+  "description": "AI-assisted trading research and human-approved paper execution.",
+  "icons": [
+    { "src": "/icon.svg", "sizes": "512x512", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}
