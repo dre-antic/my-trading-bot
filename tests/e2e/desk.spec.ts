@@ -10,4 +10,8 @@ test("operator can login and reach the desk", async ({ page }) => {
   await page.goto("/opportunities");
   await page.getByRole("button", { name: "Scan educational strategies" }).click();
   await expect(page.getByText("SPY").first()).toBeVisible({ timeout: 20_000 });
+  await page.goto("/terminal");
+  await expect(page.getByRole("heading", { name: "Market Watch" })).toBeVisible({ timeout: 20_000 });
+  await page.getByRole("button", { name: "Buy by Market" }).click();
+  await expect(page.getByText(/paper buy SPY/i)).toBeVisible({ timeout: 20_000 });
 });

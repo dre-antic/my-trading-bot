@@ -5,11 +5,13 @@
 Implemented:
 
 1. **Internal paper broker** — complete order/fill/position loop. Readiness: `sandbox_only`.
-2. **Alpaca paper HTTP client** — `src/server/alpaca.ts`. Readiness: `integration_untested`. Requires keys. Does not fake success. `fetchImpl` is injectable; contract tests in `tests/integration/alpaca-paper.test.ts` use fixture JSON and treat HTTP 401/422 as failures.
+2. **Alpaca paper HTTP client** — `src/server/alpaca.ts`. Readiness: `integration_untested`. Requires keys. Does not fake success.
+3. **Alpaca live HTTP client** — `src/server/alpaca-live.ts`. Host pinned to `api.alpaca.markets`. Paper keys/hosts refused. Readiness: `integration_untested`.
+4. **OANDA practice/live** — `src/server/oanda.ts`. Practice = `api-fxpractice.oanda.com`. Live = `api-fxtrade.oanda.com` only. Readiness: `integration_untested`.
 
 Reserved, not implemented:
 
-- Interactive Brokers, OANDA, MT5, cTrader, Binance, Coinbase, Kraken
+- Interactive Brokers, generic OANDA id, MT5, cTrader, Binance, Coinbase, Kraken
 
 The original `bot.py` used CCXT Binance sandbox. That script is not carried forward; the new adapter interface replaces it.
 

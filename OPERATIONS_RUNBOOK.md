@@ -13,7 +13,8 @@ API: `/api/status` (authenticated)
 
 ## Common actions
 
-- Stop new trades: Settings → Stop new trades
+- Stop new trades: Settings → Stop new trades (or banner Kill switch)
+- Disarm/disable live: Settings live card, or Kill switch (`DISARM LIVE` + stop new trades)
 - Flatten paper book: type `CLOSE ALL POSITIONS`
 - Re-seed: delete `data/atcc.sqlite` and run seed
 - Logs: structured console + `system_events` / `audit_events`

@@ -57,7 +57,7 @@ export const DEFAULT_CONSTITUTION_LIMITS: Omit<
   permittedMarkets: ["*"],
   permittedAssetClasses: ["equity", "etf", "forex", "crypto"],
   permittedStrategies: ["*"],
-  permittedBrokers: ["paper", "alpaca_paper"],
+  permittedBrokers: ["paper", "alpaca_paper", "alpaca_live", "oanda_practice", "oanda_live"],
   requireStopLoss: true,
   maxDataAgeSeconds: 300,
   maxSignalAgeSeconds: 600,

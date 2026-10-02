@@ -22,7 +22,11 @@ export async function GET() {
       ],
       registry: BROKER_REGISTRY,
       credentialMetadata: meta,
-      alpacaConfigured: Boolean(config.alpacaPaperKey && config.alpacaPaperSecret),
+      alpacaPaperConfigured: Boolean(config.alpacaPaperKey && config.alpacaPaperSecret),
+      alpacaLiveConfigured: Boolean(config.alpacaLiveKey && config.alpacaLiveSecret),
+      oandaConfigured: Boolean(config.oandaToken && config.oandaAccountId),
+      oandaEnv: config.oandaEnv,
+      liveEnvEnabled: config.liveEnabled,
     };
   });
 }

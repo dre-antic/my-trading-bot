@@ -114,4 +114,10 @@ describe("risk firewall", () => {
     expect(result.decision).toBe("REJECTED");
     expect(result.violations.some((v) => v.code === "TRADE_RISK_LIMIT")).toBe(true);
   });
+
+  it("rejects fat-finger limit prices", () => {
+    const result = evaluateRiskFirewall(request({ lastPrice: "100", limitPrice: "130" }));
+    expect(result.decision).toBe("REJECTED");
+    expect(result.violations.some((v) => v.code === "FAT_FINGER_PRICE")).toBe(true);
+  });
 });

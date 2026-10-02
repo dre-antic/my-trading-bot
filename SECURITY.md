@@ -11,6 +11,10 @@ Implemented:
 - Allowlisted agent tools (research agents are read/propose only)
 - Broker credentials never returned by APIs; metadata only
 - LIVE and autonomous paths refused without environment + user flags
+- Live hosts allowlisted (`api.alpaca.markets`, `api-fxtrade.oanda.com`); paper hosts refused for live orders
+- Distinct live vs paper keys; example `SESSION_SECRET` cannot enable live
+- 15-minute live arm window; `PLACE LIVE ORDER` per ticket; no one-click live
+- Circuit breaker after 3 live broker errors
 - Tenant-scoped queries
 
 Not yet production-hardened:

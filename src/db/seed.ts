@@ -14,6 +14,7 @@ export async function seed(db = getDb()): Promise<{ userId: string; accountId: s
   migrate(db);
   const now = toIsoUtc();
   upsertMarketDataSources(db);
+  upsertInstruments(db);
   const existing = db.prepare("SELECT id FROM users WHERE email = ?").get(DEMO_EMAIL) as { id: string } | undefined;
   if (existing) {
     const account = db.prepare("SELECT id FROM broker_accounts WHERE user_id = ?").get(existing.id) as { id: string };
@@ -78,18 +79,7 @@ export async function seed(db = getDb()): Promise<{ userId: string; accountId: s
     "INSERT INTO runtime_flags (user_id, display_mode, trading_mode, live_enabled, autonomous_enabled, stop_new_trades, stop_automation) VALUES (?, ?, ?, 0, 0, 0, 0)",
   ).run(userId, "demo", "assisted");
 
-  const instruments = [
-    ["SPY", "etf", "USD", "ARCA", 2, 4, "0.01", "0.0001", "0.0001", "America/New_York", "rth"],
-    ["AAPL", "equity", "USD", "NASDAQ", 2, 4, "0.01", "0.0001", "0.0001", "America/New_York", "rth"],
-    ["EURUSD", "forex", "USD", "FX", 5, 2, "0.00001", "1000", "1000", "America/New_York", "weekdays"],
-    ["BTC-USD", "crypto", "USD", "CRYPTO", 2, 8, "0.01", "0.00000001", "0.00000001", "UTC", "24x7"],
-  ];
-  for (const inst of instruments) {
-    db.prepare(
-      `INSERT OR IGNORE INTO instruments (id, symbol, asset_class, currency, venue, price_decimals, quantity_decimals, tick_size, lot_size, min_quantity, timezone, trading_hours)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-    ).run(ids.instrument(), ...inst);
-  }
+  upsertInstruments(db);
 
   upsertMarketDataSources(db);
 
@@ -119,6 +109,26 @@ export async function seed(db = getDb()): Promise<{ userId: string; accountId: s
   );
 
   return { userId, accountId };
+}
+
+function upsertInstruments(db: ReturnType<typeof getDb>): void {
+  const instruments = [
+    ["SPY", "etf", "USD", "ARCA", 2, 4, "0.01", "0.0001", "0.0001", "America/New_York", "rth"],
+    ["AAPL", "equity", "USD", "NASDAQ", 2, 4, "0.01", "0.0001", "0.0001", "America/New_York", "rth"],
+    ["MSFT", "equity", "USD", "NASDAQ", 2, 4, "0.01", "0.0001", "0.0001", "America/New_York", "rth"],
+    ["NVDA", "equity", "USD", "NASDAQ", 2, 4, "0.01", "0.0001", "0.0001", "America/New_York", "rth"],
+    ["EURUSD", "forex", "USD", "FX", 5, 2, "0.00001", "1000", "1000", "America/New_York", "weekdays"],
+    ["GBPUSD", "forex", "USD", "FX", 5, 2, "0.00001", "1000", "1000", "America/New_York", "weekdays"],
+    ["USDJPY", "forex", "USD", "FX", 3, 2, "0.001", "1000", "1000", "America/New_York", "weekdays"],
+    ["XAUUSD", "forex", "USD", "FX", 2, 2, "0.01", "1", "1", "America/New_York", "weekdays"],
+    ["BTC-USD", "crypto", "USD", "CRYPTO", 2, 8, "0.01", "0.00000001", "0.00000001", "UTC", "24x7"],
+  ];
+  for (const inst of instruments) {
+    db.prepare(
+      `INSERT OR IGNORE INTO instruments (id, symbol, asset_class, currency, venue, price_decimals, quantity_decimals, tick_size, lot_size, min_quantity, timezone, trading_hours)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    ).run(ids.instrument(), ...inst);
+  }
 }
 
 function upsertMarketDataSources(db: ReturnType<typeof getDb>): void {

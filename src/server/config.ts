@@ -10,6 +10,12 @@ export interface AppConfig {
   alpacaPaperKey?: string;
   alpacaPaperSecret?: string;
   alpacaPaperBaseUrl: string;
+  alpacaLiveKey?: string;
+  alpacaLiveSecret?: string;
+  alpacaLiveBaseUrl: string;
+  oandaToken?: string;
+  oandaAccountId?: string;
+  oandaEnv: "practice" | "live";
   openaiKey?: string;
   anthropicKey?: string;
   geminiKey?: string;
@@ -30,6 +36,12 @@ export function loadConfig(): AppConfig {
     alpacaPaperKey: process.env.ALPACA_PAPER_KEY,
     alpacaPaperSecret: process.env.ALPACA_PAPER_SECRET,
     alpacaPaperBaseUrl: process.env.ALPACA_PAPER_BASE_URL ?? "https://paper-api.alpaca.markets",
+    alpacaLiveKey: process.env.ALPACA_LIVE_KEY,
+    alpacaLiveSecret: process.env.ALPACA_LIVE_SECRET,
+    alpacaLiveBaseUrl: process.env.ALPACA_LIVE_BASE_URL ?? "https://api.alpaca.markets",
+    oandaToken: process.env.OANDA_API_TOKEN,
+    oandaAccountId: process.env.OANDA_ACCOUNT_ID,
+    oandaEnv: process.env.OANDA_ENV === "live" ? "live" : "practice",
     openaiKey: process.env.OPENAI_API_KEY,
     anthropicKey: process.env.ANTHROPIC_API_KEY,
     geminiKey: process.env.GEMINI_API_KEY,

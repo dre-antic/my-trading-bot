@@ -3,7 +3,9 @@ export type EmergencyAction =
   | "CANCEL_OPEN_ORDERS"
   | "PAUSE_STRATEGY"
   | "STOP_AUTOMATION"
-  | "CLOSE_ALL_POSITIONS";
+  | "CLOSE_ALL_POSITIONS"
+  | "DISARM_LIVE"
+  | "DISABLE_LIVE";
 
 export interface EmergencyRequest {
   action: EmergencyAction;
@@ -17,6 +19,8 @@ export const EMERGENCY_PHRASES: Record<EmergencyAction, string> = {
   PAUSE_STRATEGY: "PAUSE STRATEGY",
   STOP_AUTOMATION: "STOP AUTOMATION",
   CLOSE_ALL_POSITIONS: "CLOSE ALL POSITIONS",
+  DISARM_LIVE: "DISARM LIVE",
+  DISABLE_LIVE: "DISABLE LIVE TRADING",
 };
 
 export function authorizeEmergency(req: EmergencyRequest): { ok: true } | { ok: false; reason: string } {

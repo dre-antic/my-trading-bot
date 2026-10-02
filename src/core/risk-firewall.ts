@@ -2,7 +2,7 @@ import { constitutionAllowsAssetClass, constitutionAllowsBroker, constitutionAll
 import { Money, Qty } from "./money";
 import { isStale, parseUtc } from "./time";
 import type { Direction, InstrumentSpec, PortfolioSnapshot } from "./types";
-import type { SizingResult } from "./position-sizing";
+import { isFatFingerPrice } from "./fat-finger";
 
 export type RiskDecision = "APPROVED" | "REJECTED";
 
@@ -34,6 +34,10 @@ export interface RiskCheckRequest {
   duplicateClientOrderId?: string;
   existingOpenOrderForInstrument?: boolean;
   stopPresent: boolean;
+  lastPrice?: string;
+  limitPrice?: string;
+  stopLossPrice?: string;
+  takeProfitPrice?: string;
 }
 
 export interface RiskViolation {
@@ -183,6 +187,12 @@ export function evaluateRiskFirewall(req: RiskCheckRequest): RiskFirewallResult 
   }
   if (new Qty(req.sizing.quantity || "0").lte(0)) {
     violations.push({ code: "ZERO_QUANTITY", message: "Position size is zero." });
+  }
+  if (isFatFingerPrice(req.lastPrice, req.limitPrice) || isFatFingerPrice(req.lastPrice, req.stopLossPrice) || isFatFingerPrice(req.lastPrice, req.takeProfitPrice)) {
+    violations.push({
+      code: "FAT_FINGER_PRICE",
+      message: "Limit/stop/target is more than 10% away from last price.",
+    });
   }
 
   return {

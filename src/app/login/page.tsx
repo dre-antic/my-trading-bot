@@ -29,7 +29,7 @@ export default function LoginPage() {
         </p>
         <h1>AI Trading Command Center</h1>
         <p className="muted">
-          Research, strategy compliance, deterministic risk, and human-approved paper execution. Not a chatbot with a buy button.
+          Research, strategy compliance, deterministic risk, and a Market Watch / chart / ticket desk. Paper by default. Not a chatbot with a buy button.
         </p>
         <form onSubmit={onSubmit} className="grid">
           <div>

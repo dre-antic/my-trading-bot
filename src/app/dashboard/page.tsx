@@ -12,7 +12,6 @@ export default function DashboardPage() {
     api<Record<string, unknown>>("/api/dashboard").then(setData).catch((e) => setError(e.message));
   }, []);
   const port = (data?.portfolio ?? {}) as Record<string, string>;
-  const health = (data?.health ?? {}) as Record<string, unknown>;
   return (
     <AppFrame>
       <h1>Desk overview</h1>
@@ -32,8 +31,11 @@ export default function DashboardPage() {
         <div className="card">
           <h3>Risk and bot status</h3>
           <p>Constitution is active. Risk Firewall is deterministic software. AI cannot disable it.</p>
-          <p className="muted">Broker: paper · Market data: demo provider · AI paid services: {(health.ai as { paidServices?: boolean })?.paidServices ? "configured" : "off"}</p>
-          <Link className="btn secondary" href="/opportunities">Review opportunities</Link>
+          <p className="muted">Open the Terminal for Market Watch, chart, ticket, and Experts. LIVE stays off until you complete every safety gate.</p>
+          <div className="row">
+            <Link className="btn" href="/terminal">Open terminal</Link>
+            <Link className="btn secondary" href="/opportunities">Review opportunities</Link>
+          </div>
         </div>
         <div className="card">
           <h3>Positions</h3>

@@ -37,6 +37,7 @@ import { isMarketOpen } from "@/core/calendar";
 import { getDb } from "@/db/client";
 import { addAlert, audit } from "./audit";
 import { loadConfig } from "./config";
+import { disableLiveTrading, disarmLiveSession, getLiveControl } from "./live-control";
 
 function db() {
   return getDb();
@@ -628,6 +629,62 @@ function writeJournal(
     );
 }
 
+export function applyPaperMarketOrder(
+  userId: string,
+  input: {
+    instrument: string;
+    side: "buy" | "sell";
+    type: "market" | "limit" | "stop";
+    quantity: string;
+    expectedPrice?: string;
+    limitPrice?: string;
+    stopPrice?: string;
+    strategyId?: string;
+    strategyVersion?: number;
+  },
+): { orderId: string; accountId: string; status: string } {
+  const { account, state } = loadPaper(userId);
+  const now = new Date();
+  const submitted = submitPaperOrder(state, {
+    userId,
+    accountId: account.id,
+    strategyId: input.strategyId,
+    strategyVersion: input.strategyVersion,
+    instrument: input.instrument,
+    side: input.side,
+    type: input.type,
+    quantity: input.quantity,
+    limitPrice: input.limitPrice,
+    stopPrice: input.stopPrice,
+    expectedPrice: input.expectedPrice,
+    now,
+  });
+  const quotes = currentQuotes(submitted.state);
+  const matched = matchPaperOrders(submitted.state, quotes, now);
+  savePaper(account.id, matched);
+  persistOrderAndFills(userId, account.id, matched, submitted.order.orderId);
+  const order = matched.orders[submitted.order.orderId];
+  audit({
+    userId,
+    action: "order.paper_ticket",
+    entity: "order",
+    entityId: order.orderId,
+    payload: { status: order.status, simulated: true, instrument: input.instrument },
+  });
+  return { orderId: order.orderId, accountId: account.id, status: order.status };
+}
+
+export function listInstruments(): Array<{
+  symbol: string;
+  assetClass: AssetClass;
+  venue: string;
+  currency: string;
+}> {
+  return db()
+    .prepare("SELECT symbol, asset_class as assetClass, venue, currency FROM instruments ORDER BY symbol")
+    .all() as Array<{ symbol: string; assetClass: AssetClass; venue: string; currency: string }>;
+}
+
 export function closePosition(userId: string, instrument: string): void {
   const { account, state } = loadPaper(userId);
   const pos = state.positions[instrument];
@@ -868,6 +925,12 @@ export function emergency(userId: string, action: EmergencyAction, confirmPhrase
       closePosition(userId, pos);
     }
   }
+  if (action === "DISARM_LIVE") {
+    disarmLiveSession(userId, confirmPhrase);
+  }
+  if (action === "DISABLE_LIVE") {
+    disableLiveTrading(userId, confirmPhrase);
+  }
   addAlert(userId, "system_failure", "Emergency control executed", action);
   audit({ userId, action: "emergency", entity: "runtime", entityId: action, payload: { action } });
   return { ok: true, action };
@@ -880,7 +943,12 @@ export function health() {
     database: process.env.DATABASE_URL ? "postgres-schema-available" : "sqlite",
     worker: "sql-jobs",
     redis: process.env.REDIS_URL ? "configured" : "sql-fallback",
-    broker: { paper: "ok", alpaca: config.alpacaPaperKey ? "keys-present" : "not-configured" },
+    broker: {
+      paper: "ok",
+      alpacaPaper: config.alpacaPaperKey ? "keys-present" : "not-configured",
+      alpacaLive: config.alpacaLiveKey ? "keys-present" : "not-configured",
+      oanda: config.oandaToken ? `${config.oandaEnv}-keys-present` : "not-configured",
+    },
     marketData: process.env.MARKETDATA_PROVIDER ?? "stooq",
     engine: process.env.ATCC_ENGINE ?? "native-ts",
     notifications: notificationStatus(),
@@ -897,8 +965,13 @@ export function health() {
 
 export function setModes(userId: string, patch: Partial<{ displayMode: DisplayMode; tradingMode: LiveTradingMode }>) {
   const config = loadConfig();
-  if (patch.displayMode === "live" && !config.liveEnabled) {
-    throw new Error("LIVE mode is blocked by environment policy.");
+  if (patch.displayMode === "live") {
+    if (!config.liveEnabled) {
+      throw new Error("LIVE mode is blocked by environment policy.");
+    }
+    if (!getLiveControl(userId).liveEnabled) {
+      throw new Error("Enable LIVE TRADING in Settings before switching the display to live.");
+    }
   }
   if (patch.tradingMode === "autonomous" && !config.autonomousEnabled) {
     throw new Error("Autonomous trading is blocked by environment policy.");

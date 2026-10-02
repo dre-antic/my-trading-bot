@@ -39,7 +39,8 @@ export interface SubmitOrderRequest {
   quantity: string;
   limitPrice?: string;
   stopPrice?: string;
-  reduceOnly?: boolean;
+  takeProfitPrice?: string;
+  stopLossPrice?: string;
 }
 
 export interface BrokerHealth {
@@ -87,6 +88,24 @@ export const BROKER_REGISTRY: Array<{
     notes: "Real HTTP adapter to Alpaca paper trading. Not marked production-ready. Requires user keys.",
   },
   {
+    id: "alpaca_live",
+    displayName: "Alpaca Live",
+    readiness: "integration_untested",
+    notes: "Live equities/crypto via api.alpaca.markets only. Fail-closed. Requires distinct live keys, env LIVE, in-app enable, session arm, and PLACE LIVE ORDER. Not marked production-ready.",
+  },
+  {
+    id: "oanda_practice",
+    displayName: "OANDA Practice",
+    readiness: "integration_untested",
+    notes: "Forex practice (api-fxpractice.oanda.com). Not real money.",
+  },
+  {
+    id: "oanda_live",
+    displayName: "OANDA Live",
+    readiness: "integration_untested",
+    notes: "Forex live (api-fxtrade.oanda.com only). Same live gates as Alpaca live. Not marked production-ready.",
+  },
+  {
     id: "interactive_brokers",
     displayName: "Interactive Brokers",
     readiness: "not_implemented",
@@ -96,7 +115,7 @@ export const BROKER_REGISTRY: Array<{
     id: "oanda",
     displayName: "OANDA",
     readiness: "not_implemented",
-    notes: "Adapter interface reserved. Not implemented.",
+    notes: "Use oanda_practice or oanda_live. This generic id is reserved.",
   },
   {
     id: "mt5",

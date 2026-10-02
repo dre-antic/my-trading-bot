@@ -354,6 +354,23 @@ CREATE TABLE IF NOT EXISTS notification_deliveries (
   reason TEXT,
   created_at TEXT NOT NULL
 );
+CREATE TABLE IF NOT EXISTS live_control (
+  user_id TEXT PRIMARY KEY,
+  live_enabled INTEGER NOT NULL DEFAULT 0,
+  armed_until TEXT,
+  halted INTEGER NOT NULL DEFAULT 0,
+  halt_reason TEXT,
+  broker_error_streak INTEGER NOT NULL DEFAULT 0,
+  updated_at TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS expert_attachments (
+  id TEXT PRIMARY KEY,
+  user_id TEXT NOT NULL,
+  strategy_id TEXT NOT NULL,
+  symbol TEXT NOT NULL,
+  enabled INTEGER NOT NULL DEFAULT 1,
+  created_at TEXT NOT NULL
+);
 CREATE TABLE IF NOT EXISTS runtime_flags (
   user_id TEXT PRIMARY KEY,
   display_mode TEXT NOT NULL,

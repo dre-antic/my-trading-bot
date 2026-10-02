@@ -11,17 +11,32 @@ export default function SettingsPage() {
   const [symbol, setSymbol] = useState("SPY");
   const [engine, setEngine] = useState<Record<string, unknown> | null>(null);
   const [market, setMarket] = useState<Record<string, unknown> | null>(null);
+  const [live, setLive] = useState<Record<string, unknown> | null>(null);
+  const [livePhrase, setLivePhrase] = useState("");
   useEffect(() => {
     api<{ constitution: Record<string, unknown> }>("/api/constitution").then((d) => setConstitution(d.constitution));
     api<Record<string, unknown>>("/api/engine").then(setEngine);
     api<Record<string, unknown>>("/api/market-data").then(setMarket);
+    api<Record<string, unknown>>("/api/live").then(setLive);
   }, []);
   async function emergency(action: string, confirm: string) {
     try {
       await api("/api/emergency", { method: "POST", body: JSON.stringify({ action, confirmPhrase: confirm }) });
       setMsg(`${action} executed`);
+      setLive(await api<Record<string, unknown>>("/api/live"));
     } catch (e) {
       setMsg(e instanceof Error ? e.message : "failed");
+    }
+  }
+  async function liveAction(action: string) {
+    try {
+      const confirmPhrase =
+        action === "disarm" ? "DISARM LIVE" : action === "disable" ? "DISABLE LIVE TRADING" : livePhrase;
+      await api("/api/live", { method: "POST", body: JSON.stringify({ action, confirmPhrase }) });
+      setLive(await api<Record<string, unknown>>("/api/live"));
+      setMsg(`${action} ok`);
+    } catch (e) {
+      setMsg(e instanceof Error ? e.message : "live action failed");
     }
   }
   async function refreshBars() {
@@ -67,12 +82,32 @@ export default function SettingsPage() {
         <pre style={{ whiteSpace: "pre-wrap" }}>{JSON.stringify(engine, null, 2)}</pre>
       </div>
       <div className="card">
+        <h3>Live trading (fail-closed)</h3>
+        <p className="muted">
+          Real-money orders stay blocked until ATCC_LIVE_ENABLED=true, SESSION_SECRET is not the example value,
+          you type ENABLE LIVE TRADING, display is live, you type ARM LIVE SESSION (15 minutes), and each ticket
+          types PLACE LIVE ORDER. AI cannot skip this. Brokers are not marked production-ready.
+        </p>
+        <pre style={{ whiteSpace: "pre-wrap" }}>{JSON.stringify(live, null, 2)}</pre>
+        <label>Type the exact live phrase (ENABLE LIVE TRADING / ARM LIVE SESSION / DISABLE LIVE TRADING / ARM reset: RESET CIRCUIT BREAKER)</label>
+        <input value={livePhrase} onChange={(e) => setLivePhrase(e.target.value)} autoComplete="off" />
+        <div className="row">
+          <button className="btn" onClick={() => liveAction("enable")}>Enable live</button>
+          <button className="btn" onClick={() => liveAction("arm")}>Arm 15 min</button>
+          <button className="btn secondary" onClick={() => liveAction("disarm")}>Disarm</button>
+          <button className="btn danger" onClick={() => liveAction("disable")}>Disable live</button>
+          <button className="btn secondary" onClick={() => liveAction("reset_breaker")}>Reset breaker</button>
+        </div>
+      </div>
+      <div className="card">
         <h3>Emergency controls</h3>
-        <p className="muted">High-risk actions require the exact confirmation phrase.</p>
+        <p className="muted">High-risk actions require the exact confirmation phrase. Kill switch also sits in the top banner.</p>
         <div className="row">
           <button className="btn secondary" onClick={() => emergency("STOP_NEW_TRADES", "STOP NEW TRADES")}>Stop new trades</button>
           <button className="btn secondary" onClick={() => emergency("STOP_AUTOMATION", "STOP AUTOMATION")}>Stop automation</button>
           <button className="btn secondary" onClick={() => emergency("CANCEL_OPEN_ORDERS", "CANCEL OPEN ORDERS")}>Cancel open orders</button>
+          <button className="btn danger" onClick={() => emergency("DISARM_LIVE", "DISARM LIVE")}>Disarm live</button>
+          <button className="btn danger" onClick={() => emergency("DISABLE_LIVE", "DISABLE LIVE TRADING")}>Disable live</button>
         </div>
         <label>Type CLOSE ALL POSITIONS to flatten paper book</label>
         <input value={phrase} onChange={(e) => setPhrase(e.target.value)} />

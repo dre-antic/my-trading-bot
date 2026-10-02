@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { api } from "./api";
 
 const LINKS = [
+  ["/terminal", "Terminal"],
   ["/dashboard", "Dashboard"],
   ["/opportunities", "Opportunities"],
   ["/positions", "Positions"],
@@ -22,21 +23,36 @@ const LINKS = [
   ["/settings", "Settings"],
 ];
 
-export function AppFrame({ children }: { children: React.ReactNode }) {
+export function AppFrame({ children, dense }: { children: React.ReactNode; dense?: boolean }) {
   const path = usePathname();
   const router = useRouter();
-  const [me, setMe] = useState<{ flags?: { display_mode: string; trading_mode: string }; portfolio?: { equity: string; currency: string } } | null>(null);
+  const [me, setMe] = useState<{
+    flags?: { display_mode: string; trading_mode: string };
+    portfolio?: { equity: string; currency: string };
+    live?: { envLiveEnabled: boolean; control: { liveEnabled: boolean; armedUntil: string | null; halted: boolean } };
+  } | null>(null);
 
   useEffect(() => {
-    api<{ flags: { display_mode: string; trading_mode: string }; portfolio: { equity: string; currency: string } }>("/api/auth/me")
-      .then(setMe)
+    Promise.all([
+      api<{ flags: { display_mode: string; trading_mode: string }; portfolio: { equity: string; currency: string } }>("/api/auth/me"),
+      api<{ envLiveEnabled: boolean; control: { liveEnabled: boolean; armedUntil: string | null; halted: boolean } }>("/api/live").catch(() => null),
+    ])
+      .then(([auth, live]) => setMe({ ...auth, live: live ?? undefined }))
       .catch(() => router.push("/login"));
   }, [router]);
 
   const mode = me?.flags?.display_mode ?? "demo";
+  const liveOn = Boolean(me?.live?.control.liveEnabled);
+  const armed = Boolean(me?.live?.control.armedUntil && new Date(me.live.control.armedUntil).getTime() > Date.now());
+
+  async function kill() {
+    await api("/api/emergency", { method: "POST", body: JSON.stringify({ action: "DISARM_LIVE", confirmPhrase: "DISARM LIVE" }) });
+    await api("/api/emergency", { method: "POST", body: JSON.stringify({ action: "STOP_NEW_TRADES", confirmPhrase: "STOP NEW TRADES" }) });
+    window.location.reload();
+  }
 
   return (
-    <div className="app-shell">
+    <div className={`app-shell ${dense ? "dense" : ""}`}>
       <aside className="sidebar">
         <div className="brand">
           <small>Command Center</small>
@@ -50,20 +66,24 @@ export function AppFrame({ children }: { children: React.ReactNode }) {
           ))}
         </nav>
       </aside>
-      <main className="main">
+      <main className={`main ${dense ? "terminal-main" : ""}`}>
         <div className={`mode-banner ${mode}`}>
           <div>
             <span className={`chip ${mode}`}>{mode}</span>
             <span className="chip">{me?.flags?.trading_mode ?? "assisted"}</span>
+            <span className={`chip ${liveOn ? "live" : "paper"}`}>LIVE {liveOn ? (armed ? "armed" : "on") : "off"}</span>
           </div>
-          <div className="mono muted">
-            Equity {me?.portfolio?.equity ?? "—"} {me?.portfolio?.currency ?? ""} · LIVE off · Autonomous off
+          <div className="row">
+            <div className="mono muted">
+              Equity {me?.portfolio?.equity ?? "—"} {me?.portfolio?.currency ?? ""} · Autonomous off
+            </div>
+            <button className="btn danger" onClick={kill}>Kill switch</button>
           </div>
         </div>
         {children}
       </main>
       <nav className="bottom-nav">
-        {LINKS.slice(0, 5).map(([href, label]) => (
+        {[["/terminal", "Terminal"], ...LINKS.slice(1, 5)].map(([href, label]) => (
           <Link key={href} href={href} className={path.startsWith(href) ? "active" : ""}>
             {label}
           </Link>

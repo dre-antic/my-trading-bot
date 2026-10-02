@@ -1,16 +1,16 @@
 # AI Trading Command Center
 
-A personal AI-assisted trading research, decision-support, portfolio, and **human-approved paper execution** desk.
+A personal AI-assisted trading research, decision-support, portfolio, **human-approved paper execution**, and **fail-closed live** desk with a Market Watch / chart / ticket terminal.
 
 This is not “LLM predicts market → BUY”.
 
 ```
 market data → scanner → strategy engine → research desk → candidate
 → strategy compliance → portfolio analysis → deterministic risk firewall
-→ execution validation → user approval → paper broker → journal → learning lab
+→ execution validation → user approval → paper or gated live broker → journal
 ```
 
-**LIVE trading is off. Autonomous trading is off. User approval is on.**
+**LIVE trading is off until you complete every gate in `LIVE_TRADING.md`. Autonomous trading is off. User approval is on.**
 
 The original repository contained a 70-line Binance RSI script, later replaced by an unrelated video studio. This branch implements the trading product the repository was named for.
 
@@ -37,10 +37,13 @@ The original repository contained a 70-line Binance RSI script, later replaced b
 - Next.js PWA command center (phone-sized navigation included)
 - Multi-agent desk catalog (15 roles). Default provider is deterministic, not a paid LLM
 - Alpaca **paper** HTTP adapter with injectable-fetch contract tests (not marked production-ready)
+- Alpaca **live** and OANDA practice/live adapters (fail-closed, integration-untested)
+- Terminal: Market Watch, candlestick chart, order ticket, Trade/History/Experts
+- Live arming (15 min), kill switch, circuit breaker, fat-finger 10% band
 
 ## What is explicitly not claimed
 
-- No production-ready live broker
+- No production-ready live broker. Live adapters exist and stay fail-closed / integration-untested
 - No guaranteed profit, winning strategy, or “validated” edge
 - Educational strategies are infrastructure tests only
 - Demo market data is labeled DEMO and is synthetic
@@ -57,7 +60,7 @@ npx tsx src/db/seed.ts
 npm run dev
 ```
 
-Open http://127.0.0.1:3000
+Open http://127.0.0.1:3000 then **Terminal** for the trading desk (Market Watch, chart, ticket). Dashboard remains the overview.
 
 Demo login:
 
@@ -102,4 +105,4 @@ Paper/live mode will not silently substitute synthetic bars. Refresh from Settin
 
 ## Safety
 
-AI processes cannot call arbitrary broker APIs, change the Constitution, raise risk limits, or place live orders. See `SECURITY.md` and `RISK_MANAGEMENT.md`.
+AI processes cannot call arbitrary broker APIs, change the Constitution, raise risk limits, or place live orders. Live execution requires the full phrase stack in `LIVE_TRADING.md`. See also `SECURITY.md` and `RISK_MANAGEMENT.md`.
