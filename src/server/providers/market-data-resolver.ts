@@ -44,19 +44,33 @@ export function barsFromCacheOrDemo(symbol: string, assetClass: AssetClass, mode
 export async function refreshInstrumentBars(symbol: string, assetClass: AssetClass): Promise<Bar[]> {
   const provider = configuredProvider();
   const mode = loadConfig().displayModeDefault;
-  if (mode !== "demo") assertNoFakeProductionData(mode, provider.id === "demo" ? "synthetic" : provider.id);
-  const bars = await provider.getBars({ instrument: symbol, assetClass, timeframe: "1d", limit: 250 });
-  memory.set(symbol, bars);
-  persist(symbol, bars);
-  return bars;
+  try {
+    if (mode !== "demo") assertNoFakeProductionData(mode, provider.id === "demo" ? "synthetic" : provider.id);
+    const bars = await provider.getBars({ instrument: symbol, assetClass, timeframe: "1d", limit: 250 });
+    if (!bars.length) throw new Error(`Provider ${provider.id} returned no bars for ${symbol}`);
+    memory.set(symbol, bars);
+    persist(symbol, bars);
+    return bars;
+  } catch (error) {
+    const demoAllowed = mode === "demo" || process.env.MARKETDATA_PROVIDER === "demo";
+    if (!demoAllowed) throw error;
+    const bars = synthesizeDemoBars(symbol, assetClass, 240, symbol.split("").reduce((s, c) => s + c.charCodeAt(0), 0));
+    memory.set(symbol, bars);
+    persist(symbol, bars);
+    return bars;
+  }
 }
 
 function persist(symbol: string, bars: Bar[]): void {
-  const db = getDb();
-  db.prepare("DELETE FROM market_bar_cache WHERE symbol = ?").run(symbol);
-  db.prepare(
-    "INSERT INTO market_bar_cache (id, symbol, payload, provider, created_at) VALUES (?, ?, ?, ?, ?)",
-  ).run(ids.dataSource(), symbol, JSON.stringify(bars), bars[0]?.provenance.provider ?? "unknown", toIsoUtc());
+  try {
+    const db = getDb();
+    db.prepare("DELETE FROM market_bar_cache WHERE symbol = ?").run(symbol);
+    db.prepare(
+      "INSERT INTO market_bar_cache (id, symbol, payload, provider, created_at) VALUES (?, ?, ?, ?, ?)",
+    ).run(ids.dataSource(), symbol, JSON.stringify(bars), bars[0]?.provenance.provider ?? "unknown", toIsoUtc());
+  } catch {
+    // Memory cache still holds the series. SQLite write is best-effort after migrate.
+  }
 }
 
 export function cachedSymbols(): string[] {

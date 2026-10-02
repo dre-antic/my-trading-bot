@@ -1,6 +1,11 @@
 import { provenance, type BarQuery, type MarketDataProvider } from "@/core/market-data";
 import type { AssetClass, Bar } from "@/core/types";
 
+const STOOQ_HEADERS = {
+  "User-Agent": "ATCC/0.1 (research desk; historical CSV)",
+  Accept: "text/csv,text/plain,*/*",
+};
+
 const SYMBOL_MAP: Record<string, string> = {
   SPY: "spy.us",
   AAPL: "aapl.us",
@@ -20,7 +25,7 @@ export class StooqProvider implements MarketDataProvider {
 
   async healthCheck(): Promise<{ ok: boolean; message: string }> {
     try {
-      const res = await this.fetchImpl("https://stooq.com/q/d/l/?s=spy.us&i=d");
+      const res = await this.fetchImpl("https://stooq.com/q/d/l/?s=spy.us&i=d", { headers: STOOQ_HEADERS });
       return { ok: res.ok, message: res.ok ? "stooq reachable" : `stooq HTTP ${res.status}` };
     } catch (error) {
       return { ok: false, message: error instanceof Error ? error.message : "stooq unreachable" };
@@ -30,7 +35,7 @@ export class StooqProvider implements MarketDataProvider {
   async getBars(query: BarQuery): Promise<Bar[]> {
     const symbol = stooqSymbol(query.instrument);
     const url = `https://stooq.com/q/d/l/?s=${encodeURIComponent(symbol)}&i=d`;
-    const res = await this.fetchImpl(url);
+    const res = await this.fetchImpl(url, { headers: STOOQ_HEADERS });
     if (!res.ok) throw new Error(`Stooq error ${res.status} for ${query.instrument}`);
     const text = await res.text();
     return parseStooqCsv(text, query.instrument, query.assetClass, url);

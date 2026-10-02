@@ -26,11 +26,11 @@ export default function SettingsPage() {
   }
   async function refreshBars() {
     try {
-      const res = await api<{ symbol: string; bars: number; provider?: string; source?: string }>("/api/market-data/refresh", {
+      const res = await api<{ symbol: string; bars: number; provider?: string; source?: string; note?: string }>("/api/market-data/refresh", {
         method: "POST",
         body: JSON.stringify({ symbol, assetClass: symbol === "BTC-USD" ? "crypto" : symbol === "EURUSD" ? "forex" : "etf" }),
       });
-      setMsg(`Refreshed ${res.symbol}: ${res.bars} bars from ${res.provider ?? "unknown"} (${res.source ?? "n/a"})`);
+      setMsg(`Refreshed ${res.symbol}: ${res.bars} bars from ${res.provider ?? "unknown"} (${res.source ?? "n/a"})${res.note ? ` — ${res.note}` : ""}`);
       setMarket(await api<Record<string, unknown>>("/api/market-data"));
     } catch (e) {
       setMsg(e instanceof Error ? e.message : "refresh failed");
