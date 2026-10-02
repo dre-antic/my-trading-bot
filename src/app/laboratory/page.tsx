@@ -27,8 +27,13 @@ export default function LaboratoryPage() {
     setChampion((current) => current || d.strategies[0]?.strategyId || "");
     setChallenger((current) => current || d.strategies[1]?.strategyId || "");
   }
+
   useEffect(() => {
-    void reload();
+    void api<typeof data>("/api/laboratory").then((d) => {
+      setData(d);
+      setChampion((current) => current || d.strategies[0]?.strategyId || "");
+      setChallenger((current) => current || d.strategies[1]?.strategyId || "");
+    });
   }, []);
 
   return (

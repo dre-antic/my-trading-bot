@@ -15,7 +15,7 @@ describe("optional LLM providers", () => {
   });
 
   it("refuses a missing key and sanitizes secrets", async () => {
-    const provider = new OpenAiProvider(undefined, async () => new Response("{}", { status: 200 }));
+    const provider = new OpenAiProvider("", async () => new Response("{}", { status: 200 }));
     await expect(provider.complete({ model: "gpt-4o-mini", messages: [{ role: "user", content: "hi" }] })).rejects.toThrow(/not configured/);
     expect(sanitizeForLlm("key sk-abcdefghijklmnopqrstuv")).toContain("[REDACTED]");
     expect(() => assertNoSecretInPrompt("send sk-abcdefghijklmnopqrstuv")).toThrow(/secrets/);

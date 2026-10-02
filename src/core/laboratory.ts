@@ -69,6 +69,8 @@ export function evaluatePromotionGates(evidence: ValidationEvidence, gates = DEF
 }
 
 /** Laboratory promotion never enables LIVE. Best-option alternative: APPROVED only. */
-export function canPromoteToLive(_championLifecycle?: StrategyLifecycle, _gate?: GateResult): boolean {
+export function canPromoteToLive(championLifecycle?: StrategyLifecycle, gate?: GateResult): boolean {
+  void championLifecycle;
+  void gate;
   return false;
 }

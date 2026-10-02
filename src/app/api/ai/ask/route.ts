@@ -8,7 +8,13 @@ export async function POST(req: Request) {
     const question = body.question ?? "";
     const inj = detectPromptInjection(question);
     if (inj.flagged) {
-      return { answer: "The desk refused this prompt because it looks like an injection attempt.", usedLlm: false, flagged: true };
+      return {
+        answer: "The desk refused this prompt because it looks like an injection attempt.",
+        usedLlm: false,
+        flagged: true,
+        citations: [],
+        disclaimer: "Prompt blocked. No LLM call was made.",
+      };
     }
     return askDesk(user.userId, question);
   });

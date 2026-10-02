@@ -6,14 +6,7 @@ import { seed } from "@/db/seed";
 import { audit } from "./audit";
 
 export async function ensureSeeded(): Promise<void> {
-  const db = getDb();
-  const row = db.prepare("SELECT COUNT(*) as c FROM sqlite_master WHERE type='table' AND name='users'").get() as { c: number };
-  if (row.c === 0) {
-    await seed();
-    return;
-  }
-  const users = db.prepare("SELECT COUNT(*) as c FROM users").get() as { c: number };
-  if (users.c === 0) await seed();
+  await seed();
 }
 
 export async function login(email: string, password: string): Promise<{ userId: string; email: string; displayName: string }> {
