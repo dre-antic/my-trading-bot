@@ -100,7 +100,6 @@ export class OandaAdapter implements BrokerAdapter {
     };
     return (body.positions ?? []).map((p) => {
       const longQty = Number(p.long.units);
-      const shortQty = Number(p.short.units);
       const qty = longQty !== 0 ? p.long.units : p.short.units;
       const px = longQty !== 0 ? p.long.averagePrice : p.short.averagePrice;
       return { instrument: p.instrument.replace("_", ""), quantity: qty, averagePrice: px || "0", marketPrice: px || "0" };

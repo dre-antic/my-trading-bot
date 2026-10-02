@@ -122,7 +122,7 @@ export function armLiveSession(userId: string, confirmPhrase: string): LiveContr
   return getLiveControl(userId);
 }
 
-export function disarmLiveSession(userId: string, confirmPhrase = LIVE_PHRASES.disarm): LiveControl {
+export function disarmLiveSession(userId: string, confirmPhrase: string = LIVE_PHRASES.disarm): LiveControl {
   assertPhrase(confirmPhrase, LIVE_PHRASES.disarm);
   ensureRow(userId);
   getDb().prepare("UPDATE live_control SET armed_until = NULL, updated_at = ? WHERE user_id = ?").run(toIsoUtc(), userId);

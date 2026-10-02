@@ -42,10 +42,9 @@ describe("live broker adapters refuse paper paths", () => {
 
   it("OANDA live uses fxtrade and never fxpractice", async () => {
     const seen: string[] = [];
-    process.env.OANDA_API_TOKEN = "token";
-    process.env.OANDA_ACCOUNT_ID = "acct";
     const adapter = new OandaAdapter("live", "token", "acct", fixtureFetch((url) => seen.push(url)));
-    await adapter.getAccount();
+    const health = await adapter.healthCheck();
+    expect(health.paper).toBe(false);
     expect(seen[0]).toContain("api-fxtrade.oanda.com");
     expect(seen[0]).not.toContain("fxpractice");
   });

@@ -1,5 +1,6 @@
 import { constitutionAllowsAssetClass, constitutionAllowsBroker, constitutionAllowsMarket, constitutionAllowsStrategy, pctOf, type Constitution } from "./constitution";
 import { Money, Qty } from "./money";
+import type { SizingResult } from "./position-sizing";
 import { isStale, parseUtc } from "./time";
 import type { Direction, InstrumentSpec, PortfolioSnapshot } from "./types";
 import { isFatFingerPrice } from "./fat-finger";
