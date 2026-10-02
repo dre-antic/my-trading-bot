@@ -12,6 +12,13 @@ docker compose up --build
 
 This starts the web process and a worker sharing a volume. Redis/Postgres profiles exist but are not required.
 
+```bash
+docker compose --profile postgres --profile redis up
+DATABASE_URL=postgres://atcc:atcc@localhost:5432/atcc npm run db:migrate:pg
+```
+
+Postgres schema apply does **not** switch the Next.js query path. Redis, if `REDIS_URL` is set, is a job wake-up; durable jobs stay in SQL.
+
 Environment variables are listed in `.env.example`.
 
 ## Cloud

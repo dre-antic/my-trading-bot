@@ -283,13 +283,6 @@ export function agentById(id: string): AgentDefinition {
   return found;
 }
 
-export function sanitizeForLlm(text: string): string {
-  return text
-    .replace(/(api[_-]?key|secret|password|token)\s*[:=]\s*\S+/gi, "$1=[REDACTED]")
-    .replace(/sk-[A-Za-z0-9]{10,}/g, "[REDACTED]")
-    .slice(0, 20_000);
-}
-
 export function estimateCostUsd(model: string, inputTokens: number, outputTokens: number): string {
   const table: Record<string, { in: number; out: number }> = {
     "gpt-4o-mini": { in: 0.15 / 1_000_000, out: 0.6 / 1_000_000 },

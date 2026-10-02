@@ -12,6 +12,7 @@ const LINKS = [
   ["/orders", "Orders"],
   ["/strategies", "Strategies"],
   ["/backtests", "Backtests"],
+  ["/laboratory", "Laboratory"],
   ["/research", "Research"],
   ["/ai", "AI Desk"],
   ["/journal", "Journal"],

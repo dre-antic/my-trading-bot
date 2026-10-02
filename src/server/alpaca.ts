@@ -22,6 +22,7 @@ export class AlpacaPaperAdapter implements BrokerAdapter {
     private readonly key = loadConfig().alpacaPaperKey,
     private readonly secret = loadConfig().alpacaPaperSecret,
     private readonly baseUrl = loadConfig().alpacaPaperBaseUrl,
+    private readonly fetchImpl: typeof fetch = fetch,
   ) {}
 
   private headers(): Record<string, string> {
@@ -47,7 +48,7 @@ export class AlpacaPaperAdapter implements BrokerAdapter {
   async healthCheck(): Promise<BrokerHealth> {
     const started = Date.now();
     try {
-      const res = await fetch(`${this.baseUrl}/v2/clock`, { headers: this.headers() });
+      const res = await this.fetchImpl(`${this.baseUrl}/v2/clock`, { headers: this.headers() });
       return {
         ok: res.ok,
         latencyMs: Date.now() - started,
@@ -65,7 +66,7 @@ export class AlpacaPaperAdapter implements BrokerAdapter {
   }
 
   async getAccount(): Promise<BrokerAccount> {
-    const res = await fetch(`${this.baseUrl}/v2/account`, { headers: this.headers() });
+    const res = await this.fetchImpl(`${this.baseUrl}/v2/account`, { headers: this.headers() });
     if (!res.ok) throw new Error(`Alpaca account error ${res.status}`);
     const data = (await res.json()) as { id: string; currency: string; cash: string; equity: string; buying_power: string; pattern_day_trader: boolean };
     return {
@@ -79,7 +80,7 @@ export class AlpacaPaperAdapter implements BrokerAdapter {
   }
 
   async getPositions(): Promise<BrokerPosition[]> {
-    const res = await fetch(`${this.baseUrl}/v2/positions`, { headers: this.headers() });
+    const res = await this.fetchImpl(`${this.baseUrl}/v2/positions`, { headers: this.headers() });
     if (!res.ok) throw new Error(`Alpaca positions error ${res.status}`);
     const data = (await res.json()) as Array<{ symbol: string; qty: string; avg_entry_price: string; current_price: string }>;
     return data.map((p) => ({
@@ -91,7 +92,7 @@ export class AlpacaPaperAdapter implements BrokerAdapter {
   }
 
   async getOrders(): Promise<UniversalOrder[]> {
-    const res = await fetch(`${this.baseUrl}/v2/orders?status=all&limit=50`, { headers: this.headers() });
+    const res = await this.fetchImpl(`${this.baseUrl}/v2/orders?status=all&limit=50`, { headers: this.headers() });
     if (!res.ok) throw new Error(`Alpaca orders error ${res.status}`);
     const data = (await res.json()) as Array<Record<string, string>>;
     return data.map((o) => this.toOrder(o));
@@ -103,7 +104,7 @@ export class AlpacaPaperAdapter implements BrokerAdapter {
 
   async submitOrder(req: SubmitOrderRequest): Promise<UniversalOrder> {
     assertPaperOrAuthorizedLive("paper", false);
-    const res = await fetch(`${this.baseUrl}/v2/orders`, {
+    const res = await this.fetchImpl(`${this.baseUrl}/v2/orders`, {
       method: "POST",
       headers: this.headers(),
       body: JSON.stringify({
@@ -125,7 +126,7 @@ export class AlpacaPaperAdapter implements BrokerAdapter {
   }
 
   async cancelOrder(brokerOrderId: string): Promise<UniversalOrder> {
-    const res = await fetch(`${this.baseUrl}/v2/orders/${brokerOrderId}`, { method: "DELETE", headers: this.headers() });
+    const res = await this.fetchImpl(`${this.baseUrl}/v2/orders/${brokerOrderId}`, { method: "DELETE", headers: this.headers() });
     if (!res.ok && res.status !== 204) throw new Error(`Alpaca cancel error ${res.status}`);
     return this.getOrderStatus(brokerOrderId);
   }
@@ -135,7 +136,7 @@ export class AlpacaPaperAdapter implements BrokerAdapter {
   }
 
   async getOrderStatus(brokerOrderId: string): Promise<UniversalOrder> {
-    const res = await fetch(`${this.baseUrl}/v2/orders/${brokerOrderId}`, { headers: this.headers() });
+    const res = await this.fetchImpl(`${this.baseUrl}/v2/orders/${brokerOrderId}`, { headers: this.headers() });
     if (!res.ok) throw new Error(`Alpaca order status error ${res.status}`);
     return this.toOrder((await res.json()) as Record<string, string>);
   }

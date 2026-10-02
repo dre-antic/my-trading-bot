@@ -16,6 +16,15 @@ This application is MIT. Dependencies keep their own licenses.
 | lucide-react | ISC | Icons (dependency present; pages use CSS) |
 | mammoth | BSD-2-Clause | DOCX (available, import UI currently uses pasted text) |
 | pdf-parse | MIT | PDF (available, import UI currently uses pasted text) |
+| pg | MIT | Optional PostgreSQL migrate client |
+| ioredis | MIT | Optional Redis job wake-up |
+
+## External data (not vendored)
+
+| Source | Access | How used |
+|---|---|---|
+| Stooq daily CSV | Public HTTP CSV | Historical bars with provenance; no SDK copied |
+| Alpaca paper / data HTTP | User keys | Adapter + contract tests against fixture JSON |
 
 ## Research references — not vendored
 

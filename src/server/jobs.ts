@@ -2,8 +2,10 @@ import { ids } from "@/core/ids";
 import { toIsoUtc } from "@/core/time";
 import { getDb } from "@/db/client";
 import { importDocument, runStrategyBacktest, scanStrategy } from "./trading-service";
+import { enqueueRedisJob } from "./redis-queue";
+import { refreshInstrumentBars } from "./providers/market-data-resolver";
 
-export type JobKind = "market_scan" | "backtest" | "document" | "walk_forward" | "monte_carlo" | "ai_research";
+export type JobKind = "market_scan" | "backtest" | "document" | "walk_forward" | "monte_carlo" | "ai_research" | "market_data_refresh" | "laboratory";
 
 export function enqueueJob(userId: string, kind: JobKind, payload: unknown): string {
   const id = ids.job();
@@ -12,6 +14,7 @@ export function enqueueJob(userId: string, kind: JobKind, payload: unknown): str
       "INSERT INTO jobs (id, user_id, kind, status, progress, logs, payload, created_at, attempts) VALUES (?, ?, ?, 'queued', 0, '', ?, ?, 0)",
     )
     .run(id, userId, kind, JSON.stringify(payload), toIsoUtc());
+  void enqueueRedisJob(id);
   return id;
 }
 
@@ -43,6 +46,11 @@ export async function processNextJob(): Promise<boolean> {
       result = runStrategyBacktest(row.user_id, payload.strategyId);
     } else if (row.kind === "document") {
       result = importDocument(row.user_id, payload.filename, payload.text);
+    } else if (row.kind === "market_data_refresh") {
+      result = await refreshInstrumentBars(payload.symbol ?? "SPY", (payload.assetClass as "etf") ?? "etf");
+    } else if (row.kind === "laboratory") {
+      const { evaluateExperiment } = await import("./laboratory");
+      result = evaluateExperiment(row.user_id, payload.experimentId, payload.userApproved === "true");
     } else {
       result = { note: "AI research jobs require a configured provider. Deterministic desk was used instead." };
     }

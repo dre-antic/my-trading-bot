@@ -21,6 +21,10 @@ export function redactSecrets(value: string): string {
     .replace(/(api[_-]?key|secret|password|authorization)\s*[:=]\s*["']?[^"'\s]+/gi, "$1=[REDACTED]");
 }
 
+export function sanitizeForLlm(text: string): string {
+  return redactSecrets(text).slice(0, 12_000);
+}
+
 export function assertNoSecretInPrompt(prompt: string): void {
   if (/sk-[A-Za-z0-9-_]{8,}/.test(prompt) || /APCA-API-SECRET/i.test(prompt)) {
     throw new Error("Refusing to send secrets to an LLM.");

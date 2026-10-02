@@ -11,6 +11,8 @@ services:
       ATCC_AUTONOMOUS_ENABLED: "false"
       AI_DAILY_LIMIT_USD: "0"
       AI_MONTHLY_LIMIT_USD: "0"
+      MARKETDATA_PROVIDER: demo
+      ATCC_ENGINE: native
     volumes:
       - atcc-data:/data
   worker:
@@ -21,10 +23,14 @@ services:
       SESSION_SECRET: change-me-to-a-long-random-string-at-least-32-chars
       ATCC_LIVE_ENABLED: "false"
       ATCC_AUTONOMOUS_ENABLED: "false"
+      MARKETDATA_PROVIDER: demo
+      ATCC_ENGINE: native
     volumes:
       - atcc-data:/data
     depends_on:
       - web
+  # Optional: docker compose --profile postgres up
+  # Then npm run db:migrate:pg with DATABASE_URL. App request path stays SQLite unless you migrate data yourself.
   postgres:
     image: postgres:16
     profiles: ["postgres"]
@@ -34,6 +40,8 @@ services:
       POSTGRES_DB: atcc
     ports:
       - "5432:5432"
+  # Optional: docker compose --profile redis up
+  # REDIS_URL is a job wake-up. Durable work remains in the SQL jobs table.
   redis:
     image: redis:7
     profiles: ["redis"]

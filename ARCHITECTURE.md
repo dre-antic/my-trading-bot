@@ -5,23 +5,23 @@
 | Process | Role | Status |
 |---|---|---|
 | Next.js web + API | Control plane, PWA, REST | Implemented |
-| Worker (`src/worker`) | Durable job table consumer | Implemented |
-| SQLite | Default store for local/dev/test | Implemented |
-| PostgreSQL | Compose profile for production-shaped deploys | Schema not yet ported; do not claim ready |
-| Redis | Optional queue | Not wired; jobs persist in SQLite |
+| Worker (`src/worker`) | Durable SQL job consumer; optional Redis wake-up | Implemented |
+| SQLite | Default store for local/dev/test and the app query path | Implemented |
+| PostgreSQL | Schema mirror + `migratePostgres(DATABASE_URL)` | Schema available; request path stays SQLite-first |
+| Redis | Optional `atcc:jobs` list as wake-up | Wired; SQL remains source of truth |
 
 ## Module map
 
 ```
-src/core        Pure domain: money, constitution, DSL, risk, paper, backtest, AI catalog
-src/db          SQLite schema, migrate, seed
-src/server      Auth, sessions, trading service, Alpaca adapter, jobs
+src/core        Pure domain: money, constitution, DSL, risk, paper, backtest, AI catalog, LEAN mapping, lab gates
+src/db          SQLite schema, Postgres schema, migrate, seed
+src/server      Auth, sessions, trading service, Alpaca, jobs, notifications, providers
 src/app         Next.js UI + route handlers
 src/worker      Background loop
 src/ui          Client helpers
 ```
 
-The trading engine is a TypeScript port inspired by LEAN/Hummingbot *concepts* (universal order, connector interface, evented fills). LEAN is **not** vendored. See `TRADING_ENGINE.md`.
+The trading engine is a TypeScript implementation with a LEAN-compatible export (`toLeanConfig`, `leanStatistics`). LEAN itself is **not** vendored. If `lean` CLI is installed and `ATCC_ENGINE=lean`, `LeanCliEngine` is selected and **refuses to invent LEAN results** until a workspace is configured. See `TRADING_ENGINE.md`.
 
 ## Safety pipeline
 
@@ -35,6 +35,10 @@ Every executable proposal is a `TradeCandidate`, then:
 6. Journal + audit
 
 Research, signal, proposal, approval, and execution are separate states.
+
+## Laboratory
+
+Champion/challenger experiments live in `strategy_experiments`. Robustness gates (OOS trades, walk-forward windows, drawdown, lifecycle) are evaluated separately from human approval. Promotion requires the phrase `PROMOTE CHALLENGER` and sets the challenger to **APPROVED**, never LIVE.
 
 ## Multi-tenant boundary
 

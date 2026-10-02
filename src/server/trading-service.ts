@@ -1,5 +1,4 @@
 import { runOutOfSample, runWalkForward, runMonteCarlo } from "@/core/anti-overfit";
-import { runBacktest } from "@/core/backtest";
 import { riskReward, transitionCandidate, type TradeCandidate } from "@/core/candidate";
 import { parseConstitution, type Constitution } from "@/core/constitution";
 import { interpretSourceText } from "@/core/document-import";
@@ -7,6 +6,11 @@ import { authorizeEmergency, type EmergencyAction } from "@/core/emergency";
 import { ids } from "@/core/ids";
 import { classifyMistakePatterns, draftJournalFromTrade } from "@/core/journal";
 import { synthesizeDemoBars } from "@/core/market-data";
+import { barsFromCacheOrDemo } from "@/server/providers/market-data-resolver";
+import { selectTradingEngine } from "@/core/lean-engine";
+import { canSpend, type CostLedgerEntry } from "@/core/cost";
+import { selectLlmProvider } from "@/server/providers/llm";
+import { notificationStatus } from "@/server/notifications";
 import { Money, Qty } from "@/core/money";
 import {
   cancelPaperOrder,
@@ -65,13 +69,14 @@ export function listStrategies(userId: string): StrategyDefinition[] {
 export function getStrategy(userId: string, strategyId: string): StrategyDefinition {
   const row = db()
     .prepare(
-      `SELECT payload FROM strategy_versions
-       WHERE strategy_id = ? AND strategy_id IN (SELECT id FROM strategies WHERE user_id = ?)
-       ORDER BY version DESC LIMIT 1`,
+      `SELECT v.payload, s.lifecycle FROM strategy_versions v
+       JOIN strategies s ON s.id = v.strategy_id
+       WHERE v.strategy_id = ? AND s.user_id = ?
+       ORDER BY v.version DESC LIMIT 1`,
     )
-    .get(strategyId, userId) as { payload: string } | undefined;
+    .get(strategyId, userId) as { payload: string; lifecycle: StrategyDefinition["lifecycle"] } | undefined;
   if (!row) throw new Error("strategy not found");
-  return parseStrategy(JSON.parse(row.payload));
+  return { ...parseStrategy(JSON.parse(row.payload)), lifecycle: row.lifecycle };
 }
 
 export function createStrategyVersion(userId: string, input: Omit<StrategyDefinition, "strategyId" | "version" | "createdAt" | "author"> & { strategyId?: string }): StrategyDefinition {
@@ -183,8 +188,15 @@ export function getInstrument(symbol: string): InstrumentSpec {
 }
 
 export function barsFor(symbol: string, assetClass: AssetClass): ReturnType<typeof synthesizeDemoBars> {
-  const seed = symbol.split("").reduce((s, c) => s + c.charCodeAt(0), 0);
-  return synthesizeDemoBars(symbol, assetClass, 240, seed);
+  return barsFromCacheOrDemo(symbol, assetClass, flagsSafeDisplay());
+}
+
+function flagsSafeDisplay() {
+  try {
+    return loadConfig().displayModeDefault;
+  } catch {
+    return "demo" as const;
+  }
 }
 
 export function flags(userId: string): {
@@ -654,7 +666,8 @@ export function runStrategyBacktest(userId: string, strategyId: string) {
   const strategy = getStrategy(userId, strategyId);
   const inst = getInstrument(strategy.instruments[0]);
   const bars = barsFor(inst.symbol, inst.assetClass);
-  const full = runBacktest({ strategy, bars, fillOn: "next_open" });
+  const engine = selectTradingEngine();
+  const full = engine.backtest({ strategy, bars, fillOn: "next_open" });
   const oos = runOutOfSample({ strategy, bars, fillOn: "next_open" });
   const wf = runWalkForward({ strategy, bars, fillOn: "next_open" }, 120, 40);
   const mc = runMonteCarlo(full, 100, 2);
@@ -709,7 +722,7 @@ export function importDocument(userId: string, filename: string, text: string) {
   return { id, interpretation };
 }
 
-export function askDesk(userId: string, question: string) {
+export async function askDesk(userId: string, question: string) {
   const strategies = listStrategies(userId);
   const candidates = listCandidates(userId);
   const port = portfolioOf(userId);
@@ -741,16 +754,66 @@ export function askDesk(userId: string, question: string) {
   } else {
     answer = `Account equity ${port.equity} ${port.currency} (paper/demo). Open positions: ${intel.openPositions}. Strategies: ${strategies.length}. This answer uses system data only.`;
   }
+  const facts = [
+    `Equity ${port.equity} ${port.currency}`,
+    `Open positions ${intel.openPositions}`,
+    `Candidates ${candidates.length}`,
+    `Deterministic answer: ${answer}`,
+  ].join(". ");
+  let usedLlm = false;
+  let providerName = "none";
+  let model = "deterministic-desk";
+  let cost = "0";
+  let tokensIn = 0;
+  let tokensOut = 0;
+  const llm = selectLlmProvider();
+  const cfg = loadConfig();
+  const paid = Boolean(llm) && (Number(cfg.aiDailyLimitUsd) > 0 || Number(cfg.aiMonthlyLimitUsd) > 0);
+  if (llm && paid) {
+    const ledger = db()
+      .prepare("SELECT estimated_cost_usd as estimatedCostUsd, created_at as at, agent_id as agent FROM ai_runs WHERE user_id = ?")
+      .all(userId) as CostLedgerEntry[];
+    const spend = canSpend(
+      ledger.map((e) => ({ ...e, model: "ledger", inputTokens: 0, outputTokens: 0, task: "desk", userId })),
+      { dailyUsd: cfg.aiDailyLimitUsd, monthlyUsd: cfg.aiMonthlyLimitUsd, perAgentUsd: "1", paidServicesEnabled: true },
+      "trade_committee",
+      "0.01",
+      new Date(),
+    );
+    if (spend.allowed) {
+      const completion = await llm.complete({
+        model: cfg.openaiKey ? "gpt-4o-mini" : "claude-3-5-haiku",
+        messages: [
+          {
+            role: "system",
+            content:
+              "You are the ATCC desk. Use only the supplied system facts. Never invent balances, fills, or broker states. You have no execution tools.",
+          },
+          { role: "user", content: `${question}\n\nSYSTEM FACTS:\n${facts}` },
+        ],
+        maxTokens: 300,
+      });
+      answer = completion.text || answer;
+      usedLlm = completion.usedLlm;
+      providerName = completion.provider;
+      model = completion.model;
+      cost = completion.estimatedCostUsd;
+      tokensIn = completion.inputTokens;
+      tokensOut = completion.outputTokens;
+    }
+  }
   db()
     .prepare(
-      "INSERT INTO ai_runs (id, user_id, agent_id, provider, model, used_llm, input_tokens, output_tokens, estimated_cost_usd, task, output, created_at) VALUES (?, ?, ?, ?, ?, 0, 0, 0, '0', ?, ?, ?)",
+      "INSERT INTO ai_runs (id, user_id, agent_id, provider, model, used_llm, input_tokens, output_tokens, estimated_cost_usd, task, output, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
     )
-    .run(ids.aiRun(), userId, "trade_committee", "none", "deterministic-desk", question, answer, toIsoUtc());
+    .run(ids.aiRun(), userId, "trade_committee", providerName, model, usedLlm ? 1 : 0, tokensIn, tokensOut, cost, question, answer, toIsoUtc());
   return {
     answer,
-    usedLlm: false,
+    usedLlm,
     citations: ["portfolio", "candidates", "risk_events", "journal"],
-    disclaimer: "Deterministic desk. Paid LLM providers stay off unless configured. No execution authority.",
+    disclaimer: usedLlm
+      ? "LLM phrasing over injected system facts. The model cannot execute or override the Risk Firewall."
+      : "Deterministic desk. Paid LLM providers stay off unless configured. No execution authority.",
   };
 }
 
@@ -814,14 +877,18 @@ export function health() {
   const config = loadConfig();
   return {
     api: "ok",
-    database: "ok",
-    worker: "in-process",
-    broker: { paper: "ok", alpaca: config.alpacaPaperKey ? "keys-present-untested" : "not-configured" },
-    marketData: "demo-provider",
+    database: process.env.DATABASE_URL ? "postgres-schema-available" : "sqlite",
+    worker: "sql-jobs",
+    redis: process.env.REDIS_URL ? "configured" : "sql-fallback",
+    broker: { paper: "ok", alpaca: config.alpacaPaperKey ? "keys-present" : "not-configured" },
+    marketData: process.env.MARKETDATA_PROVIDER ?? "stooq",
+    engine: process.env.ATCC_ENGINE ?? "native-ts",
+    notifications: notificationStatus(),
     ai: {
       openai: Boolean(config.openaiKey),
       anthropic: Boolean(config.anthropicKey),
-      paidServices: Boolean(config.openaiKey || config.anthropicKey),
+      compatible: Boolean(process.env.OPENAI_COMPATIBLE_BASE_URL),
+      paidServices: Boolean(config.openaiKey || config.anthropicKey || process.env.OPENAI_COMPATIBLE_BASE_URL) && Number(config.aiDailyLimitUsd) > 0,
     },
     liveEnabled: config.liveEnabled,
     autonomousEnabled: config.autonomousEnabled,

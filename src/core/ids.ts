@@ -42,4 +42,5 @@ export const ids = {
   constitution: () => newId("con"),
   job: () => newId("job"),
   clientOrder: () => newId("clord"),
+  delivery: () => newId("dlv"),
 };

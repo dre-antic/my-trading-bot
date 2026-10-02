@@ -376,6 +376,23 @@ CREATE TABLE IF NOT EXISTS jobs (
   attempts INTEGER NOT NULL DEFAULT 0
 );
 
+CREATE TABLE IF NOT EXISTS market_bar_cache (
+  id TEXT PRIMARY KEY,
+  symbol TEXT NOT NULL,
+  payload TEXT NOT NULL,
+  provider TEXT NOT NULL,
+  created_at TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS notification_deliveries (
+  id TEXT PRIMARY KEY,
+  user_id TEXT NOT NULL,
+  channel TEXT NOT NULL,
+  sent INTEGER NOT NULL,
+  reason TEXT,
+  created_at TEXT NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS runtime_flags (
   user_id TEXT PRIMARY KEY,
   display_mode TEXT NOT NULL,

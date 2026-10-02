@@ -5,7 +5,7 @@
 Implemented:
 
 1. **Internal paper broker** — complete order/fill/position loop. Readiness: `sandbox_only`.
-2. **Alpaca paper HTTP client** — `src/server/alpaca.ts`. Readiness: `integration_untested`. Requires keys. Does not fake success.
+2. **Alpaca paper HTTP client** — `src/server/alpaca.ts`. Readiness: `integration_untested`. Requires keys. Does not fake success. `fetchImpl` is injectable; contract tests in `tests/integration/alpaca-paper.test.ts` use fixture JSON and treat HTTP 401/422 as failures.
 
 Reserved, not implemented:
 

@@ -13,6 +13,7 @@ export const DEMO_PASSWORD = "CommandCenter!demo";
 export async function seed(db = getDb()): Promise<{ userId: string; accountId: string }> {
   migrate(db);
   const now = toIsoUtc();
+  upsertMarketDataSources(db);
   const existing = db.prepare("SELECT id FROM users WHERE email = ?").get(DEMO_EMAIL) as { id: string } | undefined;
   if (existing) {
     const account = db.prepare("SELECT id FROM broker_accounts WHERE user_id = ?").get(existing.id) as { id: string };
@@ -90,12 +91,7 @@ export async function seed(db = getDb()): Promise<{ userId: string; accountId: s
     ).run(ids.instrument(), ...inst);
   }
 
-  db.prepare("INSERT OR IGNORE INTO market_data_sources (id, provider, readiness, notes) VALUES (?, ?, ?, ?)").run(
-    "demo",
-    "demo",
-    "sandbox_only",
-    "Deterministic demo series. Labeled DEMO. Never used as live production data.",
-  );
+  upsertMarketDataSources(db);
 
   for (const agent of AGENT_CATALOG) {
     db.prepare("INSERT OR IGNORE INTO ai_agents (id, name, role, permissions) VALUES (?, ?, ?, ?)").run(
@@ -123,6 +119,22 @@ export async function seed(db = getDb()): Promise<{ userId: string; accountId: s
   );
 
   return { userId, accountId };
+}
+
+function upsertMarketDataSources(db: ReturnType<typeof getDb>): void {
+  const sources: Array<[string, string, string, string]> = [
+    ["demo", "demo", "sandbox_only", "Deterministic demo series. Labeled DEMO. Never used as live production data."],
+    ["stooq", "stooq", "sandbox_only", "Free Stooq daily CSV. Historical/delayed. Provenance is labeled. Best no-key alternative."],
+    ["alpaca_data", "alpaca_data", "integration_untested", "Requires Alpaca keys. Refuses to invent bars when keys or the API are missing."],
+  ];
+  for (const [id, provider, readiness, notes] of sources) {
+    db.prepare("INSERT OR IGNORE INTO market_data_sources (id, provider, readiness, notes) VALUES (?, ?, ?, ?)").run(
+      id,
+      provider,
+      readiness,
+      notes,
+    );
+  }
 }
 
 if (process.argv[1] && process.argv[1].endsWith("seed.ts")) {

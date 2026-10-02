@@ -29,4 +29,5 @@ export function addAlert(userId: string, kind: string, title: string, body: stri
   db.prepare(
     "INSERT INTO alerts (id, user_id, kind, title, body, channel, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)",
   ).run(ids.alert(), userId, kind, title, body, channel, toIsoUtc());
+  void import("./notifications").then((n) => n.fanoutExternal({ userId, kind, title, body }));
 }

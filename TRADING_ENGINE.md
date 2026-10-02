@@ -2,23 +2,23 @@
 
 ## Decision
 
-QuantConnect LEAN is Apache-2.0 and is the preferred *reference* for event-driven backtests and live glue. This repository does **not** embed LEAN (C# / large runtime). A native TypeScript engine implements the first vertical slice so the product is testable without a .NET host.
+QuantConnect LEAN is Apache-2.0 and is the preferred *reference* for event-driven backtests and live glue. This repository does **not** embed LEAN (C# / large runtime). A native TypeScript engine implements the product path so the desk is testable without a .NET host.
 
-Interface conceptually:
+Interface:
 
 ```
 TradingEngine
-  evaluate(strategy, bars) -> signals
   backtest(request) -> metrics + trades
-  paper(account, orders, quotes) -> fills
 ```
 
-Implemented in `src/core/backtest.ts`, `src/core/dsl.ts`, `src/core/paper-broker.ts`.
+Implemented:
 
-## Look-ahead
+- `NativeEngine` (`src/core/lean-engine.ts`) wraps `runBacktest` and tags warnings with `Engine=native-ts`.
+- `toLeanConfig` exports an `atcc-lean-compatible-v1` description (universe, timeframe, stops, sizing).
+- `leanStatistics` maps ATCC metrics onto common LEAN statistic names.
+- `LeanCliEngine` probes `lean --version`. If the CLI is missing it falls back to native. If the CLI is present but no LEAN project workspace is configured, it **throws** rather than inventing LEAN results.
+- `selectTradingEngine()` returns `LeanCliEngine` only when `ATCC_ENGINE=lean` **and** the CLI is available.
 
-Signals are evaluated on the closed window. Optional fill is `next_open` (default in lab runs) to reduce close-to-close leakage.
+Look-ahead: signals are evaluated on the closed window. Optional fill is `next_open` (default in lab runs) to reduce close-to-close leakage.
 
-## Future LEAN adapter
-
-A LEAN adapter can be added behind the same strategy definition. Until that adapter exists, do not document LEAN as integrated.
+Do not document LEAN as a live integrated execution engine. The mapping is compatible; the runtime is native unless a real LEAN workspace is wired later.
