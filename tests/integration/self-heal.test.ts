@@ -65,7 +65,7 @@ describe("self-heal repairs", () => {
   it("refuses to enable live as a heal action", () => {
     expect(() => refuseForbiddenHeal("enable_live")).toThrow(/human-gated/);
     const findings = diagnoseSelfHeal();
-    expect(findings.every((f) => f.code !== "enable_live")).toBe(true);
+    expect(findings.every((f) => !f.code.includes("enable"))).toBe(true);
   });
 
   it("disables an expert attached to a deleted strategy", async () => {
