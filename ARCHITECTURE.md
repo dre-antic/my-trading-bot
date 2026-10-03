@@ -1,82 +1,51 @@
 # Architecture
 
-AI Video Studio is a local control center. The Mac (or Linux) app owns projects, the timeline, review, and render. Heavy neural video models are optional remote workers.
+## Processes
+
+| Process | Role | Status |
+|---|---|---|
+| Next.js web + API | Control plane, PWA, REST | Implemented |
+| Worker (`src/worker`) | Durable SQL job consumer; optional Redis wake-up | Implemented |
+| SQLite | Default store for local/dev/test and the app query path | Implemented |
+| PostgreSQL | Schema mirror + `migratePostgres(DATABASE_URL)` | Schema available; request path stays SQLite-first |
+| Redis | Optional `atcc:jobs` list as wake-up | Wired; SQL remains source of truth |
+
+## Module map
 
 ```
-Mac / Linux desktop window (pywebview or Tauri)
-        │
-        ▼
-Local FastAPI app (127.0.0.1)
-        │
-        ▼
-SQLite + files on disk
-        │
-        ▼
-Production graph (checkpointed stages)
-        ├── Research engine
-        ├── Script engine + critic
-        ├── Story / scene planner
-        ├── Visual decision engine
-        ├── Image / motion-graphics / optional ComfyUI
-        ├── Shot-level video (Ken Burns or remote generator)
-        ├── Consistency metadata (bibles)
-        ├── Voice engine
-        ├── Music / SFX engine
-        ├── Editing (FFmpeg timeline)
-        ├── Captions
-        ├── Thumbnails + critic
-        ├── Review AI (separate reviewers + executive producer)
-        ├── Deterministic technical QC
-        └── Correction loop (smallest asset)
+src/core        Pure domain: money, constitution, DSL, risk, paper, backtest, AI catalog, LEAN mapping, lab gates
+src/db          SQLite schema, Postgres schema, migrate, seed
+src/server      Auth, sessions, trading service, Alpaca, jobs, notifications, providers
+src/app         Next.js UI + route handlers
+src/worker      Background loop
+src/ui          Client helpers
 ```
 
-## Why not LangGraph
+The trading engine is a TypeScript implementation with a LEAN-compatible export (`toLeanConfig`, `leanStatistics`). LEAN itself is **not** vendored. If `lean` CLI is installed and `ATCC_ENGINE=lean`, `LeanCliEngine` is selected and **refuses to invent LEAN results** until a workspace is configured. See `TRADING_ENGINE.md`.
 
-LangGraph is MIT, actively maintained (verified 2026-09-09), and a reasonable orchestrator. It was **not** adopted.
+## Safety pipeline
 
-Reasons:
+Every executable proposal is a `TradeCandidate`, then:
 
-1. Pause, resume, license gates, cost gates, and correction loops need to share the SQLite checkpoint already used for crash recovery.
-2. Bundling the LangChain stack would add moving parts without helping FFmpeg, TTS, or render.
-3. A small explicit stage graph is easier to test and to explain in the UI.
+1. Strategy compliance (DSL)
+2. Portfolio intelligence
+3. Deterministic Risk Firewall
+4. Human decision (`APPROVE` / `REJECT` / `WATCH`)
+5. Broker adapter (paper only in this build)
+6. Journal + audit
 
-The production graph lives in `engine/aivideostudio/orchestrator.py`.
+Research, signal, proposal, approval, and execution are separate states.
 
-## Desktop choice
+## Laboratory
 
-Evaluated Swift/SwiftUI, Tauri, Electron, and pywebview.
+Champion/challenger experiments live in `strategy_experiments`. Robustness gates (OOS trades, walk-forward windows, drawdown, lifecycle) are evaluated separately from human approval. Promotion requires the phrase `PROMOTE CHALLENGER` and sets the challenger to **APPROVED**, never LIVE.
 
-| Option | Verdict |
-|---|---|
-| SwiftUI | Best native feel, but this repository must also run and test on Linux CI |
-| Electron | Heavy RAM, against the performance rule |
-| Tauri 2 | Apache-2.0/MIT, lightweight, preferred Mac wrapper (`packaging/` + `desktop/`) |
-| pywebview | Native Cocoa window on Mac, GTK on Linux, ships today |
+## Multi-tenant boundary
 
-The engine always listens on localhost. Tauri or pywebview is only a window around it.
+Rows are keyed by `user_id`. API handlers load only the session user. This is application-level isolation, not separate databases.
 
-## Default compute (no GPU required)
+## Modes
 
-Consumer Macs often cannot run Wan / Hunyuan / FLUX locally. The Visual Decision Engine therefore prefers:
-
-- Motion graphics and diagrams (original, local, approved)
-- Wikimedia Commons stills when the file license is safe, with attribution
-- Ken Burns / camera moves via FFmpeg (shot-level, never one giant video model call)
-- Optional ComfyUI or OpenAI-compatible APIs when the user enables them
-
-Voice defaults to eSpeak NG (always-on subprocess, GPL binary not linked). Piper and Kokoro are preferred drop-in local voices when present. Music is an original procedural composer (ACE-Step is optional).
-
-## Data
-
-- Metadata: SQLite (`studio.sqlite` in Application Support)
-- Media: `projects/<id>/...` on disk
-- Secrets: encrypted vault + macOS Keychain/libsecret via `keyring`
-- Logs: redacted (API keys stripped)
-
-## Providers
-
-Interfaces: `LLMProvider`, research, image, video, TTS, music, SFX, captions. Each has fallbacks, bounded retries, and license checks in commercial mode.
-
-## Crash recovery
-
-Every finished stage writes files and a checkpoint name. Reopening the app continues from the next unfinished stage. Completed assets are not regenerated unless a change request marks them dirty.
+- Display: `demo` | `paper` | `live` (live blocked unless `ATCC_LIVE_ENABLED=true` **and** in-app flag)
+- Trading: `research` | `assisted` | `autonomous` (autonomous blocked unless `ATCC_AUTONOMOUS_ENABLED=true`)
+- Defaults: LIVE off, AUTONOMOUS off, approval on
