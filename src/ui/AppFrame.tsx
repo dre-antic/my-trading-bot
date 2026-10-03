@@ -32,12 +32,19 @@ export function AppFrame({ children, dense }: { children: React.ReactNode; dense
     live?: { envLiveEnabled: boolean; control: { liveEnabled: boolean; armedUntil: string | null; halted: boolean } };
   } | null>(null);
 
+  const [healNote, setHealNote] = useState("");
+
   useEffect(() => {
     Promise.all([
       api<{ flags: { display_mode: string; trading_mode: string }; portfolio: { equity: string; currency: string } }>("/api/auth/me"),
       api<{ envLiveEnabled: boolean; control: { liveEnabled: boolean; armedUntil: string | null; halted: boolean } }>("/api/live").catch(() => null),
+      api<{ actions: Array<{ applied: boolean; detail: string }> }>("/api/heal", { method: "POST", body: JSON.stringify({}) }).catch(() => null),
     ])
-      .then(([auth, live]) => setMe({ ...auth, live: live ?? undefined }))
+      .then(([auth, live, heal]) => {
+        setMe({ ...auth, live: live ?? undefined });
+        const fixed = heal?.actions.filter((a) => a.applied) ?? [];
+        if (fixed.length) setHealNote(`Self-heal repaired ${fixed.length} item(s). LIVE was not touched.`);
+      })
       .catch(() => router.push("/login"));
   }, [router]);
 
@@ -72,6 +79,7 @@ export function AppFrame({ children, dense }: { children: React.ReactNode; dense
             <span className={`chip ${mode}`}>{mode}</span>
             <span className="chip">{me?.flags?.trading_mode ?? "assisted"}</span>
             <span className={`chip ${liveOn ? "live" : "paper"}`}>LIVE {liveOn ? (armed ? "armed" : "on") : "off"}</span>
+            {healNote ? <span className="chip paper">{healNote}</span> : null}
           </div>
           <div className="row">
             <div className="mono muted">

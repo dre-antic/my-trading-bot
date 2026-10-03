@@ -40,6 +40,8 @@ The original repository contained a 70-line Binance RSI script, later replaced b
 - Alpaca **live** and OANDA practice/live adapters (fail-closed, integration-untested)
 - Terminal: Market Watch, candlestick chart, order ticket, Trade/History/Experts
 - Live arming (15 min), kill switch, circuit breaker, fat-finger 10% band
+- Self-heal watchdog (schema, paper book, stuck jobs, LIVE drift). Never auto-enables live or places orders
+- Self-heal watchdog (schema, paper book, stuck jobs, LIVE drift). Never auto-enables live or places orders
 
 ## What is explicitly not claimed
 

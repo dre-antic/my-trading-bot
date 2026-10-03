@@ -57,6 +57,10 @@ Autonomous mode cannot arm or place live orders. Candidate Approve on Opportunit
 - Settings: `DISARM LIVE`, `DISABLE LIVE TRADING`, `CLOSE ALL POSITIONS` (paper book)
 - Three consecutive live broker errors trip the circuit breaker until you type `RESET CIRCUIT BREAKER`
 
+## Self-heal
+
+The desk auto-repairs schema, paper books, stuck jobs, and LIVE *drift* (if the environment flag is off it forces paper). It will **not** enable live, arm a session, reset the circuit breaker, or place an order.
+
 ## What still stays off unless you change it
 
 - `ATCC_AUTONOMOUS_ENABLED` — keep false

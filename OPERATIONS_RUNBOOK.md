@@ -17,7 +17,8 @@ API: `/api/status` (authenticated)
 - Disarm/disable live: Settings live card, or Kill switch (`DISARM LIVE` + stop new trades)
 - Flatten paper book: type `CLOSE ALL POSITIONS`
 - Re-seed: delete `data/atcc.sqlite` and run seed
-- Logs: structured console + `system_events` / `audit_events`
+- Self-heal: System → Repair now, or `POST /api/heal`. Also runs on login and in the worker
+- Logs: structured console + `system_events` / `audit_events` (kind `self_heal`)
 
 ## Market data
 

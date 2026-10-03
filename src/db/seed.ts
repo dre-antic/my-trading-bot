@@ -17,7 +17,21 @@ export async function seed(db = getDb()): Promise<{ userId: string; accountId: s
   upsertInstruments(db);
   const existing = db.prepare("SELECT id FROM users WHERE email = ?").get(DEMO_EMAIL) as { id: string } | undefined;
   if (existing) {
-    const account = db.prepare("SELECT id FROM broker_accounts WHERE user_id = ?").get(existing.id) as { id: string };
+    let account = db.prepare("SELECT id FROM broker_accounts WHERE user_id = ?").get(existing.id) as { id: string } | undefined;
+    if (!account) {
+      const accountId = ids.account();
+      db.prepare(
+        `INSERT INTO broker_accounts (id, user_id, broker, broker_account_ref, environment, display_name, currency, paper_state, last_sync_at, created_at)
+         VALUES (?, ?, 'paper', 'PAPER-001', 'paper', 'Internal Paper Account', 'USD', ?, ?, ?)`,
+      ).run(
+        accountId,
+        existing.id,
+        JSON.stringify({ accountId, currency: "USD", cash: "100000", realizedPnl: "0", positions: {}, orders: {}, fills: [] }),
+        now,
+        now,
+      );
+      account = { id: accountId };
+    }
     return { userId: existing.id, accountId: account.id };
   }
 
@@ -111,7 +125,7 @@ export async function seed(db = getDb()): Promise<{ userId: string; accountId: s
   return { userId, accountId };
 }
 
-function upsertInstruments(db: ReturnType<typeof getDb>): void {
+export function upsertInstruments(db: ReturnType<typeof getDb> = getDb()): void {
   const instruments = [
     ["SPY", "etf", "USD", "ARCA", 2, 4, "0.01", "0.0001", "0.0001", "America/New_York", "rth"],
     ["AAPL", "equity", "USD", "NASDAQ", 2, 4, "0.01", "0.0001", "0.0001", "America/New_York", "rth"],
@@ -131,7 +145,7 @@ function upsertInstruments(db: ReturnType<typeof getDb>): void {
   }
 }
 
-function upsertMarketDataSources(db: ReturnType<typeof getDb>): void {
+export function upsertMarketDataSources(db: ReturnType<typeof getDb> = getDb()): void {
   const sources: Array<[string, string, string, string]> = [
     ["demo", "demo", "sandbox_only", "Deterministic demo series. Labeled DEMO. Never used as live production data."],
     ["stooq", "stooq", "sandbox_only", "Free Stooq daily CSV. Historical/delayed. Provenance is labeled. Best no-key alternative."],

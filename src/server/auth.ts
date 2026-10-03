@@ -7,6 +7,12 @@ import { audit } from "./audit";
 
 export async function ensureSeeded(): Promise<void> {
   await seed();
+  try {
+    const { runSelfHeal } = await import("./self-heal");
+    await runSelfHeal();
+  } catch {
+    // Seed already ran. Heal is best-effort so login still works if a repair is mid-flight.
+  }
 }
 
 export async function login(email: string, password: string): Promise<{ userId: string; email: string; displayName: string }> {
@@ -41,5 +47,11 @@ export async function register(email: string, password: string, displayName: str
     "INSERT INTO runtime_flags (user_id, display_mode, trading_mode, live_enabled, autonomous_enabled, stop_new_trades, stop_automation) VALUES (?, 'demo', 'assisted', 0, 0, 0, 0)",
   ).run(userId);
   audit({ userId, action: "auth.register", entity: "user", entityId: userId });
+  try {
+    const { runSelfHeal } = await import("./self-heal");
+    await runSelfHeal({ userId, force: true });
+  } catch {
+    // Registration succeeded. Missing paper/constitution is repaired on the next request.
+  }
   return { userId, email };
 }

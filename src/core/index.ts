@@ -34,3 +34,4 @@ export * from "./lean-engine";
 export * from "./laboratory";
 export * from "./live-safety";
 export * from "./fat-finger";
+export * from "./self-heal";

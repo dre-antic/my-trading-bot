@@ -38,6 +38,7 @@ import { getDb } from "@/db/client";
 import { addAlert, audit } from "./audit";
 import { loadConfig } from "./config";
 import { disableLiveTrading, disarmLiveSession, getLiveControl } from "./live-control";
+import { repairPaperStateOrThrow } from "./self-heal";
 
 function db() {
   return getDb();
@@ -129,7 +130,7 @@ export function primaryAccount(userId: string): { id: string; paper_state: strin
 
 export function loadPaper(userId: string): { account: ReturnType<typeof primaryAccount>; state: PaperAccountState } {
   const account = primaryAccount(userId);
-  const state = (account.paper_state ? JSON.parse(account.paper_state) : createPaperAccount(account.id, "100000")) as PaperAccountState;
+  const state = repairPaperStateOrThrow(account.id, account.paper_state);
   return { account, state };
 }
 
@@ -960,6 +961,7 @@ export function health() {
     },
     liveEnabled: config.liveEnabled,
     autonomousEnabled: config.autonomousEnabled,
+    selfHeal: "auto-repair on boot, request, and worker. Never live/orders.",
   };
 }
 

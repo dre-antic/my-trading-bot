@@ -42,6 +42,11 @@ export default function DashboardPage() {
           <p className="muted">{Array.isArray((data?.portfolio as { positions?: unknown[] })?.positions) ? (data?.portfolio as { positions: unknown[] }).positions.length : 0} open</p>
           <Link href="/positions">Manage positions</Link>
         </div>
+        <div className="card">
+          <h3>Self-heal</h3>
+          <p className="muted">The desk repairs schema, paper books, stuck jobs, and LIVE drift by itself. It never enables live or places an order.</p>
+          <Link className="btn secondary" href="/status">System + Repair now</Link>
+        </div>
       </div>
     </AppFrame>
   );
