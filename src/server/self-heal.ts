@@ -437,11 +437,13 @@ export async function runSelfHeal(opts: { userId?: string; force?: boolean } = {
   };
 
   try {
-    db()
-      .prepare("INSERT INTO system_events (id, kind, payload, created_at) VALUES (?, 'self_heal', ?, ?)")
-      .run(ids.system(), JSON.stringify({ actions: report.actions, remaining: finalFindings.map((f) => f.code) }), toIsoUtc());
-    if (opts.userId && actions.length) {
-      audit({ userId: opts.userId, action: "self_heal", entity: "runtime", payload: { actions } });
+    if (actions.length) {
+      db()
+        .prepare("INSERT INTO system_events (id, kind, payload, created_at) VALUES (?, 'self_heal', ?, ?)")
+        .run(ids.system(), JSON.stringify({ actions: report.actions, remaining: finalFindings.map((f) => f.code) }), toIsoUtc());
+      if (opts.userId) {
+        audit({ userId: opts.userId, action: "self_heal", entity: "runtime", payload: { actions } });
+      }
     }
   } catch {
     // Audit is best-effort if schema is mid-repair.
