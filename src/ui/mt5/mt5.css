@@ -100,7 +100,7 @@
 .mt5-oct .buy { background: #1e8449; color: #fff; border: 0; padding: 6px 12px; cursor: pointer; font-weight: 700; }
 .mt5-oct .sell:disabled, .mt5-oct .buy:disabled { opacity: 0.5; }
 .mt5-oct input { width: 64px; background: #111; color: #eee; border: 1px solid #444; padding: 4px 6px; }
-.mt5-chart-host { flex: 1; min-height: 180px; }
+.mt5-chart-host { flex: 1; min-height: 280px; width: 100%; height: 100%; position: relative; }
 .mt5-chart-tabs { display: flex; background: #1a1a1a; border-top: 1px solid #111; }
 .mt5-chart-tabs button {
   background: #252525; border: 1px solid #111; color: #ccc; padding: 3px 10px; cursor: pointer;

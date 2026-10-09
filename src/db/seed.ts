@@ -131,17 +131,26 @@ export function upsertInstruments(db: ReturnType<typeof getDb> = getDb()): void 
     ["AAPL", "equity", "USD", "NASDAQ", 2, 4, "0.01", "0.0001", "0.0001", "America/New_York", "rth"],
     ["MSFT", "equity", "USD", "NASDAQ", 2, 4, "0.01", "0.0001", "0.0001", "America/New_York", "rth"],
     ["NVDA", "equity", "USD", "NASDAQ", 2, 4, "0.01", "0.0001", "0.0001", "America/New_York", "rth"],
-    ["EURUSD", "forex", "USD", "FX", 5, 2, "0.00001", "1000", "1000", "America/New_York", "weekdays"],
-    ["GBPUSD", "forex", "USD", "FX", 5, 2, "0.00001", "1000", "1000", "America/New_York", "weekdays"],
-    ["USDJPY", "forex", "USD", "FX", 3, 2, "0.001", "1000", "1000", "America/New_York", "weekdays"],
-    ["XAUUSD", "forex", "USD", "FX", 2, 2, "0.01", "1", "1", "America/New_York", "weekdays"],
+    ["EURUSD", "forex", "USD", "FX", 5, 2, "0.00001", "0.01", "0.01", "America/New_York", "weekdays"],
+    ["GBPUSD", "forex", "USD", "FX", 5, 2, "0.00001", "0.01", "0.01", "America/New_York", "weekdays"],
+    ["USDJPY", "forex", "USD", "FX", 3, 2, "0.001", "0.01", "0.01", "America/New_York", "weekdays"],
+    ["XAUUSD", "forex", "USD", "FX", 2, 2, "0.01", "0.01", "0.01", "America/New_York", "weekdays"],
     ["US500", "etf", "USD", "INDEX", 2, 4, "0.01", "0.0001", "0.0001", "America/New_York", "rth"],
     ["BTCUSD", "crypto", "USD", "CRYPTO", 2, 8, "0.01", "0.00000001", "0.00000001", "UTC", "24x7"],
     ["BTC-USD", "crypto", "USD", "CRYPTO", 2, 8, "0.01", "0.00000001", "0.00000001", "UTC", "24x7"],
   ];
   for (const inst of instruments) {
+    const symbol = inst[0];
+    const existing = db.prepare("SELECT id FROM instruments WHERE symbol = ?").get(symbol) as { id: string } | undefined;
+    if (existing) {
+      db.prepare(
+        `UPDATE instruments SET asset_class = ?, currency = ?, venue = ?, price_decimals = ?, quantity_decimals = ?,
+         tick_size = ?, lot_size = ?, min_quantity = ?, timezone = ?, trading_hours = ? WHERE symbol = ?`,
+      ).run(...inst.slice(1), symbol);
+      continue;
+    }
     db.prepare(
-      `INSERT OR IGNORE INTO instruments (id, symbol, asset_class, currency, venue, price_decimals, quantity_decimals, tick_size, lot_size, min_quantity, timezone, trading_hours)
+      `INSERT INTO instruments (id, symbol, asset_class, currency, venue, price_decimals, quantity_decimals, tick_size, lot_size, min_quantity, timezone, trading_hours)
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     ).run(ids.instrument(), ...inst);
   }

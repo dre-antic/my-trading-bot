@@ -91,7 +91,7 @@ export function Mt5Terminal() {
   const [ingest, setIngest] = useState<IngestResult | null>(null);
   const [paste, setPaste] = useState("");
   const [tester, setTester] = useState<TesterResult | null>(null);
-  const [clock, setClock] = useState(() => new Date().toISOString().slice(11, 19));
+  const [clock, setClock] = useState("");
 
   const load = useCallback(async (sym = symbol, tf = timeframe) => {
     const next = await api<TerminalData>(`/api/terminal?symbol=${encodeURIComponent(sym)}&timeframe=${encodeURIComponent(tf)}`);
@@ -107,7 +107,9 @@ export function Mt5Terminal() {
     const poll = setInterval(() => {
       load(symbol, timeframe).catch(() => undefined);
     }, 12_000);
-    const tick = setInterval(() => setClock(new Date().toISOString().slice(11, 19)), 1000);
+    const tickClock = () => setClock(new Date().toISOString().slice(11, 19));
+    tickClock();
+    const tick = setInterval(tickClock, 1000);
     return () => {
       clearInterval(poll);
       clearInterval(tick);

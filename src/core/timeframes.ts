@@ -96,9 +96,10 @@ function aggregateBars(bars: Bar[], timeframe: Mt5Timeframe): Bar[] {
 
 function expandIntrabar(daily: Bar[], timeframe: Mt5Timeframe, maxBars: number): Bar[] {
   const minutes = TIMEFRAME_MINUTES[timeframe];
-  const perDay = Math.max(4, Math.min(48, Math.floor(1440 / minutes)));
-  const daysNeeded = Math.max(1, Math.ceil(maxBars / perDay));
+  const naturalPerDay = Math.max(1, Math.floor(1440 / minutes));
+  const daysNeeded = Math.max(1, Math.min(daily.length, Math.ceil(maxBars / Math.min(naturalPerDay, maxBars))));
   const source = daily.slice(-daysNeeded);
+  const perDay = Math.max(1, Math.min(naturalPerDay, Math.ceil(maxBars / source.length)));
   const out: Bar[] = [];
   for (const bar of source) {
     const open = Number(bar.open);
@@ -108,7 +109,7 @@ function expandIntrabar(daily: Bar[], timeframe: Mt5Timeframe, maxBars: number):
     const up = close >= open;
     const path = up ? [open, high, low, close] : [open, low, high, close];
     const start = Date.parse(bar.timestamp);
-    const stepMs = minutes * 60_000;
+    const stepMs = 86_400_000 / perDay;
     for (let i = 0; i < perDay; i += 1) {
       const t = (i + 0.5) / perDay;
       const px = samplePath(path, t);

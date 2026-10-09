@@ -35,8 +35,9 @@ export function LightweightChart({
   useEffect(() => {
     const el = host.current;
     if (!el) return undefined;
+    const size = () => ({ width: Math.max(el.clientWidth, 320), height: Math.max(el.clientHeight, 240) });
     const chart = createChart(el, {
-      autoSize: true,
+      ...size(),
       layout: {
         background: { type: ColorType.Solid, color: "#000000" },
         textColor: "#b0b0b0",
@@ -53,7 +54,10 @@ export function LightweightChart({
       crosshair: { mode: 1 },
     });
     chartRef.current = chart;
-    const ro = new ResizeObserver(() => chart.applyOptions({ width: el.clientWidth, height: el.clientHeight }));
+    const ro = new ResizeObserver(() => {
+      chart.applyOptions(size());
+      chart.timeScale().fitContent();
+    });
     ro.observe(el);
     return () => {
       ro.disconnect();
@@ -64,7 +68,7 @@ export function LightweightChart({
 
   useEffect(() => {
     const chart = chartRef.current;
-    if (!chart) return;
+    if (!chart || !bars.length) return;
     const candleData = bars.map((b) => ({
       time: (Math.floor(Date.parse(b.t) / 1000) || 0) as Time,
       open: Number(b.o),
@@ -115,8 +119,11 @@ export function LightweightChart({
     };
   }, [bars, bid, ask, style]);
 
-  if (!bars.length) {
-    return <div className="mt5-chart-host" style={{ display: "grid", placeItems: "center", color: "#888" }}>No chart data</div>;
-  }
-  return <div ref={host} className="mt5-chart-host" role="img" aria-label="Price chart" />;
+  return (
+    <div ref={host} className="mt5-chart-host" role="img" aria-label="Price chart">
+      {bars.length ? null : (
+        <div style={{ display: "grid", placeItems: "center", height: "100%", color: "#888" }}>No chart data</div>
+      )}
+    </div>
+  );
 }
