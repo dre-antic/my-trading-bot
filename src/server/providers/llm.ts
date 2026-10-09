@@ -128,10 +128,56 @@ export class OpenAiCompatibleProvider implements AiProvider {
   }
 }
 
+export class GeminiProvider implements AiProvider {
+  readonly id: AiProviderId = "gemini";
+  readonly displayName = "Gemini";
+  constructor(private readonly key = loadConfig().geminiKey, private readonly fetchImpl = timedFetch) {}
+
+  async complete(req: { model: string; messages: { role: "system" | "user" | "assistant"; content: string }[]; maxTokens?: number; timeoutMs?: number }): Promise<AiCompletion> {
+    if (!this.key) throw new Error("GEMINI_API_KEY is not configured");
+    const system = req.messages.filter((m) => m.role === "system").map((m) => sanitizeForLlm(m.content)).join("\n");
+    const user = req.messages.filter((m) => m.role !== "system").map((m) => sanitizeForLlm(m.content)).join("\n");
+    assertNoSecretInPrompt(system);
+    assertNoSecretInPrompt(user);
+    const model = req.model.startsWith("gemini") ? req.model : "gemini-2.0-flash";
+    const res = await this.fetchImpl(
+      `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(this.key)}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          systemInstruction: system ? { parts: [{ text: system }] } : undefined,
+          contents: [{ parts: [{ text: user }] }],
+          generationConfig: { maxOutputTokens: req.maxTokens ?? 800 },
+        }),
+      },
+      req.timeoutMs ?? 30_000,
+    );
+    if (!res.ok) throw new Error(`Gemini HTTP ${res.status}`);
+    const body = (await res.json()) as {
+      candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }>;
+      usageMetadata?: { promptTokenCount?: number; candidatesTokenCount?: number };
+    };
+    const input = body.usageMetadata?.promptTokenCount ?? 0;
+    const output = body.usageMetadata?.candidatesTokenCount ?? 0;
+    return {
+      provider: "gemini",
+      model,
+      text: body.candidates?.[0]?.content?.parts?.map((p) => p.text ?? "").join("\n") ?? "",
+      toolCalls: [],
+      inputTokens: input,
+      outputTokens: output,
+      estimatedCostUsd: estimateCostUsd(model, input, output),
+      usedLlm: true,
+    };
+  }
+}
+
 export function selectLlmProvider(): AiProvider | null {
   const cfg = loadConfig();
   if (cfg.openaiKey) return new OpenAiProvider();
   if (cfg.anthropicKey) return new AnthropicProvider();
+  if (cfg.geminiKey) return new GeminiProvider();
   if (process.env.OPENAI_COMPATIBLE_BASE_URL) return new OpenAiCompatibleProvider();
   return null;
 }

@@ -135,6 +135,8 @@ export function upsertInstruments(db: ReturnType<typeof getDb> = getDb()): void 
     ["GBPUSD", "forex", "USD", "FX", 5, 2, "0.00001", "1000", "1000", "America/New_York", "weekdays"],
     ["USDJPY", "forex", "USD", "FX", 3, 2, "0.001", "1000", "1000", "America/New_York", "weekdays"],
     ["XAUUSD", "forex", "USD", "FX", 2, 2, "0.01", "1", "1", "America/New_York", "weekdays"],
+    ["US500", "etf", "USD", "INDEX", 2, 4, "0.01", "0.0001", "0.0001", "America/New_York", "rth"],
+    ["BTCUSD", "crypto", "USD", "CRYPTO", 2, 8, "0.01", "0.00000001", "0.00000001", "UTC", "24x7"],
     ["BTC-USD", "crypto", "USD", "CRYPTO", 2, 8, "0.01", "0.00000001", "0.00000001", "UTC", "24x7"],
   ];
   for (const inst of instruments) {

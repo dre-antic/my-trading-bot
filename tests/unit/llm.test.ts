@@ -4,14 +4,21 @@ import { assertNoSecretInPrompt, sanitizeForLlm } from "@/core/security";
 
 describe("optional LLM providers", () => {
   it("selects nothing when no keys or compatible URL are set", () => {
-    const prev = { o: process.env.OPENAI_API_KEY, a: process.env.ANTHROPIC_API_KEY, c: process.env.OPENAI_COMPATIBLE_BASE_URL };
+    const prev = {
+      o: process.env.OPENAI_API_KEY,
+      a: process.env.ANTHROPIC_API_KEY,
+      c: process.env.OPENAI_COMPATIBLE_BASE_URL,
+      g: process.env.GEMINI_API_KEY,
+    };
     delete process.env.OPENAI_API_KEY;
     delete process.env.ANTHROPIC_API_KEY;
     delete process.env.OPENAI_COMPATIBLE_BASE_URL;
+    delete process.env.GEMINI_API_KEY;
     expect(selectLlmProvider()).toBeNull();
     process.env.OPENAI_API_KEY = prev.o;
     process.env.ANTHROPIC_API_KEY = prev.a;
     process.env.OPENAI_COMPATIBLE_BASE_URL = prev.c;
+    process.env.GEMINI_API_KEY = prev.g;
   });
 
   it("refuses a missing key and sanitizes secrets", async () => {

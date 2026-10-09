@@ -6,6 +6,7 @@ import { authorizeEmergency, type EmergencyAction } from "@/core/emergency";
 import { ids } from "@/core/ids";
 import { classifyMistakePatterns, draftJournalFromTrade } from "@/core/journal";
 import { synthesizeDemoBars } from "@/core/market-data";
+import { parseTimeframe, resampleBars } from "@/core/timeframes";
 import { barsFromCacheOrDemo } from "@/server/providers/market-data-resolver";
 import { selectTradingEngine } from "@/core/lean-engine";
 import { canSpend, type CostLedgerEntry } from "@/core/cost";
@@ -188,8 +189,10 @@ export function getInstrument(symbol: string): InstrumentSpec {
   };
 }
 
-export function barsFor(symbol: string, assetClass: AssetClass): ReturnType<typeof synthesizeDemoBars> {
-  return barsFromCacheOrDemo(symbol, assetClass, flagsSafeDisplay());
+export function barsFor(symbol: string, assetClass: AssetClass, timeframe?: string): ReturnType<typeof synthesizeDemoBars> {
+  const daily = barsFromCacheOrDemo(symbol, assetClass, flagsSafeDisplay());
+  if (!timeframe) return daily;
+  return resampleBars(daily, parseTimeframe(timeframe, "D1"));
 }
 
 function flagsSafeDisplay() {
@@ -956,7 +959,7 @@ export function health() {
       openai: Boolean(config.openaiKey),
       anthropic: Boolean(config.anthropicKey),
       compatible: Boolean(process.env.OPENAI_COMPATIBLE_BASE_URL),
-      paidServices: Boolean(config.openaiKey || config.anthropicKey || process.env.OPENAI_COMPATIBLE_BASE_URL) && Number(config.aiDailyLimitUsd) > 0,
+      paidServices: Boolean(config.openaiKey || config.anthropicKey || config.geminiKey || process.env.OPENAI_COMPATIBLE_BASE_URL) && Number(config.aiDailyLimitUsd) > 0,
     },
     liveEnabled: config.liveEnabled,
     autonomousEnabled: config.autonomousEnabled,

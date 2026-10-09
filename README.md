@@ -1,8 +1,10 @@
 # AI Trading Command Center
 
-A personal AI-assisted trading research, decision-support, portfolio, **human-approved paper execution**, and **fail-closed live** desk with a Market Watch / chart / ticket terminal.
+A personal AI-assisted trading research, decision-support, portfolio, **human-approved paper execution**, and **fail-closed live** desk. The main screen is a **MetaTrader 5–faithful workspace** (Market Watch, Navigator, charts, Toolbox, Strategy Tester) — original CSS, not MetaQuotes software.
 
-This is not “LLM predicts market → BUY”.
+This is not “LLM predicts market → BUY”. It is not affiliated with MetaQuotes.
+
+Upload **audio, video, PDF, DOCX, Markdown, or JSON**. Whisper / Gemini extract source text when keys are set; a deterministic compiler turns that into a reviewable Expert. Without keys, Markdown/PDF/text still compile.
 
 ```
 market data → scanner → strategy engine → research desk → candidate
@@ -38,7 +40,9 @@ The original repository contained a 70-line Binance RSI script, later replaced b
 - Multi-agent desk catalog (15 roles). Default provider is deterministic, not a paid LLM
 - Alpaca **paper** HTTP adapter with injectable-fetch contract tests (not marked production-ready)
 - Alpaca **live** and OANDA practice/live adapters (fail-closed, integration-untested)
-- Terminal: Market Watch, candlestick chart, order ticket, Trade/History/Experts
+- Terminal: MT5-style Market Watch, Navigator, periodicity toolbars, Toolbox (Trade/History/Experts/Journal), Strategy Tester
+- Charts: TradingView Lightweight Charts (candles/bars/line, bid/ask lines, volume)
+- Strategy ingest: audio / video / file → SOURCE vs INTERPRETATION → DSL Expert (Whisper, Gemini, or heuristic)
 - Live arming (15 min), kill switch, circuit breaker, fat-finger 10% band
 - Self-heal watchdog (schema, paper book, stuck jobs, LIVE drift). Never auto-enables live or places orders
 - Self-heal watchdog (schema, paper book, stuck jobs, LIVE drift). Never auto-enables live or places orders
@@ -62,7 +66,15 @@ npx tsx src/db/seed.ts
 npm run dev
 ```
 
-The desk listens on port **3000**. Open it from Cursor’s **Webpage** / Forwarded Ports on this agent. After `npm run dev` on your own machine, visit `http://127.0.0.1:3000` (login, then Terminal). Dashboard remains the overview.
+The desk listens on port **3000**. Open it from Cursor’s **Webpage** / Forwarded Ports on this agent. After `npm run dev` on your own machine, visit `http://127.0.0.1:3000` (login, then the terminal). Dashboard, laboratory, and brokers remain under **Window** / **Tools**.
+
+Optional AI keys (never required for paper compile of text/PDF):
+
+- `OPENAI_API_KEY` — Whisper transcription + optional spec rewrite (also set `AI_DAILY_LIMIT_USD` > 0)
+- `GEMINI_API_KEY` — video understanding / spec rewrite
+- `ANTHROPIC_API_KEY` — spec rewrite
+
+**Disclaimer:** Paper trading and historical tests are not profit forecasts. Do not use this as financial advice. Live trading stays fail-closed.
 
 Demo login:
 

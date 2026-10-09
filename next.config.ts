@@ -3,7 +3,7 @@ import { appContentSecurityPolicy, PREVIEW_DEV_ORIGINS } from "./src/server/web-
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  serverExternalPackages: ["better-sqlite3", "pg", "ioredis"],
+  serverExternalPackages: ["better-sqlite3", "pg", "ioredis", "pdf-parse", "mammoth"],
   poweredByHeader: false,
   allowedDevOrigins: PREVIEW_DEV_ORIGINS,
   async headers() {

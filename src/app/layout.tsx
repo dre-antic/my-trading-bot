@@ -7,14 +7,14 @@ const plexSans = IBM_Plex_Sans({ subsets: ["latin"], weight: ["400", "500", "600
 const plexMono = IBM_Plex_Mono({ subsets: ["latin"], weight: ["400", "500"], variable: "--font-mono" });
 
 export const metadata: Metadata = {
-  title: "AI Trading Command Center",
-  description: "Personal AI-assisted trading research, risk, and paper execution desk.",
+  title: "Trading Terminal",
+  description: "Paper trading terminal with Market Watch, charts, Experts, and media strategy ingest. Not affiliated with MetaQuotes.",
   manifest: "/manifest.json",
-  appleWebApp: { capable: true, title: "ATCC", statusBarStyle: "black-translucent" },
+  appleWebApp: { capable: true, title: "Terminal", statusBarStyle: "black-translucent" },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0b0e12",
+  themeColor: "#1c1c1c",
   width: "device-width",
   initialScale: 1,
 };

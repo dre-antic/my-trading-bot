@@ -1,17 +1,18 @@
 import { expect, test } from "@playwright/test";
+import path from "node:path";
 
-test("operator can login and reach the desk", async ({ page }) => {
+test("operator can login, paper-trade, and ingest a strategy file", async ({ page }) => {
   await page.goto("/login");
   await page.getByLabel("Email").fill("demo@local");
   await page.getByLabel("Password").fill("CommandCenter!demo");
   await page.getByRole("button", { name: "Enter desk" }).click();
-  await expect(page.getByRole("heading", { name: "Desk overview" })).toBeVisible({ timeout: 20_000 });
-  await expect(page.getByText("LIVE off")).toBeVisible();
-  await page.goto("/opportunities");
-  await page.getByRole("button", { name: "Scan educational strategies" }).click();
-  await expect(page.getByText("SPY").first()).toBeVisible({ timeout: 20_000 });
-  await page.goto("/terminal");
   await expect(page.getByRole("heading", { name: "Market Watch" })).toBeVisible({ timeout: 20_000 });
+  await expect(page.getByText("LIVE off")).toBeVisible();
   await page.getByRole("button", { name: "Buy by Market" }).click();
-  await expect(page.getByText(/paper buy SPY/i)).toBeVisible({ timeout: 20_000 });
+  await expect(page.getByText(/paper buy EURUSD/i)).toBeVisible({ timeout: 20_000 });
+  await page.getByRole("button", { name: /New… \(audio, video, file\)/ }).click();
+  await page.getByLabel("Strategy file").setInputFiles(path.join(process.cwd(), "tests/fixtures/rsi-mean-reversion.md"));
+  await expect(page.getByText(/RSI mean reversion/i).first()).toBeVisible({ timeout: 20_000 });
+  await page.getByRole("button", { name: /Confirm and attach to EURUSD/ }).click();
+  await expect(page.getByText(/attached to EURUSD/i)).toBeVisible({ timeout: 20_000 });
 });
