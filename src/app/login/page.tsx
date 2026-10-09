@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { api } from "@/ui/api";
 
@@ -10,12 +10,18 @@ export default function LoginPage() {
   const [password, setPassword] = useState("CommandCenter!demo");
   const [error, setError] = useState("");
 
+  useEffect(() => {
+    api("/api/auth/me")
+      .then(() => router.replace("/terminal"))
+      .catch(() => undefined);
+  }, [router]);
+
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
     try {
       await api("/api/auth/login", { method: "POST", body: JSON.stringify({ email, password }) });
-      router.push("/dashboard");
+      router.push("/terminal");
     } catch (err) {
       setError(err instanceof Error ? err.message : "login failed");
     }

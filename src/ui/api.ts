@@ -3,7 +3,13 @@ export async function api<T>(path: string, init?: RequestInit): Promise<T> {
     ...init,
     headers: { "Content-Type": "application/json", ...(init?.headers ?? {}) },
   });
-  const data = await res.json();
+  const text = await res.text();
+  let data: { error?: string } = {};
+  try {
+    data = text ? (JSON.parse(text) as { error?: string }) : {};
+  } catch {
+    throw new Error(res.ok ? "unexpected response" : `request failed (${res.status})`);
+  }
   if (!res.ok) throw new Error(data.error ?? "request failed");
   return data as T;
 }

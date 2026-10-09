@@ -62,7 +62,7 @@ npx tsx src/db/seed.ts
 npm run dev
 ```
 
-Open http://127.0.0.1:3000 then **Terminal** for the trading desk (Market Watch, chart, ticket). Dashboard remains the overview.
+The desk listens on port **3000**. Open it from Cursor’s **Webpage** / Forwarded Ports on this agent. After `npm run dev` on your own machine, visit `http://127.0.0.1:3000` (login, then Terminal). Dashboard remains the overview.
 
 Demo login:
 
