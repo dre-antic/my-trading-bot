@@ -1,69 +1,122 @@
-# AI Video Studio
+# AI Trading Command Center
 
-A native-feeling video production studio for Mac. You describe the video you want. The application researches, writes, plans scenes, generates visuals, records narration, composes original music, edits, captions, reviews, and renders a real MP4.
+A personal AI-assisted trading research, decision-support, portfolio, **human-approved paper execution**, and **fail-closed live** desk. The main screen is a **MetaTrader 5–faithful workspace** (Market Watch, Navigator, charts, Toolbox, Strategy Tester) — original CSS, not MetaQuotes software.
 
-You do **not** need Terminal, Python, Docker, ComfyUI, or GPU knowledge for normal use.
+This is not “LLM predicts market → BUY”. It is not affiliated with MetaQuotes.
 
-## What you get
+Upload **audio, video, PDF, DOCX, Markdown, or JSON**. Whisper / Gemini extract source text when keys are set; a deterministic compiler turns that into a reviewable Expert. Without keys, Markdown/PDF/text still compile.
 
-- A desktop window (macOS or Linux) with a dark studio interface
-- New Project → prompt, platform, duration, Simple/Advanced → **Create video**
-- A full production pipeline that writes files to disk and a SQLite project database
-- Playable H.264 MP4 output, captions (SRT/VTT/ASS), thumbnails, research citations, and license records
-- Optional cloud / ComfyUI / Ollama providers behind Settings — never required for the base studio
-
-## Open the app (normal use)
-
-**On a Mac, after installing the application:**
-
-1. Open **Applications**
-2. Double-click **AI Video Studio**
-   or click it in the **Dock**
-
-That is the intended everyday launch. You should not need Terminal.
-
-**On this computer (development / Linux):**
-
-```bash
-cd /path/to/ai-video-studio
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -e ".[dev]"
-./scripts/launch.sh
+```
+market data → scanner → strategy engine → research desk → candidate
+→ strategy compliance → portfolio analysis → deterministic risk firewall
+→ execution validation → user approval → paper or gated live broker → journal
 ```
 
-`./scripts/launch.sh` starts the studio and opens a native window when possible. Use `./scripts/launch.sh --no-window` if you only want the local web UI at http://127.0.0.1:8745
+**LIVE trading is off until you complete every gate in `LIVE_TRADING.md`. Autonomous trading is off. User approval is on.**
 
-## First-run wizard
+The original repository contained a 70-line Binance RSI script, later replaced by an unrelated video studio. This branch implements the trading product the repository was named for.
 
-The first launch walks through:
+## What works now
 
-1. Welcome  
-2. Check this computer  
-3. Required components (FFmpeg, voice engine)  
-4. Optional models (none required)  
-5. A short test video  
+- Login and session auth (seeded demo operator)
+- Trading Constitution (versioned, AI-immutable)
+- Strategy DSL, versioning, educational examples
+- Document/notes import with SOURCE vs INTERPRETATION
+- Deterministic indicators, regime classifier, bull/bear desk
+- Trade candidates with full structured fields
+- Position sizing (server-side)
+- Risk Firewall (deterministic approve/reject)
+- Internal paper broker, OMS, fills, positions, reconciliation helper
+- Backtest, out-of-sample, walk-forward, Monte Carlo, strategy tournament
+- Champion/challenger laboratory with human-gated promotion to APPROVED (never LIVE)
+- Native TypeScript trading engine plus a LEAN-compatible export; CLI probe refuses invented LEAN results
+- Stooq free historical CSV (best no-key data alternative) and optional Alpaca data
+- Optional OpenAI / Anthropic / OpenAI-compatible LLMs, gated by cost caps
+- PostgreSQL schema + `npm run db:migrate:pg`; app query path stays SQLite-first
+- Optional Redis as job wake-up over the durable SQL job table
+- In-app alerts plus Telegram / Discord / email-webhook transports (unconfigured = not sent)
+- Journal, alerts, audit trail, emergency controls
+- Next.js PWA command center (phone-sized navigation included)
+- Multi-agent desk catalog (15 roles). Default provider is deterministic, not a paid LLM
+- Alpaca **paper** HTTP adapter with injectable-fetch contract tests (not marked production-ready)
+- Alpaca **live** and OANDA practice/live adapters (fail-closed, integration-untested)
+- Terminal: MT5-style Market Watch, Navigator, periodicity toolbars, Toolbox (Trade/History/Experts/Journal), Strategy Tester
+- Charts: TradingView Lightweight Charts (candles/bars/line, bid/ask lines, volume)
+- Strategy ingest: audio / video / file → SOURCE vs INTERPRETATION → DSL Expert (Whisper, Gemini, or heuristic)
+- Live arming (15 min), kill switch, circuit breaker, fat-finger 10% band
+- Self-heal watchdog (schema, paper book, stuck jobs, LIVE drift). Never auto-enables live or places orders
+- Self-heal watchdog (schema, paper book, stuck jobs, LIVE drift). Never auto-enables live or places orders
 
-If a step fails, the app explains it in plain language.
+## What is explicitly not claimed
 
-## Requirements
+- No production-ready live broker. Live adapters exist and stay fail-closed / integration-untested
+- No guaranteed profit, winning strategy, or “validated” edge
+- Educational strategies are infrastructure tests only
+- Demo market data is labeled DEMO and is synthetic
+- Paid AI stays off unless you configure a key **and** a budget greater than zero
+- Alpaca, LEAN CLI, Postgres request-path, and Redis are not claimed production-ready
+- Laboratory promotion never enables LIVE trading
 
-- macOS 12+ (Apple Silicon or Intel) or Linux for development
-- FFmpeg (the setup path detects it; on Mac, the packaging script can install via Homebrew when you allow it)
-- Disk space for projects (videos are stored as files, not inside the database)
-
-No paid API key is required. Optional keys are entered in **Settings → AI providers** and stored encrypted on this computer.
-
-## Tests
+## Launch
 
 ```bash
-source .venv/bin/activate
-pytest tests/unit tests/failure tests/integration -q
-pytest tests/e2e -q
+npm install
+npx tsx src/db/migrate.ts
+npx tsx src/db/seed.ts
+npm run dev
 ```
 
-The end-to-end test produces a real MP4 about why the sky appears blue.
+The desk listens on port **3000**. Open it from Cursor’s **Webpage** / Forwarded Ports on this agent. After `npm run dev` on your own machine, visit `http://127.0.0.1:3000` (login, then the terminal). Dashboard, laboratory, and brokers remain under **Window** / **Tools**.
 
-## License of this application
+Optional AI keys (never required for paper compile of text/PDF):
 
-MIT for the studio source. Third-party tools keep their own licenses — see `LICENSES.md`, `THIRD_PARTY_NOTICES.md`, and `MODEL_REGISTRY.md`.
+- `OPENAI_API_KEY` — Whisper transcription + optional spec rewrite (also set `AI_DAILY_LIMIT_USD` > 0)
+- `GEMINI_API_KEY` — video understanding / spec rewrite
+- `ANTHROPIC_API_KEY` — spec rewrite
+
+**Disclaimer:** Paper trading and historical tests are not profit forecasts. Do not use this as financial advice. Live trading stays fail-closed.
+
+Demo login:
+
+- email: `demo@local`
+- password: `CommandCenter!demo`
+
+Optional worker:
+
+```bash
+npm run dev:worker
+```
+
+Optional Postgres schema apply (does not switch the live query path):
+
+```bash
+DATABASE_URL=postgres://atcc:atcc@localhost:5432/atcc npm run db:migrate:pg
+```
+
+Tests:
+
+```bash
+npm test
+npm run verify:slice
+npm run build
+```
+
+## Paper account
+
+The seeded **Internal Paper Account** starts with 100,000 USD simulated cash. All fills are labeled simulated.
+
+To use Alpaca paper later, create a paper key at Alpaca, set `ALPACA_PAPER_KEY` / `ALPACA_PAPER_SECRET`, and keep `ATCC_LIVE_ENABLED=false`. The adapter is integration-untested and will not invent a successful response if Alpaca is unreachable.
+
+## Market data
+
+| Provider | When | Notes |
+|---|---|---|
+| `demo` | `ATCC_DISPLAY_MODE=demo` or `MARKETDATA_PROVIDER=demo` | Labeled synthetic series |
+| `stooq` | default when unset | Free daily CSV, provenance tagged |
+| `alpaca` | keys required | Refuses to invent bars |
+
+Paper/live mode will not silently substitute synthetic bars. Refresh from Settings or `POST /api/market-data/refresh`.
+
+## Safety
+
+AI processes cannot call arbitrary broker APIs, change the Constitution, raise risk limits, or place live orders. Live execution requires the full phrase stack in `LIVE_TRADING.md`. See also `SECURITY.md` and `RISK_MANAGEMENT.md`.
