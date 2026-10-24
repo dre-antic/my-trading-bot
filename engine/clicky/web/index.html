@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
+    <meta name="theme-color" content="#0c0d11" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Clicky" />
+    <meta name="description" content="Tap-first paper trading AI for your phone." />
+    <title>Clicky</title>
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/icon.svg" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="device">
+      <div class="app" id="app">
+        <header class="top">
+          <div>
+            <p class="kicker">Clicky</p>
+            <h1 id="headline">Pocket tap AI</h1>
+          </div>
+          <button class="pill" id="source-pill" type="button">PAPER</button>
+        </header>
+
+        <section class="wallet" id="wallet" aria-live="polite">
+          <div>
+            <span>Equity</span>
+            <strong id="equity">$10,000</strong>
+          </div>
+          <div>
+            <span>Cash</span>
+            <strong id="cash">$10,000</strong>
+          </div>
+          <div>
+            <span>Open P&amp;L</span>
+            <strong id="upnl">$0.00</strong>
+          </div>
+        </section>
+
+        <section class="markets" id="markets" role="tablist" aria-label="Markets"></section>
+
+        <section class="stage">
+          <button class="orb" id="orb" type="button" aria-label="Ask Clicky what to do">
+            <span class="orb-face" data-mood="hold">
+              <i class="eye"></i>
+              <i class="eye"></i>
+              <b class="mouth"></b>
+            </span>
+          </button>
+          <article class="take" id="take">
+            <p class="take-meta" id="take-meta">Waiting on a tap</p>
+            <p class="take-body" id="take-body">Clicky watches the tape. Hit ASK for a take, or BUY / SELL to move paper cash.</p>
+          </article>
+        </section>
+
+        <section class="stakes" aria-label="Tap size">
+          <p>Tap size</p>
+          <div class="chips" id="stakes"></div>
+        </section>
+
+        <section class="pads">
+          <button class="pad buy" id="buy" type="button">BUY</button>
+          <button class="pad ask" id="ask" type="button">ASK</button>
+          <button class="pad sell" id="sell" type="button">SELL</button>
+        </section>
+
+        <nav class="dock">
+          <button type="button" class="dock-btn on" id="tab-home" data-tab="home">Home</button>
+          <button type="button" class="dock-btn" id="tab-chat" data-tab="chat">Chat</button>
+          <button type="button" class="dock-btn" id="tab-book" data-tab="book">Book</button>
+        </nav>
+      </div>
+
+      <section class="sheet" id="sheet-confirm" hidden>
+        <div class="sheet-card">
+          <p class="kicker" id="confirm-kicker">Confirm tap</p>
+          <h2 id="confirm-title">Buy $25 of BTC?</h2>
+          <p id="confirm-body">Paper only. No real order leaves this phone.</p>
+          <div class="sheet-actions">
+            <button type="button" class="ghost" id="confirm-cancel">Not now</button>
+            <button type="button" class="solid" id="confirm-go">Do it</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" id="panel-chat" hidden>
+        <header class="panel-top">
+          <h2>Chat</h2>
+          <button type="button" class="ghost sm" data-close="chat">Close</button>
+        </header>
+        <div class="log" id="chat-log" aria-live="polite"></div>
+        <form class="composer" id="chat-form">
+          <div class="chips" id="prompts"></div>
+          <div class="row">
+            <label class="sr-only" for="chat-input">Message</label>
+            <input id="chat-input" name="message" autocomplete="off" placeholder="Ask Clicky…" />
+            <button type="submit" class="solid sm">Send</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="panel" id="panel-book" hidden>
+        <header class="panel-top">
+          <h2>Paper book</h2>
+          <button type="button" class="ghost sm" data-close="book">Close</button>
+        </header>
+        <div class="book-body">
+          <div id="lots"></div>
+          <h3>Tap history</h3>
+          <div id="clicks"></div>
+          <button type="button" class="ghost danger" id="reset">Reset paper</button>
+        </div>
+      </section>
+
+      <p class="toast" id="toast" hidden></p>
+    </div>
+    <script src="/app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "name": "Clicky",
+  "short_name": "Clicky",
+  "description": "Tap-first paper trading AI for your phone.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0c0d11",
+  "theme_color": "#0c0d11",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

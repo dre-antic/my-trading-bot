@@ -1,3 +1,28 @@
+# Clicky
+
+A tap-first AI for your phone. Open it, pick BTC / ETH / SOL, hit **ASK** for a take, then **BUY** or **SELL** to move a $10,000 paper wallet. Every tap clicks. Nothing is live — no real orders leave the phone.
+
+## Open Clicky on your phone
+
+On this computer:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -e ".[dev]"
+./scripts/run-clicky.sh
+```
+
+Then on your phone (same Wi-Fi): open the URL it prints, usually `http://<this-computer>:8765`. In the browser menu choose **Add to Home Screen**. Clicky launches full-screen like an app.
+
+Clicky pulls public prices when the network allows, and falls back to labeled demo quotes if it cannot. Trades stay paper-only.
+
+```bash
+pytest tests/clicky -q
+```
+
+---
+
 # AI Video Studio
 
 A native-feeling video production studio for Mac. You describe the video you want. The application researches, writes, plans scenes, generates visuals, records narration, composes original music, edits, captions, reviews, and renders a real MP4.
