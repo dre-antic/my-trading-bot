@@ -31,12 +31,14 @@ dev = ["pytest>=8"]
 
 [project.scripts]
 ai-video-studio = "aivideostudio.launch:main"
+clicky = "clicky.server:main"
 
 [tool.setuptools.packages.find]
 where = ["engine"]
 
 [tool.setuptools.package-data]
 aivideostudio = ["web/**/*", "resources/**/*"]
+clicky = ["web/**/*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
