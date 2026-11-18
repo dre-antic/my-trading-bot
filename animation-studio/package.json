@@ -1,0 +1,34 @@
+{
+  "name": "animation-studio",
+  "private": true,
+  "version": "0.1.0",
+  "description": "3D animated explainer videos with Three.js + Remotion",
+  "type": "module",
+  "scripts": {
+    "studio": "remotion studio",
+    "voiceover": "node scripts/voiceover.mjs",
+    "transcribe": "node scripts/transcribe.mjs",
+    "sfx": "node scripts/sfx.mjs",
+    "render": "node scripts/render.mjs",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@react-three/fiber": "^9.8.2",
+    "@remotion/bundler": "^4.0.544",
+    "@remotion/captions": "^4.0.544",
+    "@remotion/cli": "^4.0.544",
+    "@remotion/google-fonts": "^4.0.544",
+    "@remotion/install-whisper-cpp": "^4.0.544",
+    "@remotion/renderer": "^4.0.544",
+    "@remotion/three": "^4.0.544",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "remotion": "^4.0.544",
+    "three": "^0.187.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.3.0",
+    "@types/three": "^0.187.0",
+    "typescript": "^7.0.2"
+  }
+}
