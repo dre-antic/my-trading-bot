@@ -7,6 +7,7 @@
 // Engines, picked in this order unless --engine is given:
 //   clone       --sample (or VOICE_SAMPLE) is set: your own voice, cloned locally with Chatterbox (scripts/setup-voice-clone.sh)
 //   elevenlabs  ELEVENLABS_API_KEY is set
+//   chatterbox  Chatterbox is installed: its built-in natural narrator voice, local and free
 //   espeak      free robotic draft voice
 // Either way the result goes through scripts/transcribe.mjs.
 import {execFileSync} from 'node:child_process';
@@ -18,7 +19,7 @@ import {ffmpeg, parseArgs, projectPaths, ROOT} from './lib.mjs';
 
 const {flags} = parseArgs(process.argv.slice(2));
 if (!flags.project || !flags.script) {
-	console.error('Usage: node scripts/voiceover.mjs --project <id> --script <script.txt> [--sample <recording>] [--voice <voice id>] [--engine clone|elevenlabs|espeak]');
+	console.error('Usage: node scripts/voiceover.mjs --project <id> --script <script.txt> [--sample <recording>] [--voice <voice id>] [--engine clone|chatterbox|elevenlabs|espeak]');
 	process.exit(1);
 }
 
@@ -28,25 +29,30 @@ fs.mkdirSync(paths.publicDir, {recursive: true});
 const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'tts-'));
 
 const sample = flags.sample ?? process.env.VOICE_SAMPLE;
-const engine = flags.engine ?? (sample ? 'clone' : process.env.ELEVENLABS_API_KEY ? 'elevenlabs' : 'espeak');
+const python = process.env.VOICE_PYTHON ?? path.join(ROOT, '.voice-venv', 'bin', 'python');
+const engine =
+	flags.engine ??
+	(sample ? 'clone' : process.env.ELEVENLABS_API_KEY ? 'elevenlabs' : fs.existsSync(python) ? 'chatterbox' : 'espeak');
 let rawAudio;
 
-if (engine === 'clone') {
-	if (!sample || !fs.existsSync(sample)) throw new Error('Voice cloning needs --sample <recording of your voice> (10-30 seconds).');
-	const python = process.env.VOICE_PYTHON ?? path.join(ROOT, '.voice-venv', 'bin', 'python');
+if (engine === 'clone' || engine === 'chatterbox') {
 	if (!fs.existsSync(python)) throw new Error('Chatterbox is not installed. Run: bash scripts/setup-voice-clone.sh');
-	// Clean reference: mono 24 kHz, leading silence removed, loudness normalized, at most 30 s.
-	const ref = path.join(tmp, 'reference.wav');
-	ffmpeg(['-i', sample, '-af', 'silenceremove=start_periods=1:start_threshold=-45dB,loudnorm=I=-18:TP=-2,atrim=0:30', '-ar', '24000', '-ac', '1', ref]);
+	const args = [path.join(ROOT, 'scripts', 'clone_voice.py'), '--model', flags.model ?? 'turbo'];
+	if (engine === 'clone') {
+		if (!sample || !fs.existsSync(sample)) throw new Error('Voice cloning needs --sample <recording of your voice> (10-30 seconds).');
+		// Clean reference: mono 24 kHz, leading silence removed, loudness normalized, at most 30 s.
+		const ref = path.join(tmp, 'reference.wav');
+		ffmpeg(['-i', sample, '-af', 'silenceremove=start_periods=1:start_threshold=-45dB,loudnorm=I=-18:TP=-2,atrim=0:30', '-ar', '24000', '-ac', '1', ref]);
+		args.push('--sample', ref);
+		console.log(`Cloning your voice from ${sample} with Chatterbox (local, no API key)...`);
+	} else {
+		console.log("Chatterbox built-in narrator voice (local, no API key). Pass --sample to use your own voice...");
+	}
 	const textFile = path.join(tmp, 'script.txt');
 	fs.writeFileSync(textFile, text);
-	rawAudio = path.join(tmp, 'clone.wav');
-	console.log(`Cloning your voice from ${sample} with Chatterbox (local, no API key)...`);
-	execFileSync(
-		python,
-		[path.join(ROOT, 'scripts', 'clone_voice.py'), '--sample', ref, '--text', textFile, '--out', rawAudio, '--model', flags.model ?? 'turbo'],
-		{stdio: 'inherit'},
-	);
+	rawAudio = path.join(tmp, 'chatterbox.wav');
+	args.push('--text', textFile, '--out', rawAudio);
+	execFileSync(python, args, {stdio: 'inherit'});
 } else if (engine === 'elevenlabs') {
 	const key = process.env.ELEVENLABS_API_KEY;
 	if (!key) throw new Error('ELEVENLABS_API_KEY is not set. Add it as a secret or use --engine espeak.');

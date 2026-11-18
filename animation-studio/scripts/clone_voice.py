@@ -3,7 +3,8 @@
     .voice-venv/bin/python scripts/clone_voice.py --sample my-voice.wav --text script.txt --out voiceover.wav
 
 The sample should be 10-30 seconds of one person talking clearly, with no music.
-Called by scripts/voiceover.mjs when --engine clone is used.
+Without --sample, Chatterbox's built-in narrator voice is used.
+Called by scripts/voiceover.mjs (engines "clone" and "chatterbox").
 """
 
 import argparse
@@ -31,7 +32,7 @@ def chunks(text: str, limit: int) -> list[str]:
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--sample", required=True, help="Reference recording of the voice to clone")
+    ap.add_argument("--sample", help="Reference recording of the voice to clone (omit for the built-in voice)")
     ap.add_argument("--text", required=True, help="Text file with the script")
     ap.add_argument("--out", required=True, help="Output .wav path")
     ap.add_argument("--model", choices=["turbo", "standard"], default="turbo")
@@ -59,7 +60,7 @@ def main() -> None:
     pieces = []
     for i, part in enumerate(parts):
         t = time.time()
-        kwargs = {"audio_prompt_path": args.sample} if i == 0 else {}
+        kwargs = {"audio_prompt_path": args.sample} if i == 0 and args.sample else {}
         if args.model == "standard":
             kwargs.update(exaggeration=args.exaggeration, cfg_weight=args.cfg)
         wav = model.generate(part, **kwargs)

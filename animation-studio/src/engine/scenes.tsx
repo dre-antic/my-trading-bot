@@ -242,8 +242,8 @@ export const BarChart: React.FC<SceneProps<BarChartScene>> = (props) => {
 	const vertical = width < height;
 	const cam = useSceneCamera(scene.camera ?? 'push', [vertical ? 0 : 0.2, 1.25, 0], !!scene.headline);
 	const max = Math.max(...scene.bars.map((b) => b.value));
-	const gap = vertical ? 2.1 : 0.95;
-	const startX = (vertical ? 0 : 0.8) - ((scene.bars.length - 1) * gap) / 2;
+	const gap = vertical ? 2.1 : Math.min(1.6, 3.8 / Math.max(1, scene.bars.length));
+	const startX = (vertical ? 0 : 0.9) - ((scene.bars.length - 1) * gap) / 2;
 	const maxH = 2.1;
 	const bars = scene.bars.map((b, i) => {
 		const g = spring({frame: frame - 6 - i * 5, fps, config: {damping: 15, stiffness: 90}});
@@ -259,8 +259,12 @@ export const BarChart: React.FC<SceneProps<BarChartScene>> = (props) => {
 				<>
 					{scene.headline ? <Headline text={scene.headline} theme={theme} /> : null}
 					{bars.map((b, i) => {
+						const edgeL = projectToScreen([(b.x - (gap * 0.34)) * xs, 0.4, 0.32], cam, width, height);
+						const edgeR = projectToScreen([(b.x + (gap * 0.34)) * xs, 0.4, 0.32], cam, width, height);
+						const barPx = Math.abs(edgeR.x - edgeL.x);
 						const top = projectToScreen([b.x * xs, b.h + 0.08, 0], cam, width, height);
-						const base = projectToScreen([b.x * xs, Math.min(0.42, b.h * 0.5), 0.32], cam, width, height);
+						const short = b.h < 0.5;
+						const base = projectToScreen([b.x * xs, short ? b.h + 0.55 : b.h > 0.84 ? b.h * 0.5 : 0.42, 0.32], cam, width, height);
 						return (
 							<React.Fragment key={i}>
 								<Tag text={b.display ?? String(b.value)} x={top.x} y={top.y} theme={theme} color={b.highlight ? theme.accent : undefined} delay={12 + i * 5} size={0.85} />
@@ -273,10 +277,12 @@ export const BarChart: React.FC<SceneProps<BarChartScene>> = (props) => {
 										fontFamily,
 										fontWeight: 900,
 										fontSize: width * (vertical ? 0.03 : 0.017),
-										color: '#ffffff',
-										textShadow: '0 2px 6px rgba(0,0,0,0.25)',
+										color: short ? theme.ink : '#ffffff',
+										textShadow: short ? 'none' : '0 2px 6px rgba(0,0,0,0.25)',
 										opacity: b.g,
-										whiteSpace: 'nowrap',
+										textAlign: 'center',
+										lineHeight: 1.05,
+										width: barPx * 0.9,
 									}}
 								>
 									{b.label}
@@ -411,7 +417,7 @@ export const Compare: React.FC<SceneProps<CompareScene>> = (props) => {
 	const {scene, theme} = props;
 	const frame = useCurrentFrame();
 	const {fps, width, height} = useVideoConfig();
-	const cam = useSceneCamera(scene.camera ?? 'push', undefined, !!scene.headline);
+	const cam = useSceneCamera(scene.camera ?? 'push', [0, 1.4, 0], !!scene.headline);
 	const xs = useLayoutScale();
 	const vertical = width < height;
 	const lx = vertical ? -2.4 : -1.9;

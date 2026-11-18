@@ -52,7 +52,7 @@ Pick one:
   Only clone a voice the user owns or has permission to use. If they ask to clone someone else's voice (a celebrity, another creator), decline.
   Tell the user what makes a good sample: one speaker, quiet room, no music, natural speaking pace in the tone they want for the video.
 - **Generate it here**: `node scripts/voiceover.mjs --project <id> --script src/projects/<id>/script.txt`
-  Uses ElevenLabs when `ELEVENLABS_API_KEY` is set (optional `ELEVENLABS_VOICE_ID`, `--voice <id>`), otherwise the robotic eSpeak draft voice.
+  Uses ElevenLabs when `ELEVENLABS_API_KEY` is set (optional `ELEVENLABS_VOICE_ID`, `--voice <id>`). Otherwise it uses Chatterbox's built-in natural narrator voice when `.voice-venv/` exists, and falls back to the robotic eSpeak draft voice. Force one with `--engine clone|chatterbox|elevenlabs|espeak`.
   The ElevenLabs key is only ever sent to `api.elevenlabs.io`. If the user wants ElevenLabs and the key is missing, tell them to add it in Cursor Dashboard → Cloud Agents → Secrets.
 
 Pass `--script` whenever the script text is known: captions then use the exact written words, and whisper only supplies timing.
@@ -92,7 +92,7 @@ See `src/projects/money-happiness/storyboard.ts` for a complete example.
 
 ### 5. Custom scenes
 
-When no built-in scene fits, write a component in `src/projects/<id>/scenes/` and register it in the storyboard's `customScenes`.
+When no built-in scene fits, write a component in `src/projects/<id>/scenes.tsx` (see `src/projects/lottery-winners/scenes.tsx`) and register it in the storyboard's `customScenes`. Custom scenes read their settings from `scene.props`.
 Build it from `Stage`, `Character`, the props in `src/engine/Props.tsx`, `Headline`, `Tag`, and `projectToScreen`.
 Animate only from `useCurrentFrame()` (with `spring` / `interpolate`). Never use `useFrame`, `Math.random()`, timers, or real time: Remotion renders frames out of order and in parallel.
 

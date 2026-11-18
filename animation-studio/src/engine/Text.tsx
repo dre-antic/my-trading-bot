@@ -51,16 +51,21 @@ export const Tag: React.FC<{text: string; x: number; y: number; theme: Theme; co
 	const {fps, width, height} = useVideoConfig();
 	const s = spring({frame: frame - delay, fps, config: {damping: 12, stiffness: 160}});
 	const base = width < height ? 0.034 : 0.02;
+	const fontSize = Math.round(width * base * size);
+	// Keep the whole pill on screen: estimate its width from the text length.
+	const half = (text.length * fontSize * 0.62 + fontSize * 1.6 * size) / 2;
+	const margin = width * 0.02;
+	const cx = Math.min(width - margin - half, Math.max(margin + half, x));
 	return (
 		<div
 			style={{
 				position: 'absolute',
-				left: x,
+				left: cx,
 				top: y,
 				transform: `translate(-50%, -100%) scale(${s})`,
 				fontFamily,
 				fontWeight: 800,
-				fontSize: Math.round(width * base * size),
+				fontSize,
 				color: color ? '#fff' : theme.ink,
 				background: color ?? theme.panel,
 				padding: `${0.35 * size}em ${0.8 * size}em`,
