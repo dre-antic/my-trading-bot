@@ -31,6 +31,17 @@ node scripts/voiceover.mjs --project why-people-stay-broke --script script.txt
 npx remotion render WhyPeopleStayBroke out/why-people-stay-broke.mp4
 ```
 
+### Use your own cloned voice
+
+Record 10-30 seconds of yourself talking (a phone voice memo is fine: one speaker, quiet room, no music), then:
+
+```bash
+bash scripts/setup-voice-clone.sh   # one time, installs Chatterbox (MIT) into .voice-venv/
+node scripts/voiceover.mjs --project why-people-stay-broke --script script.txt --sample voices/me.m4a
+```
+
+Cloning runs locally with [Chatterbox](https://github.com/resemble-ai/chatterbox) and needs no API key. The `voices/` folder is git-ignored. Only clone voices you have permission to use.
+
 `npm run studio` opens the Remotion preview. `npx remotion still CharacterSheet out/characters.png` shows every character style.
 
 ## Layout

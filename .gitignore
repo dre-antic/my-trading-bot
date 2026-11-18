@@ -34,3 +34,5 @@ secrets/
 # animation-studio
 animation-studio/.whisper/
 animation-studio/out/
+animation-studio/.voice-venv/
+animation-studio/voices/

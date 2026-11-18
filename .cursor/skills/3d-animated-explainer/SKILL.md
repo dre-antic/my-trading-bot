@@ -44,6 +44,13 @@ Pick one:
 
 - **User uploads voiceover files** (ElevenLabs downloads, their own recording). Multiple parts are joined in order:
   `node scripts/transcribe.mjs --project <id> --script src/projects/<id>/script.txt part1.mp3 part2.mp3 part3.mp3`
+- **Clone the user's own voice** (they attach a 10-30 second recording, e.g. a phone voice memo `.m4a`, `.mp3`, or `.wav`):
+  save it as `animation-studio/voices/<name>.<ext>` (git-ignored, never commit someone's voice), run `bash scripts/setup-voice-clone.sh` once if `.voice-venv/` is missing, then
+  `node scripts/voiceover.mjs --project <id> --script src/projects/<id>/script.txt --sample voices/<name>.<ext>`
+  This uses [Chatterbox](https://github.com/resemble-ai/chatterbox) (Resemble AI, MIT) locally with no API key. The Turbo model is the default (`--model standard` is slower but has more expressive control).
+  On 4 CPU cores it takes about 1.5 s of compute per second of speech. Output carries Resemble's inaudible Perth watermark.
+  Only clone a voice the user owns or has permission to use. If they ask to clone someone else's voice (a celebrity, another creator), decline.
+  Tell the user what makes a good sample: one speaker, quiet room, no music, natural speaking pace in the tone they want for the video.
 - **Generate it here**: `node scripts/voiceover.mjs --project <id> --script src/projects/<id>/script.txt`
   Uses ElevenLabs when `ELEVENLABS_API_KEY` is set (optional `ELEVENLABS_VOICE_ID`, `--voice <id>`), otherwise the robotic eSpeak draft voice.
   The ElevenLabs key is only ever sent to `api.elevenlabs.io`. If the user wants ElevenLabs and the key is missing, tell them to add it in Cursor Dashboard → Cloud Agents → Secrets.
@@ -110,6 +117,7 @@ To add a new style, extend `CharacterStyle` in `types.ts` and `palette()` in `Ch
 
 - "Make me a 3D animated video about why people stay broke": run the master prompt, write the script, create the project, generate the voiceover, write the storyboard, render stills, render the MP4.
 - "Here are my 3 ElevenLabs voiceover parts" (attached mp3s): run `transcribe.mjs` with all parts in order plus `--script`, then storyboard and render.
+- "Use my voice" plus an attached voice memo: save it under `voices/`, run the setup script if needed, then `voiceover.mjs --sample voices/<file>`.
 - "Make it a YouTube Short": create the project with `--vertical`. Keep scenes to 1 or 2 characters and short headlines.
 - "Show me other character styles": render the `CharacterSheet` still.
 
@@ -124,5 +132,8 @@ To add a new style, extend `CharacterStyle` in `types.ts` and `palette()` in `Ch
 - **Black or empty 3D scene in renders**: the WebGL backend failed. Try `--gl=swangle` (no GPU) or `--gl=angle` (GPU).
 - **Captions out of sync**: re-run `transcribe.mjs` after editing audio. Scene `from`/`to` values must come from the new `timeline.txt`.
 - **Wrong words in captions**: pass `--script` so captions use the written text.
+- **`Audio prompt must be longer than 5 seconds`**: the voice sample is too short after leading silence is trimmed. Ask for a longer recording.
+- **`'NoneType' object is not callable` from `perth`**: run `.voice-venv/bin/pip install "setuptools<81"` (the watermark package needs `pkg_resources`).
+- **Cloned voice sounds off**: try a cleaner or longer sample, or `--model standard`.
 - **`Custom scene "x" is not registered`**: add the component to `customScenes` in the storyboard.
 - **Fonts look like a fallback**: the Montserrat font downloads from Google Fonts at render time and needs internet access.
