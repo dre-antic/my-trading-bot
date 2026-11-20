@@ -1,0 +1,10 @@
+- Glob: listed files in /tmp/evals/v0/A07
+- Read: PROJECT_STATE.md, clipcaps.py, sample_segments.json, transcribe.py
+- Shell: python3 --version, command -v ffmpeg
+- Write: captions.py, clipcaps.py, test_captions.py
+- StrReplace: captions.py, clipcaps.py, test_captions.py, PROJECT_STATE.md
+- Shell: python3 test_captions.py (several runs while fixing line breaks)
+- Read: captions.py, clipcaps.py, test_captions.py (main list via Grep)
+- Shell: burned sample captions onto a 1080x1920 video with ffmpeg, grabbed frames, measured text margins, tried font sizes 22–40 on a 42-character wide line
+- Read: preview frames (frame_2, frame_7, frame_12, frame_17_5, frame_23_5, frame_27, wide.png)
+- Shell: final python3 test_captions.py, CLI checks for a bad --start and a bad JSON file, removed _preview and __pycache__

@@ -1,0 +1,8 @@
+Tools used:
+
+- Read `/agent/repos/my-trading-bot/.agents/skills/resourceful-problem-solving/SKILL.md` and the reference files `discovery.md`, `constraints.md`, `decide-and-recover.md`, and `project-memory.md`. Listed that folder with a glob.
+- GetDynamicTools for Bright Data `search_engine`, `search_engine_batch`, and `scrape_as_markdown`, and for Cursor `WebSearch` and `WebFetch`.
+- Bright Data `search_engine_batch` twice (tool-library pricing, then maps/hosting/reminders). Both failed: Bright Data rejected the credentials (`Auth method is not supported`).
+- Cursor WebSearch for myTurn pricing, Lend Engine pricing, open-source lending software, AppSheet pricing, Glide free-plan limits, ToolPool.Garden features, ToolTrust, Apps Script email quotas, Google My Maps limits, and the Apps Script quota footnote / anonymous web-app access.
+- Cursor WebFetch of these pages on 20 Nov 2026: `https://toolpool.garden/`, `https://www.lend-engine.com/pricing`, `https://developers.google.com/apps-script/guides/web`, `https://developers.google.com/apps-script/guides/services/quotas`, `https://operations.osmfoundation.org/policies/tiles/`, `https://developer.apple.com/programs/enroll/`, `https://register.myturn.com/library/createOrganization/index?library=true&organizationType.id=4&planId=FREE`, and `https://developers.google.com/apps-script/manifest/web-app-api-executable`.
+- Shell: checked that Leaflet 1.9.4 CSS and JS on cdnjs returned HTTP 200, computed their sha384 hashes, ran `node test.js` on the lending rules (all checks passed), and ran `node --check` on the script and the page script. Wrote `Code.gs`, `Index.html`, `logic.js`, `wrappers.js`, and `test.js` under `/tmp/evals/v1/T01`.

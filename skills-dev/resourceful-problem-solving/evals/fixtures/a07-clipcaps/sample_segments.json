@@ -1,0 +1,356 @@
+[
+ {
+  "start": 0.0,
+  "end": 2.53,
+  "text": "So today we're talking with Dr.",
+  "words": [
+   {
+    "start": 0.0,
+    "end": 0.31,
+    "word": " So"
+   },
+   {
+    "start": 0.36,
+    "end": 0.76,
+    "word": " today"
+   },
+   {
+    "start": 0.81,
+    "end": 1.21,
+    "word": " we're"
+   },
+   {
+    "start": 1.26,
+    "end": 1.72,
+    "word": " talking"
+   },
+   {
+    "start": 1.77,
+    "end": 2.14,
+    "word": " with"
+   },
+   {
+    "start": 2.19,
+    "end": 2.53,
+    "word": " Dr."
+   }
+  ]
+ },
+ {
+  "start": 2.98,
+  "end": 13.19,
+  "text": "Amara Okafor about how coral reefs recover after bleaching events, and honestly what she told me before we started recording completely changed",
+  "words": [
+   {
+    "start": 2.98,
+    "end": 3.38,
+    "word": " Amara"
+   },
+   {
+    "start": 3.43,
+    "end": 3.86,
+    "word": " Okafor"
+   },
+   {
+    "start": 3.91,
+    "end": 4.31,
+    "word": " about"
+   },
+   {
+    "start": 4.36,
+    "end": 4.7,
+    "word": " how"
+   },
+   {
+    "start": 4.75,
+    "end": 5.15,
+    "word": " coral"
+   },
+   {
+    "start": 5.2,
+    "end": 5.6,
+    "word": " reefs"
+   },
+   {
+    "start": 5.65,
+    "end": 6.11,
+    "word": " recover"
+   },
+   {
+    "start": 6.16,
+    "end": 6.56,
+    "word": " after"
+   },
+   {
+    "start": 6.61,
+    "end": 7.13,
+    "word": " bleaching"
+   },
+   {
+    "start": 7.18,
+    "end": 7.64,
+    "word": " events,"
+   },
+   {
+    "start": 7.69,
+    "end": 8.03,
+    "word": " and"
+   },
+   {
+    "start": 8.08,
+    "end": 8.57,
+    "word": " honestly"
+   },
+   {
+    "start": 8.62,
+    "end": 8.99,
+    "word": " what"
+   },
+   {
+    "start": 9.04,
+    "end": 9.38,
+    "word": " she"
+   },
+   {
+    "start": 9.43,
+    "end": 9.8,
+    "word": " told"
+   },
+   {
+    "start": 9.85,
+    "end": 10.16,
+    "word": " me"
+   },
+   {
+    "start": 10.21,
+    "end": 10.64,
+    "word": " before"
+   },
+   {
+    "start": 10.69,
+    "end": 11.0,
+    "word": " we"
+   },
+   {
+    "start": 11.05,
+    "end": 11.51,
+    "word": " started"
+   },
+   {
+    "start": 11.56,
+    "end": 12.08,
+    "word": " recording"
+   },
+   {
+    "start": 12.13,
+    "end": 12.68,
+    "word": " completely"
+   },
+   {
+    "start": 12.73,
+    "end": 13.19,
+    "word": " changed"
+   }
+  ]
+ },
+ {
+  "start": 13.64,
+  "end": 16.08,
+  "text": "how I think about the ocean.",
+  "words": [
+   {
+    "start": 13.64,
+    "end": 13.98,
+    "word": " how"
+   },
+   {
+    "start": 14.03,
+    "end": 14.31,
+    "word": " I"
+   },
+   {
+    "start": 14.36,
+    "end": 14.76,
+    "word": " think"
+   },
+   {
+    "start": 14.81,
+    "end": 15.21,
+    "word": " about"
+   },
+   {
+    "start": 15.26,
+    "end": 15.6,
+    "word": " the"
+   },
+   {
+    "start": 15.65,
+    "end": 16.08,
+    "word": " ocean."
+   }
+  ]
+ },
+ {
+  "start": 16.53,
+  "end": 18.7,
+  "text": "Amara, thanks for coming on.",
+  "words": [
+   {
+    "start": 16.53,
+    "end": 16.96,
+    "word": " Amara,"
+   },
+   {
+    "start": 17.01,
+    "end": 17.44,
+    "word": " thanks"
+   },
+   {
+    "start": 17.49,
+    "end": 17.83,
+    "word": " for"
+   },
+   {
+    "start": 17.88,
+    "end": 18.31,
+    "word": " coming"
+   },
+   {
+    "start": 18.36,
+    "end": 18.7,
+    "word": " on."
+   }
+  ]
+ },
+ {
+  "start": 19.15,
+  "end": 22.16,
+  "text": "Thanks for having me, it's a pleasure.",
+  "words": [
+   {
+    "start": 19.15,
+    "end": 19.58,
+    "word": " Thanks"
+   },
+   {
+    "start": 19.63,
+    "end": 19.97,
+    "word": " for"
+   },
+   {
+    "start": 20.02,
+    "end": 20.45,
+    "word": " having"
+   },
+   {
+    "start": 20.5,
+    "end": 20.84,
+    "word": " me,"
+   },
+   {
+    "start": 20.89,
+    "end": 21.26,
+    "word": " it's"
+   },
+   {
+    "start": 21.31,
+    "end": 21.59,
+    "word": " a"
+   },
+   {
+    "start": 21.64,
+    "end": 22.16,
+    "word": " pleasure."
+   }
+  ]
+ },
+ {
+  "start": 22.61,
+  "end": 24.78,
+  "text": "Let's start with the basics:",
+  "words": [
+   {
+    "start": 22.61,
+    "end": 23.01,
+    "word": " Let's"
+   },
+   {
+    "start": 23.06,
+    "end": 23.46,
+    "word": " start"
+   },
+   {
+    "start": 23.51,
+    "end": 23.88,
+    "word": " with"
+   },
+   {
+    "start": 23.93,
+    "end": 24.27,
+    "word": " the"
+   },
+   {
+    "start": 24.32,
+    "end": 24.78,
+    "word": " basics:"
+   }
+  ]
+ },
+ {
+  "start": 25.23,
+  "end": 29.65,
+  "text": "what actually happens to a coral during a marine heatwave?",
+  "words": [
+   {
+    "start": 25.23,
+    "end": 25.6,
+    "word": " what"
+   },
+   {
+    "start": 25.65,
+    "end": 26.14,
+    "word": " actually"
+   },
+   {
+    "start": 26.19,
+    "end": 26.65,
+    "word": " happens"
+   },
+   {
+    "start": 26.7,
+    "end": 27.01,
+    "word": " to"
+   },
+   {
+    "start": 27.06,
+    "end": 27.34,
+    "word": " a"
+   },
+   {
+    "start": 27.39,
+    "end": 27.79,
+    "word": " coral"
+   },
+   {
+    "start": 27.84,
+    "end": 28.27,
+    "word": " during"
+   },
+   {
+    "start": 28.32,
+    "end": 28.6,
+    "word": " a"
+   },
+   {
+    "start": 28.65,
+    "end": 29.08,
+    "word": " marine"
+   },
+   {
+    "start": 29.13,
+    "end": 29.65,
+    "word": " heatwave?"
+   }
+  ]
+ }
+]

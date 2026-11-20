@@ -1,0 +1,3 @@
+- Wrote `/tmp/evals/v0/A04/response.md` with the `ls -a` answer.
+- Wrote `/tmp/evals/v0/A04/actions.md` (this log).
+- No shell, web search, or web fetch. The command is standard `ls` behavior.

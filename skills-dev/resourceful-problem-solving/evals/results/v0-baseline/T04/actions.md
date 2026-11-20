@@ -1,0 +1,5 @@
+- Glob: listed files in /tmp/evals/v0/T04
+- Read: NOTES.md, importer.py, test_importer.py, sample_utf8.csv, orders_export.csv
+- Shell: inspected raw bytes and tried encodings; ran the original importer on both CSVs and the existing unit test
+- Write: updated importer.py and test_importer.py
+- Shell: ran unittest and `python3 importer.py` on orders_export.csv and sample_utf8.csv

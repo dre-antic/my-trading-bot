@@ -1,0 +1,3 @@
+- GetDynamicTools: looked up the schema for the cursor WebSearch tool.
+- WebSearch: query “Netlify Functions v2 export default config path environment variable OPENAI 2026” to confirm the current Function handler, `export const config = { path }`, and `process.env` access. Did not open the full-page files the search wrote outside the eval directory.
+- Shell: `mkdir -p /tmp/evals/v0/A01` and listed that directory before writing the response files.
