@@ -25,7 +25,7 @@ export const lotteryWinners: Storyboard = {
 	characterColor: '#4c6ef5',
 	customScenes: {ShrinkingPile, LotteryBalls},
 	scenes: [
-		{type: 'title', from: 0, to: 1.91, title: 'Do lottery winners really go broke?', character: {pose: 'think', mood: 'neutral', prop: 'question'}, sfx: 'pop'},
+		{type: 'custom', component: 'LotteryBalls', from: 0, to: 1.91, headline: 'Picture winning the lottery', props: {label: ''}, sfx: ['pop', 'tick']},
 		{type: 'moneyRain', from: 1.91, to: 4.29, headline: 'Millions. Overnight.', characters: [{pose: 'cheer', mood: 'happy'}], sfx: ['whoosh', 'cash']},
 		{type: 'talk', from: 4.29, to: 6.24, headline: '...then losing it all', camera: 'pull', characters: [{pose: 'sad', mood: 'sad'}], sfx: ['whoosh', 'boom']},
 		{type: 'bigNumber', from: 6.24, to: 11.36, value: 70, suffix: '%', label: 'of winners go broke?', coins: false, character: {pose: 'point', mood: 'shocked'}, sfx: ['whoosh', 'pop']},
@@ -39,7 +39,7 @@ export const lotteryWinners: Storyboard = {
 				{pose: 'idle', mood: 'shocked', x: 1.4, turn: -0.3, talking: false},
 			],
 		},
-		{type: 'talk', from: 14.72, to: 19.25, headline: 'Nobody can find the study', camera: 'push', characters: [{pose: 'shrug', mood: 'shocked', prop: 'question'}], sfx: ['whoosh', 'ding']},
+		{type: 'talk', from: 14.72, to: 19.25, headline: 'Nobody can find the study', camera: 'push', stamp: 'No source', characters: [{pose: 'shrug', mood: 'shocked', prop: 'question'}], sfx: ['whoosh', 'boom']},
 		{
 			type: 'talk',
 			from: 19.25,
@@ -144,7 +144,7 @@ export const lotteryWinners: Storyboard = {
 			right: {label: 'Life overall: better', character: {pose: 'cheer', mood: 'happy', prop: 'heart'}},
 			versus: false,
 		},
-		{type: 'talk', from: 88.57, to: 91.12, headline: 'Money is an amplifier', camera: 'push', characters: [{pose: 'present', mood: 'happy', prop: 'lightbulb'}], sfx: ['whoosh', 'ding']},
+		{type: 'talk', from: 88.57, to: 91.12, headline: 'Money is an amplifier', camera: 'push', stamp: 'Not a curse', characters: [{pose: 'present', mood: 'happy', prop: 'lightbulb'}], sfx: ['whoosh', 'ding']},
 		{
 			type: 'compare',
 			from: 91.12,

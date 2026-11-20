@@ -1,7 +1,7 @@
 import React from 'react';
 import {AbsoluteFill, Audio, interpolate, Sequence, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
 import {resolveTheme} from './theme';
-import {Captions, mouthAt} from './Text';
+import {Captions, mouthAt, Stamp} from './Text';
 import {BarChart, BigNumber, Compare, LineChart, MoneyRain, Talk, Title} from './scenes';
 import type {Scene, SceneProps, SfxName, Storyboard} from './types';
 
@@ -85,6 +85,7 @@ export const Video: React.FC<{storyboard: Storyboard}> = ({storyboard}) => {
 								)}
 							</Mouth>
 						</Transition>
+						{scene.stamp ? <Stamp text={scene.stamp} color={theme.negative} /> : null}
 						{sfx.map((name, k) => (
 							<Audio key={k} src={staticFile(`sfx/${name}.wav`)} volume={SFX_VOLUME[name]} />
 						))}

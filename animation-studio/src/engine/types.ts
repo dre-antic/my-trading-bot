@@ -54,6 +54,8 @@ type SceneCommon = {
 	headline?: string;
 	camera?: CameraMove;
 	sfx?: SfxName | SfxName[];
+	/** A stamp that slams onto the frame a beat after the scene starts, e.g. "NO SOURCE". */
+	stamp?: string;
 };
 
 export type TalkScene = SceneCommon & {

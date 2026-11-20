@@ -109,14 +109,38 @@ export const Stage: React.FC<{
 					shadow-camera-bottom={-8}
 					shadow-bias={-0.0004}
 				/>
-				<mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-					<planeGeometry args={[80, 80]} />
-					<shadowMaterial opacity={theme.floorShadow} />
-				</mesh>
+				<directionalLight position={[-5, 4, -3]} intensity={0.55} color={theme.accent} />
+				<Set theme={theme} />
 				{children}
 			</ThreeCanvas>
 			{overlay}
 		</AbsoluteFill>
+	);
+};
+
+/** Cyclorama, colored depth shapes, and a stage disc. Replaces the empty backdrop. */
+const Set: React.FC<{theme: Theme}> = ({theme}) => {
+	const wall = new THREE.Color(theme.background).lerp(new THREE.Color('#ffffff'), 0.2).getStyle();
+	const disc = new THREE.Color('#ffffff').lerp(new THREE.Color(theme.background), 0.55).getStyle();
+	return (
+		<group>
+			<mesh position={[0, 2.6, 0]}>
+				<cylinderGeometry args={[13, 13, 9, 48, 1, true]} />
+				<meshStandardMaterial color={wall} side={THREE.BackSide} roughness={1} />
+			</mesh>
+			<mesh position={[0, -0.05, 0]} receiveShadow>
+				<cylinderGeometry args={[5.6, 5.85, 0.1, 56]} />
+				<meshStandardMaterial color={disc} roughness={0.85} />
+			</mesh>
+			<mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.012, 0]}>
+				<ringGeometry args={[5.15, 5.42, 64]} />
+				<meshStandardMaterial color={theme.accent} roughness={0.6} />
+			</mesh>
+			<mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.002, 0]} receiveShadow>
+				<circleGeometry args={[5.5, 56]} />
+				<shadowMaterial opacity={theme.floorShadow} />
+			</mesh>
+		</group>
 	);
 };
 

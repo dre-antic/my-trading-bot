@@ -79,6 +79,36 @@ export const Tag: React.FC<{text: string; x: number; y: number; theme: Theme; co
 	);
 };
 
+/** A tilted stamp that slams in a beat after the scene starts. */
+export const Stamp: React.FC<{text: string; color: string}> = ({text, color}) => {
+	const frame = useCurrentFrame();
+	const {fps, width} = useVideoConfig();
+	const s = spring({frame: frame - 16, fps, config: {damping: 9, stiffness: 200}});
+	if (s <= 0.01) return null;
+	return (
+		<AbsoluteFill style={{justifyContent: 'center', alignItems: 'center', pointerEvents: 'none'}}>
+			<div
+				style={{
+					fontFamily,
+					fontWeight: 900,
+					fontSize: width * 0.072,
+					color,
+					border: `${Math.round(width * 0.006)}px solid ${color}`,
+					padding: '0.04em 0.28em',
+					letterSpacing: 4,
+					textTransform: 'uppercase',
+					background: 'rgba(255,255,255,0.88)',
+					borderRadius: 18,
+					transform: `translateY(28%) rotate(-14deg) scale(${s})`,
+					boxShadow: '0 16px 40px rgba(0,0,0,0.18)',
+				}}
+			>
+				{text}
+			</div>
+		</AbsoluteFill>
+	);
+};
+
 export const Captions: React.FC<{captions: Caption[]; theme: Theme}> = ({captions, theme}) => {
 	const frame = useCurrentFrame();
 	const {fps, width, height} = useVideoConfig();

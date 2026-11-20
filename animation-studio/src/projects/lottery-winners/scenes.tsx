@@ -133,7 +133,7 @@ export const LotteryBalls: React.FC<SceneProps<CustomScene>> = ({scene, theme}) 
 			overlay={
 				<>
 					{scene.headline ? <Headline text={scene.headline} theme={theme} /> : null}
-					<AbsoluteFill style={{justifyContent: 'flex-start', alignItems: 'center', paddingTop: height * 0.17}}>
+					{label ? <AbsoluteFill style={{justifyContent: 'flex-start', alignItems: 'center', paddingTop: height * 0.17}}>
 						<div
 							style={{
 								fontFamily,
@@ -149,7 +149,7 @@ export const LotteryBalls: React.FC<SceneProps<CustomScene>> = ({scene, theme}) 
 						>
 							{label}
 						</div>
-					</AbsoluteFill>
+					</AbsoluteFill> : null}
 				</>
 			}
 		>

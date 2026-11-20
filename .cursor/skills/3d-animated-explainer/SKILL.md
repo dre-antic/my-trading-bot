@@ -77,7 +77,7 @@ Scene types (full fields in `src/engine/types.ts`):
 | `compare` | A vs B | `left: {label, character}`, `right: {label, character}` |
 | `custom` | anything else | `component` key in `customScenes`, `props` |
 
-Every scene also takes `from`, `to`, `headline` (short, uppercase-friendly), `camera`, and `sfx`.
+Every scene also takes `from`, `to`, `headline` (short, uppercase-friendly), `camera`, `sfx`, and `stamp` (a short label that slams onto the frame, like "No source"). Scenes sit on a round stage with a colored ring, so keep props inside about x -4 to 4.
 
 - `CharacterSpec`: `pose`, `mood`, `x` (about -3..3), `z`, `turn` (radians), `style`, `color`, `scale`, `talking`, `tag` (label above head), `prop`.
 - Poses: `idle`, `wave`, `point` (auto-aims at the middle of the frame), `pointLeft`, `pointRight`, `shrug`, `cheer`, `think`, `sad`, `walk`, `present`.

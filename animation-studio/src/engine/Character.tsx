@@ -176,8 +176,9 @@ export const Character: React.FC<CharacterProps> = ({
 	const headNod = lerp(base.headNod, target.headNod, enter) + mouth * 0.04;
 	const lean = lerp(base.lean, target.lean, enter);
 
+	const pop = 0.9 + enter * 0.1;
 	return (
-		<group position={position} rotation={[0, turn, 0]} scale={scale}>
+		<group position={[position[0], position[1] - (1 - enter) * 0.55, position[2]]} rotation={[0, turn, 0]} scale={scale * pop}>
 			<group position={[0, bodyY, 0]} rotation={[lean, 0, sway * 0.3]}>
 				{[-1, 1].map((s) => (
 					<group key={s} position={[s * 0.11, 0.92, 0]} rotation={[s * legSwing, 0, s * 0.03]}>
