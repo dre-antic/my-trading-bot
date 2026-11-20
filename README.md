@@ -64,6 +64,10 @@ pytest tests/e2e -q
 
 The end-to-end test produces a real MP4 about why the sky appears blue.
 
+## 3D animated explainers (Three.js + Remotion)
+
+`animation-studio/` is a separate Node project for 3D character explainer videos (money, psychology, history niches). Ask the Cursor agent for "a 3D animated video about …" and it follows `.cursor/skills/3d-animated-explainer/SKILL.md`. See `animation-studio/README.md`.
+
 ## License of this application
 
 MIT for the studio source. Third-party tools keep their own licenses — see `LICENSES.md`, `THIRD_PARTY_NOTICES.md`, and `MODEL_REGISTRY.md`.

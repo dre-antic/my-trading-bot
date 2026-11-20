@@ -30,3 +30,9 @@ secrets/
 *.sqlite
 *.sqlite-journal
 .python-version
+
+# animation-studio
+animation-studio/.whisper/
+animation-studio/out/
+animation-studio/.voice-venv/
+animation-studio/voices/
