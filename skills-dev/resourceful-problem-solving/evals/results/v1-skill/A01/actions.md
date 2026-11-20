@@ -1,0 +1,7 @@
+- Read `/agent/repos/my-trading-bot/.agents/skills/resourceful-problem-solving/SKILL.md`.
+- Listed that skill folder, read `references/decide-and-recover.md`, and searched the skill references for secret-handling notes.
+- Inspected Bright Data `search_engine` and `scrape_as_markdown` schemas, then called `search_engine` twice. Both calls failed because Bright Data rejected the credentials.
+- Inspected Cursor `WebSearch` and `WebFetch` schemas.
+- Web search: Netlify function environment variables, OpenAI API-key safety, the Responses API, current Netlify function syntax, Netlify function rate limits, and `max_output_tokens`.
+- Fetched `https://www.netlify.com/knowledge-base/how-to-add-a-backend-api-endpoint-with-netlify-functions/` and `https://developers.openai.com/api/docs/guides/text.md`.
+- Created `/tmp/evals/v1/A01` and wrote `response.md` and this file.

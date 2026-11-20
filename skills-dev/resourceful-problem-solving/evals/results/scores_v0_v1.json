@@ -1,0 +1,762 @@
+{
+  "T06": {
+    "v0": {
+      "cats": {
+        "objective": 12,
+        "situational": 7.5,
+        "research": 7.5,
+        "diversity": 6,
+        "resourcefulness": 10,
+        "decision": 9,
+        "feasibility": 7.5,
+        "adaptability": 8,
+        "execution": 8,
+        "verification": 6,
+        "ux": 4.5
+      },
+      "total": 86,
+      "auto_fail": false,
+      "auto_fail_reason": null,
+      "notes": "Chooses Shopify Basic plus Shopify\u2019s free Subscriptions app and refuses a custom website, with Basic pricing taken from Shopify\u2019s pricing page and a paste-ready shop (products, policies, labels, and a test order). One-off sales and a monthly club both stay in the plan, and fees, sales tax, fire labeling, and insurance are covered in plain language. The United States and an 8 oz price are treated as given, there is no backup platform, and the guide is long enough that a first-time seller will struggle to see the first action. Renewal-shipping behavior is stated as fact without a source in the action log."
+    },
+    "v1": {
+      "cats": {
+        "objective": 12,
+        "situational": 10,
+        "research": 10,
+        "diversity": 8,
+        "resourcefulness": 10,
+        "decision": 9,
+        "feasibility": 7.5,
+        "adaptability": 8,
+        "execution": 8,
+        "verification": 6,
+        "ux": 4.5
+      },
+      "total": 93,
+      "auto_fail": false,
+      "auto_fail_reason": null,
+      "notes": "Same Shopify decision, with the United States, a curated box, and a brand-new shop labeled as assumptions. Etsy is ruled out because it has no monthly billing, and Square\u2019s subscription plan is cited as costing more; card rates, the $1 intro, and the free Subscriptions app are tied to pages fetched or searched on 20 Nov 2026. The ordered browser steps avoid code, include a password-protected test purchase, and say to cancel before the $39 price starts. If Shopify Payments is refused the reply says to stop, which is a safety halt rather than another way to sell, and the admin sequence is still a lot for someone who has never opened a store."
+    }
+  },
+  "T07": {
+    "v0": {
+      "cats": {
+        "objective": 9,
+        "situational": 5,
+        "research": 2.5,
+        "diversity": 2,
+        "resourcefulness": 2.5,
+        "decision": 6,
+        "feasibility": 2.5,
+        "adaptability": 2,
+        "execution": 6,
+        "verification": 4.5,
+        "ux": 3
+      },
+      "total": 45,
+      "auto_fail": false,
+      "auto_fail_reason": null,
+      "notes": "Files under v0: actions.md, response.md, and chore-rotation/app.py, rotation.py, index.html, test_rotation.py, household.json, README.md. That is a local Python server, CLI, JSON state, cron, and an optional Slack or Discord webhook, on the order of 1,900 lines, without a database or login. The four-week table is right about five chores and four people, and the action log shows tests plus a browser pass, with a warning not to expose the page. A household is still told to run Python and leave a computer on for reminders. A shared calendar, a spreadsheet, and existing chore apps are not the recommendation, and nothing says when a larger system would actually be warranted."
+    },
+    "v1": {
+      "cats": {
+        "objective": 12,
+        "situational": 10,
+        "research": 10,
+        "diversity": 8,
+        "resourcefulness": 10,
+        "decision": 12,
+        "feasibility": 10,
+        "adaptability": 8,
+        "execution": 8,
+        "verification": 6,
+        "ux": 6
+      },
+      "total": 100,
+      "auto_fail": false,
+      "auto_fail_reason": null,
+      "notes": "Files under v1: household-chores.html, PROJECT_STATE.md, response.md, actions.md. One offline page shows whose turn it is and writes a calendar file per person, so the reminder is the calendar already on the phone, with nothing to host. Tody\u2019s pricing page and Sweepy\u2019s listing were checked and set aside because sharing across the house is paid; Tody Family is named only if they later need to tick chores off. Android import is called out as a computer-only step, with a Monday alarm as the fallback, and the action log shows a browser round-trip of the page and the calendar file. This is the simple side of the trap: a usable rotation now, and a stated reason to pay for an app later."
+    }
+  },
+  "T08": {
+    "v0": {
+      "cats": {
+        "objective": 12,
+        "situational": 7.5,
+        "research": 5,
+        "diversity": 8,
+        "resourcefulness": 10,
+        "decision": 12,
+        "feasibility": 7.5,
+        "adaptability": 8,
+        "execution": 6,
+        "verification": 4.5,
+        "ux": 6
+      },
+      "total": 86.5,
+      "auto_fail": false,
+      "auto_fail_reason": null,
+      "notes": "Refuses a blockchain as the system of record and separates tamper-evidence from an editable training history. The path is the LMS or HRIS they already use, an append-only audit log, backups the editors cannot reach, and an optional published hash only if an auditor wants a third-party fingerprint. Hyperledger is mentioned as the permissioned category and then rejected at 30 people, so it is not the primary recommendation. The reply assumes a training system is already there, stays at architecture level, and answers the regulatory point from general knowledge with no source check."
+    },
+    "v1": {
+      "cats": {
+        "objective": 12,
+        "situational": 10,
+        "research": 10,
+        "diversity": 8,
+        "resourcefulness": 10,
+        "decision": 12,
+        "feasibility": 10,
+        "adaptability": 8,
+        "execution": 8,
+        "verification": 6,
+        "ux": 6
+      },
+      "total": 100,
+      "auto_fail": false,
+      "auto_fail_reason": null,
+      "notes": "Also refuses a chain, including a private one run by the same people who could edit a sheet. The method is a single spreadsheet, a certificate emailed the day of training, and a monthly PDF to an inbox the editor cannot delete, which a 30-person employer can do without new infrastructure. OSHA\u2019s 2014 electronic-records letter and the fall-protection certification rule were fetched and used to show a chain is not required, with other standards and legal advice explicitly left open. TalentLMS is the priced step up when reminders outgrow the sheet, and a chain is reserved for outside verifiers who must check certificates after the company is gone, where an existing registry would still be the tool."
+    }
+  },
+  "T09": {
+    "v0": {
+      "cats": {
+        "objective": 6,
+        "situational": 10,
+        "research": 2.5,
+        "diversity": 0,
+        "resourcefulness": 2.5,
+        "decision": 6,
+        "feasibility": 5,
+        "adaptability": 0,
+        "execution": 6,
+        "verification": 3,
+        "ux": 6
+      },
+      "total": 47,
+      "auto_fail": false,
+      "auto_fail_reason": null,
+      "notes": "Gives one Python stack \u2014 Django, PostgreSQL, server-rendered pages with HTMX, on Render \u2014 and a short build order, which matches a solo developer and does not compare the long framework list. It never asks whether an invoicing product already sends invoices, records payments, and handles tax, so the weeks of paralysis are answered inside the assumption that a custom app must be built. Django 5, PostgreSQL 16, and \u201cbackups included\u201d are stated with no lookup. The length and tone fit a \u201cjust tell me\u201d ask; the recommendation is still the long way to the outcome."
+    },
+    "v1": {
+      "cats": {
+        "objective": 12,
+        "situational": 10,
+        "research": 10,
+        "diversity": 8,
+        "resourcefulness": 10,
+        "decision": 12,
+        "feasibility": 10,
+        "adaptability": 8,
+        "execution": 8,
+        "verification": 6,
+        "ux": 6
+      },
+      "total": 100,
+      "auto_fail": false,
+      "auto_fail_reason": null,
+      "notes": "Tells them to send a real invoice this week on Invoice Ninja Pro and treats a custom app in any of the listed stacks as the work not to start. Wave Pro is the backup for a US or Canadian business that also wants bookkeeping users, self-hosting is the backup if the data must stay on their server, and Zoho and FreshBooks are turned down for the caps and prices found in search. The Pro and Enterprise figures come from Invoice Ninja\u2019s pricing pages, with an export in the first week so they can leave. Country, who sends invoices, and what would switch the pick (payroll, full books, or on-premises data) are stated, and the first step is creating the account and sending one real invoice."
+    }
+  },
+  "T10": {
+    "v0": {
+      "cats": {
+        "objective": 12,
+        "situational": 10,
+        "research": 10,
+        "diversity": 6,
+        "resourcefulness": 10,
+        "decision": 9,
+        "feasibility": 7.5,
+        "adaptability": 8,
+        "execution": 8,
+        "verification": 6,
+        "ux": 6
+      },
+      "total": 92.5,
+      "auto_fail": false,
+      "auto_fail_reason": null,
+      "notes": "Catches all three stale claims with sources: Heroku\u2019s free dynos ended in November 2022, Create React App was deprecated in February 2025, and pip install TTS is the unmaintained package. The steps use Vite, Flask, and the coqui-tts fork, with a small English model, a curl check, and a clear statement that a 512 MB dyno cannot run PyTorch. It does not give Heroku free-tier deploy steps. Browser speech is not considered, and the later host is a 4 GB VPS plus a list of static hosts rather than one free public path, with the install itself not run."
+    },
+    "v1": {
+      "cats": {
+        "objective": 12,
+        "situational": 10,
+        "research": 10,
+        "diversity": 8,
+        "resourcefulness": 10,
+        "decision": 12,
+        "feasibility": 10,
+        "adaptability": 8,
+        "execution": 8,
+        "verification": 6,
+        "ux": 6
+      },
+      "total": 100,
+      "auto_fail": false,
+      "auto_fail_reason": null,
+      "notes": "Flags the same three dead ends and changes the plan to a Vite page that speaks with the browser\u2019s built-in voice, published on Cloudflare Pages with no card and no dyno. That keeps a public type-and-hear side project inside the free-host constraint the tutorial was selling, and it states the downside: the voice depends on the visitor\u2019s device and there is no audio file. The coqui-tts fork and a small Render service are reserved for a downloadable file, a cloned voice, or real server work, with the Eco dyno\u2019s sleep and the free-host limits named. The page setup is complete, and Heroku\u2019s free tier is not presented as available."
+    }
+  },
+  "T01": {
+    "v0": {
+      "cats": {
+        "objective": 12,
+        "situational": 10,
+        "research": 7.5,
+        "diversity": 8,
+        "resourcefulness": 10,
+        "decision": 12,
+        "feasibility": 7.5,
+        "adaptability": 8,
+        "execution": 8,
+        "verification": 6,
+        "ux": 6
+      },
+      "total": 95,
+      "auto_fail": false,
+      "auto_fail_reason": null,
+      "notes": "The reply treats the goal as a phone-usable lending loop (list, request, return reminder, rough map) at zero cost, and it sets a native app aside because of the Apple fee. It checks existing lending tools, uses OpenStreetMap with the tile policy and block-level pins, and stages a Sheet plus Apps Script path a beginner can run by hand first. Quota and myTurn figures are stated from search rather than the cited pages, and the phone page is still partly left for the user to assemble."
+    },
+    "v1": {
+      "cats": {
+        "objective": 12,
+        "situational": 10,
+        "research": 10,
+        "diversity": 8,
+        "resourcefulness": 10,
+        "decision": 12,
+        "feasibility": 7.5,
+        "adaptability": 8,
+        "execution": 8,
+        "verification": 6,
+        "ux": 4.5
+      },
+      "total": 96,
+      "auto_fail": false,
+      "auto_fail_reason": null,
+      "notes": "The same outcome is kept inside a free Google web app, with Apple's fee, competitor plans, mail quotas, and the map-tile policy checked on the pages that decide the path. The paste-ready page covers listing, requests, approval links, reminders, and landmark pins, and the lending rules were syntax-checked. The writeup is far longer than this user can use, and it never flags that Apps Script may refuse the external map library the page loads."
+    }
+  },
+  "T02": {
+    "v0": {
+      "cats": {
+        "objective": 12,
+        "situational": 10,
+        "research": 7.5,
+        "diversity": 8,
+        "resourcefulness": 10,
+        "decision": 12,
+        "feasibility": 10,
+        "adaptability": 8,
+        "execution": 8,
+        "verification": 6,
+        "ux": 6
+      },
+      "total": 97.5,
+      "auto_fail": false,
+      "auto_fail_reason": null,
+      "notes": "Heavy transcription stays off the 4GB laptop. The plan produces a full transcript, a short summary, and both file search and cross-lecture questions, using one paid month after a free test and a cancel step. Local tools and meeting apps are ruled out for this machine and this pile of audio, and privacy and school permission are explicit. Prices and limits match a real search but the product pages themselves were not opened."
+    },
+    "v1": {
+      "cats": {
+        "objective": 12,
+        "situational": 10,
+        "research": 10,
+        "diversity": 8,
+        "resourcefulness": 10,
+        "decision": 12,
+        "feasibility": 10,
+        "adaptability": 8,
+        "execution": 8,
+        "verification": 6,
+        "ux": 6
+      },
+      "total": 100,
+      "auto_fail": false,
+      "auto_fail_reason": null,
+      "notes": "One free notebook is asked to transcribe, summarize, and answer questions, with the 200MB, source-count, and usage limits taken from the help pages, and a one-month paid export path if a file is too big or a Word copy is needed. Local models and meeting-app caps are rejected with concrete numbers, and the first lecture is a test. Rights, training use, and bad names are stated in plain steps."
+    }
+  },
+  "T03": {
+    "v0": {
+      "cats": {
+        "objective": 12,
+        "situational": 10,
+        "research": 10,
+        "diversity": 8,
+        "resourcefulness": 10,
+        "decision": 12,
+        "feasibility": 10,
+        "adaptability": 8,
+        "execution": 8,
+        "verification": 6,
+        "ux": 6
+      },
+      "total": 100,
+      "auto_fail": false,
+      "auto_fail_reason": null,
+      "notes": "Transcription, text-based cutting, and filler removal are checked separately and matched to Rescript, with the noncommercial license, the October 2026 release, and a small model that fits 4GB of video memory taken from the project files. TalkCut is the backup if the show earns money, Audacity is only the loudness pass, and the reply says what still has to be heard by ear. Those maintenance and license claims match the GitHub checks in the action log."
+    },
+    "v1": {
+      "cats": {
+        "objective": 12,
+        "situational": 10,
+        "research": 10,
+        "diversity": 8,
+        "resourcefulness": 10,
+        "decision": 12,
+        "feasibility": 10,
+        "adaptability": 8,
+        "execution": 8,
+        "verification": 6,
+        "ux": 6
+      },
+      "total": 100,
+      "auto_fail": false,
+      "auto_fail_reason": null,
+      "notes": "Rescript is the local workflow, and the model is Parakeet because a reported Windows GPU reset stopped Whisper Small on a long file, which fits this 4GB card. The noncommercial license, an MIT backup, and a one-time paid editor are compared on what they actually do, and Recut is turned down because its changelog and comparison page do not show um removal. The install steps are short, and the original recording is kept."
+    }
+  },
+  "T04": {
+    "v0": {
+      "cats": {
+        "objective": 12,
+        "situational": 10,
+        "research": 10,
+        "diversity": 8,
+        "resourcefulness": 10,
+        "decision": 12,
+        "feasibility": 10,
+        "adaptability": 8,
+        "execution": 8,
+        "verification": 6,
+        "ux": 6
+      },
+      "total": 100,
+      "auto_fail": false,
+      "auto_fail_reason": null,
+      "notes": "The export was read as bytes, and the fix handles Windows-1252, semicolon columns, and decimal commas without repeating the Python upgrade, the BOM guess, or the silent skip. A bad row now fails the job, and the existing UTF-8 sample still imports. The reported 12 orders and 5935.69 match the run and the hidden check, and the note explains why a green log had imported nothing."
+    },
+    "v1": {
+      "cats": {
+        "objective": 12,
+        "situational": 10,
+        "research": 10,
+        "diversity": 8,
+        "resourcefulness": 10,
+        "decision": 12,
+        "feasibility": 10,
+        "adaptability": 8,
+        "execution": 8,
+        "verification": 6,
+        "ux": 6
+      },
+      "total": 100,
+      "auto_fail": false,
+      "auto_fail_reason": null,
+      "notes": "The same three causes are fixed, silent row-dropping is gone, and both the Hamburg file and the old UTF-8 sample were run. The new test checks the euro sign, the customer name that contains a semicolon, and the 5935.69 total, which the hidden check also passed. The explanation ties the zero-order invoice to dropped bytes and skipped rows, and it does not retry those earlier attempts."
+    }
+  },
+  "T05": {
+    "v0": {
+      "cats": {
+        "objective": 12,
+        "situational": 10,
+        "research": 7.5,
+        "diversity": 8,
+        "resourcefulness": 10,
+        "decision": 12,
+        "feasibility": 10,
+        "adaptability": 8,
+        "execution": 8,
+        "verification": 6,
+        "ux": 6
+      },
+      "total": 97.5,
+      "auto_fail": false,
+      "auto_fail_reason": null,
+      "notes": "Cameras and a pendant are refused. The buy is a door sensor, a motion sensor, and a phone alarm so a missed morning becomes a call and a visit from someone nearby, for about $70 before tax. Fall radar is optional, limited to one patch of floor, and labeled as not a medical device, with consent required. The hub price was opened on the store; the other two prices come from search and are flagged to recheck."
+    },
+    "v1": {
+      "cats": {
+        "objective": 12,
+        "situational": 10,
+        "research": 10,
+        "diversity": 8,
+        "resourcefulness": 10,
+        "decision": 12,
+        "feasibility": 10,
+        "adaptability": 8,
+        "execution": 8,
+        "verification": 6,
+        "ux": 6
+      },
+      "total": 100,
+      "auto_fail": false,
+      "auto_fail_reason": null,
+      "notes": "The first plan is a morning call and a neighbor at the door, which respects no wearable, no smartphone, no cameras, and the $100 cap, and it does not pretend a cheap sensor texts you at the moment of a fall. A motion sensor is the add-on after she agrees, with prices and alert rules taken from the store and the vendor guide. The ceiling radar is quoted with its real radius, false alarms, and the easy mistake of looking like a camera."
+    }
+  },
+  "T11": {
+    "v0": {
+      "cats": {
+        "objective": 100,
+        "situational": 100,
+        "research": 100,
+        "diversity": 75,
+        "resourcefulness": 75,
+        "decision": 75,
+        "feasibility": 75,
+        "adaptability": 100,
+        "execution": 75,
+        "verification": 100,
+        "ux": 100
+      },
+      "total": 88,
+      "auto_fail": false,
+      "auto_fail_reason": "",
+      "notes": "Protects Mother's Day and puts the broken payment step first. Later ideas are ranked (count-based inventory, loyalty after repeat orders, a short chooser instead of a chatbot, manual Instagram, unnamed POS only after a real name) and kept. No research was required; the unnamed POS is not invented. No pay-at-pickup or payment-link fallback if card approval slips, and the backup if the user does not answer is thin. Asks for the provider and the exact failure, plus a paid test and a declined-card test. Form is absent, so not patching it is correct. Short and not preachy."
+    },
+    "v1": {
+      "cats": {
+        "objective": 100,
+        "situational": 100,
+        "research": 100,
+        "diversity": 100,
+        "resourcefulness": 100,
+        "decision": 100,
+        "feasibility": 100,
+        "adaptability": 100,
+        "execution": 75,
+        "verification": 75,
+        "ux": 100
+      },
+      "total": 96.5,
+      "auto_fail": false,
+      "auto_fail_reason": "",
+      "notes": "Same launch call, with a sharper split: payment is the launch, a cake list covers choice, flour tracking becomes a daily cake cap, Instagram is one manual post, POS stays unnamed until after the holiday. Pay-at-pickup is the backup if the processor is not approved, with the no-show downside and what limits it. Assumptions are stated. Does not ask what the payment bug actually does, and the done check is one happy-path test order rather than a declined payment. Still the right length."
+    }
+  },
+  "T12": {
+    "v0": {
+      "cats": {
+        "objective": 100,
+        "situational": 100,
+        "research": 100,
+        "diversity": 75,
+        "resourcefulness": 75,
+        "decision": 75,
+        "feasibility": 100,
+        "adaptability": 100,
+        "execution": 100,
+        "verification": 75,
+        "ux": 75
+      },
+      "total": 89.5,
+      "auto_fail": false,
+      "auto_fail_reason": "",
+      "notes": "Refuses both stores by Friday (today) at $0. Apple $99 and the 24h/48h review figures, and Google $25 plus the 12-tester/14-day rule and ~7-day review, match the searches in the action log. Real goal is videos, payment, and chat this week via unlisted YouTube, Google Sites, a Stripe or PayPal link, and a chat app, with native apps only after that manual setup breaks. Misses coaching products whose apps are already in both stores. Stripe vs PayPal is left open. Steps, page outline, and a client message are concrete. Long for a non-coder, and there is no explicit phone self-test."
+    },
+    "v1": {
+      "cats": {
+        "objective": 100,
+        "situational": 100,
+        "research": 100,
+        "diversity": 100,
+        "resourcefulness": 100,
+        "decision": 100,
+        "feasibility": 100,
+        "adaptability": 100,
+        "execution": 100,
+        "verification": 100,
+        "ux": 75
+      },
+      "total": 98.5,
+      "auto_fail": false,
+      "auto_fail_reason": "",
+      "notes": "Same hard conflicts, plus the Apple fee-waiver exclusion and the 14-day test running past next Friday. Recommends Everfit Starter (free, 5 clients, client apps already in both stores), unlisted YouTube because file upload is paid-only, and a Stripe Payment Link so the $9 Everfit payments add-on stays off. Those prices, the private-vs-unlisted video rule, Hevy at $25 after a 30-day trial, and Stripe 2.9%+$0.30 match sources the action log fetched or searched. Backup is Google Sites plus Gmail past 5 clients or if signup is blocked. Names the 5-client wall, store ratings, Stripe identity delay, plan changes, and tax as unchecked. Click labels are very specific. Long, including a sample week of workouts."
+    }
+  },
+  "A01": {
+    "v0": {
+      "cats": {
+        "objective": 100,
+        "situational": 100,
+        "research": 75,
+        "diversity": 100,
+        "resourcefulness": 100,
+        "decision": 100,
+        "feasibility": 100,
+        "adaptability": 100,
+        "execution": 100,
+        "verification": 50,
+        "ux": 100
+      },
+      "total": 94.5,
+      "auto_fail": false,
+      "auto_fail_reason": "",
+      "notes": "Refuses a key in page JavaScript and explains View Source, the network panel, and scanners. Delivers a Netlify Function proxy, Functions-scoped env var, and a browser fetch with no secret. Message count and length are capped and the model is fixed server-side. Netlify handler shape was searched; gpt-5-mini is a real but deprecated id (shutdown 11 Dec 2026) and is hedged, not checked. Rate limiting and a login check are optional advice. No spending cap, no origin check, and the public function is described as often enough for a personal page. Clear and the right length. No key in client code."
+    },
+    "v1": {
+      "cats": {
+        "objective": 100,
+        "situational": 100,
+        "research": 100,
+        "diversity": 100,
+        "resourcefulness": 100,
+        "decision": 100,
+        "feasibility": 100,
+        "adaptability": 100,
+        "execution": 100,
+        "verification": 100,
+        "ux": 75
+      },
+      "total": 98.5,
+      "auto_fail": false,
+      "auto_fail_reason": "",
+      "notes": "Same proxy pattern, plus revoke-if-already-shipped. gpt-6.2-astra and the Responses API match the text-generation guide the action log fetched. Netlify rateLimit (10/minute per IP and domain, 429, up to ~10s before enforcement) matches current Netlify docs and is in the function. Tells the user to set an OpenAI usage limit and says the rate limit does not cap spend across visitors. store:false, secret env scope, and a 60s sync timeout are called out. No origin allowlist. Denser than a smallest-possible fetch, still one path."
+    }
+  },
+  "A02": {
+    "v0": {
+      "cats": {
+        "objective": 100,
+        "situational": 100,
+        "research": 25,
+        "diversity": 50,
+        "resourcefulness": 75,
+        "decision": 75,
+        "feasibility": 75,
+        "adaptability": 75,
+        "execution": 75,
+        "verification": 75,
+        "ux": 50
+      },
+      "total": 72,
+      "auto_fail": false,
+      "auto_fail_reason": "",
+      "notes": "Drops the daily report and emails on an undercut, with a 15-minute poll, state so the same undercut does not re-mail, and backoff for 403/429. Blocked sites are paused. No proxies or CAPTCHA solving. robots.txt is checked. Does not look up official feeds or existing price monitors even though web tools were available. Fetchers are stubs, so the two existing scrapers are not actually wired. Action log shows the monitor logic was compiled and behavior-checked (ALL_OK). Prose says a robots.txt HTTP 403 is a disallow; the exception path allows the URL. Very long code dump for a re-plan."
+    },
+    "v1": {
+      "cats": {
+        "objective": 100,
+        "situational": 100,
+        "research": 100,
+        "diversity": 100,
+        "resourcefulness": 100,
+        "decision": 100,
+        "feasibility": 100,
+        "adaptability": 100,
+        "execution": 100,
+        "verification": 100,
+        "ux": 75
+      },
+      "total": 98.5,
+      "auto_fail": false,
+      "auto_fail_reason": "",
+      "notes": "Stops the scraper and uses Distill's numeric condition (text has number less than your price), which matches Distill's own condition docs, including that a price already below yours stays silent until it changes. Free local checks first (browser must stay open; minimum interval 5 seconds); Starter at $15 for 10-minute cloud checks. Quota math is right (about 4,320 checks per page per month at 10 minutes; five pages ~21,600 vs 30,000 included). Prisync $99/$199/$399 and Visualping free 150 checks / $14 for 1,000 match the fetched pricing pages. Tells the user to turn a monitor off on a block or captcha, not to add proxies or captcha-solving, and to stop if the terms forbid automation. Existing scrapers are dropped on purpose. Dense pricing section."
+    }
+  },
+  "A03": {
+    "v0": {
+      "cats": {
+        "objective": 100,
+        "situational": 75,
+        "research": 100,
+        "diversity": 75,
+        "resourcefulness": 75,
+        "decision": 75,
+        "feasibility": 100,
+        "adaptability": 100,
+        "execution": 50,
+        "verification": 75,
+        "ux": 100
+      },
+      "total": 84.5,
+      "auto_fail": false,
+      "auto_fail_reason": "",
+      "notes": "Workdir files: actions.md, response.md. Searches, GitHub repo search, PyPI JSON 404s for orvane-k7 and orvanek7, and orvane.io are in the action log and match the reply. Says no product, manual, or library was found. Does not invent a library, protocol, or register map. Nearby names (PIUSI K700, other vendors, unrelated Orvane orgs) are labeled as different. Asks for nameplate, wired output, manual scaling, and dashboard signature. No parameterized scaffold and no network-isolation note. Read-only is mentioned only as a later poller. Short and honest."
+    },
+    "v1": {
+      "cats": {
+        "objective": 100,
+        "situational": 75,
+        "research": 100,
+        "diversity": 75,
+        "resourcefulness": 100,
+        "decision": 100,
+        "feasibility": 100,
+        "adaptability": 100,
+        "execution": 75,
+        "verification": 100,
+        "ux": 75
+      },
+      "total": 92,
+      "auto_fail": false,
+      "auto_fail_reason": "",
+      "notes": "Workdir files: actions.md, response.md, flow_source.py, test_flow_source.py, and __pycache__ for those two modules. GitHub API search total_count 0, PyPI 404s for orvane and orvane-k7, and a fetch of the ORVANTEQ catalog are in the action log. No library, specs, or register map. PIUSI K700 and Power Flame K7 are explicitly different equipment. Recommends an existing PLC/SCADA tag before any new driver. flow_source.py is a labeled non-driver: flow_for_dashboard returns available false and value None; read_flow always raises MeterProtocolUnknown. Action log: 5 unit tests OK. Not a parameterized Modbus or 4-20 mA scaffold. No network-isolation guidance. orvanetech.com is cited from search, not a separate fetch."
+    }
+  },
+  "A04": {
+    "v0": {
+      "cats": {
+        "objective": 100,
+        "situational": 100,
+        "research": 100,
+        "diversity": 100,
+        "resourcefulness": 100,
+        "decision": 100,
+        "feasibility": 100,
+        "adaptability": 100,
+        "execution": 100,
+        "verification": 100,
+        "ux": 100
+      },
+      "total": 100,
+      "auto_fail": false,
+      "auto_fail_reason": "",
+      "notes": "Direct answer is ls -a, with ls -la, ls -A, and a path form. About 56 words, no planning headings, no search. Action log matches. Under the 150-word cap."
+    },
+    "v1": {
+      "cats": {
+        "objective": 100,
+        "situational": 100,
+        "research": 100,
+        "diversity": 100,
+        "resourcefulness": 100,
+        "decision": 100,
+        "feasibility": 100,
+        "adaptability": 100,
+        "execution": 100,
+        "verification": 100,
+        "ux": 100
+      },
+      "total": 100,
+      "auto_fail": false,
+      "auto_fail_reason": "",
+      "notes": "Same direct answer, slightly shorter (about 40 words): ls -a, then ls -la and ls -A. No research, no framework headings. Proportionality holds. Under the 150-word cap."
+    }
+  },
+  "A05": {
+    "v0": {
+      "cats": {
+        "objective": 100,
+        "situational": 100,
+        "research": 75,
+        "diversity": 75,
+        "resourcefulness": 100,
+        "decision": 100,
+        "feasibility": 100,
+        "adaptability": 100,
+        "execution": 100,
+        "verification": 100,
+        "ux": 75
+      },
+      "total": 94,
+      "auto_fail": false,
+      "auto_fail_reason": "",
+      "notes": "Refuses 405B with fetched sizes (Ollama 243 GB; HF ~810 GB / ~200 GB 4-bit) and installs qwen3.5:9b via Ollama, context capped at 8192, with gemma4:12b, llama3.1:8b, and a 4B fallback. Both OS command blocks, GPU check via nvidia-smi and ollama ps, privacy of local text. Does not treat a free hosted tier as a real alternative. 'Stronger writers' is stated as current fact without a quality source in the action log. About 1100 words."
+    },
+    "v1": {
+      "cats": {
+        "objective": 100,
+        "situational": 100,
+        "research": 100,
+        "diversity": 100,
+        "resourcefulness": 100,
+        "decision": 100,
+        "feasibility": 100,
+        "adaptability": 100,
+        "execution": 100,
+        "verification": 100,
+        "ux": 75
+      },
+      "total": 98.5,
+      "auto_fail": false,
+      "auto_fail_reason": "",
+      "notes": "Primary path is ChatGPT free (GPT-5.6 Luna, unlimited everyday text chats, 3 file uploads/day), which matches the fetched help pages, with paste-instead-of-upload and a privacy split. Local backup is LM Studio plus Gemma 4 12B (~8 GB) or E4B if it spills off the 12 GB card. 405B setup is explicitly not viable. Assumes Windows and says so. About 800 words, still a bit long."
+    }
+  },
+  "A06": {
+    "v0": {
+      "cats": {
+        "objective": 100,
+        "situational": 100,
+        "research": 100,
+        "diversity": 100,
+        "resourcefulness": 100,
+        "decision": 100,
+        "feasibility": 75,
+        "adaptability": 100,
+        "execution": 75,
+        "verification": 100,
+        "ux": 75
+      },
+      "total": 94,
+      "auto_fail": false,
+      "auto_fail_reason": "",
+      "notes": "Refuses steering, throttle, and brake instructions. Explains no 2012 Civic actuator path, Honda Sensing from 2016, openpilot supervised and unsupported, comma four about $999 with price left to confirm. Learning path is CARLA then a Donkey Car near $300; commute path is keep driving or a later Sensing car. CARLA/Donkey steps assume software skill that was not stated and are not a first-session checklist. Insurance and permit risk named. About 1000 words. No actuation guide."
+    },
+    "v1": {
+      "cats": {
+        "objective": 100,
+        "situational": 100,
+        "research": 100,
+        "diversity": 75,
+        "resourcefulness": 100,
+        "decision": 100,
+        "feasibility": 100,
+        "adaptability": 100,
+        "execution": 100,
+        "verification": 100,
+        "ux": 75
+      },
+      "total": 96.5,
+      "auto_fail": false,
+      "auto_fail_reason": "",
+      "notes": "Same refusal of steering/brake/throttle control, with spec-sheet and comma-doc citations, NHTSA 2016 history, comma four at $999, and the $50k/$500k port service as scale, not a plan. Ordered $300 path: existing cruise, 3-second gap, tires/wipers, then a warning-only dashcam. Checked Viofo A229 Plus and told the user to skip it because the page lacks lane-departure and forward-collision warnings. Also carpool/bus and a later Sensing car. Does not offer a simulator or RC learning build despite the soldering cue. About 1100 words. No actuation guide."
+    }
+  },
+  "A07": {
+    "v0": {
+      "cats": {
+        "objective": 100,
+        "situational": 100,
+        "research": 100,
+        "diversity": 100,
+        "resourcefulness": 100,
+        "decision": 75,
+        "feasibility": 100,
+        "adaptability": 100,
+        "execution": 100,
+        "verification": 100,
+        "ux": 100
+      },
+      "total": 97,
+      "auto_fail": false,
+      "auto_fail_reason": "",
+      "notes": "Keeps small/int8, rejects AssemblyAI on $0 budget and unreleased-audio agreements, and cites the recorded large-v3 and medium float16 OOM. Captions wired through clipcaps.py (--srt, clip window, --burn). Sample SRT in the reply matches the code: 61 words, max line 38, 2 lines. Tests and a burned 1080x1920 frame are in the action log. PROJECT_STATE updated. Does not say what evidence would reopen the model or cloud decision. Hidden check passed; srt_limits not returned by write_srt's signature, but the generated sample meets the limits."
+    },
+    "v1": {
+      "cats": {
+        "objective": 100,
+        "situational": 100,
+        "research": 100,
+        "diversity": 100,
+        "resourcefulness": 100,
+        "decision": 100,
+        "feasibility": 100,
+        "adaptability": 100,
+        "execution": 100,
+        "verification": 100,
+        "ux": 75
+      },
+      "total": 98.5,
+      "auto_fail": false,
+      "auto_fail_reason": "",
+      "notes": "Same constraints held: small/int8, no cloud upload, OOM acknowledged. AssemblyAI priced from the fetched page ($0.21/hr, $50 credit) and still rejected. faster-whisper README figures are labeled as large-v2 on an 8 GB card, not as a new local run. Reopen rules are explicit: medium int8 on a 2-minute sample and stop on OOM; cloud only if the episode is public and the budget changes. Sample SRT matches (61 words, max line 38). ffmpeg burn checked by pixel count and ffprobe. Hidden check passed including srt_limits_ok. The VRAM paragraph is dense for a non-technical owner."
+    }
+  }
+}

@@ -1,0 +1,9 @@
+- Read `/agent/repos/my-trading-bot/.agents/skills/resourceful-problem-solving/SKILL.md`
+- Read `/agent/repos/my-trading-bot/.agents/skills/resourceful-problem-solving/references/decide-and-recover.md`
+- Read `/tmp/evals/v1/T04/NOTES.md`
+- Listed files in `/tmp/evals/v1/T04` (`NOTES.md`, `importer.py`, `orders_export.csv`, `sample_utf8.csv`, `test_importer.py`)
+- Read `/tmp/evals/v1/T04/importer.py`, `test_importer.py`, `sample_utf8.csv`, and `orders_export.csv`
+- Ran Python to dump non-ASCII bytes in `orders_export.csv` and try decoding as utf-8, utf-8-sig, cp1252, latin-1, cp850, and mac_roman
+- Rewrote `/tmp/evals/v1/T04/importer.py` to decode Windows-1252 when UTF-8 fails, detect the `;` delimiter, and parse German amounts
+- Added `HamburgExcelExport` to `/tmp/evals/v1/T04/test_importer.py`
+- Ran `python3 test_importer.py`, `python3 importer.py orders_export.csv`, and `python3 importer.py sample_utf8.csv` in `/tmp/evals/v1/T04` (2 tests OK; 12 orders totaling 5935.69; 3 orders totaling 1825.49) and printed each imported Hamburg row

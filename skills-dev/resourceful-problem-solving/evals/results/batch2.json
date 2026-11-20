@@ -1,0 +1,202 @@
+{
+  "T06": {
+    "v0": {
+      "cats": {
+        "objective": 12,
+        "situational": 7.5,
+        "research": 7.5,
+        "diversity": 6,
+        "resourcefulness": 10,
+        "decision": 9,
+        "feasibility": 7.5,
+        "adaptability": 8,
+        "execution": 8,
+        "verification": 6,
+        "ux": 4.5
+      },
+      "total": 86,
+      "auto_fail": false,
+      "auto_fail_reason": null,
+      "notes": "Chooses Shopify Basic plus Shopify’s free Subscriptions app and refuses a custom website, with Basic pricing taken from Shopify’s pricing page and a paste-ready shop (products, policies, labels, and a test order). One-off sales and a monthly club both stay in the plan, and fees, sales tax, fire labeling, and insurance are covered in plain language. The United States and an 8 oz price are treated as given, there is no backup platform, and the guide is long enough that a first-time seller will struggle to see the first action. Renewal-shipping behavior is stated as fact without a source in the action log."
+    },
+    "v1": {
+      "cats": {
+        "objective": 12,
+        "situational": 10,
+        "research": 10,
+        "diversity": 8,
+        "resourcefulness": 10,
+        "decision": 9,
+        "feasibility": 7.5,
+        "adaptability": 8,
+        "execution": 8,
+        "verification": 6,
+        "ux": 4.5
+      },
+      "total": 93,
+      "auto_fail": false,
+      "auto_fail_reason": null,
+      "notes": "Same Shopify decision, with the United States, a curated box, and a brand-new shop labeled as assumptions. Etsy is ruled out because it has no monthly billing, and Square’s subscription plan is cited as costing more; card rates, the $1 intro, and the free Subscriptions app are tied to pages fetched or searched on 20 Nov 2026. The ordered browser steps avoid code, include a password-protected test purchase, and say to cancel before the $39 price starts. If Shopify Payments is refused the reply says to stop, which is a safety halt rather than another way to sell, and the admin sequence is still a lot for someone who has never opened a store."
+    }
+  },
+  "T07": {
+    "v0": {
+      "cats": {
+        "objective": 9,
+        "situational": 5,
+        "research": 2.5,
+        "diversity": 2,
+        "resourcefulness": 2.5,
+        "decision": 6,
+        "feasibility": 2.5,
+        "adaptability": 2,
+        "execution": 6,
+        "verification": 4.5,
+        "ux": 3
+      },
+      "total": 45,
+      "auto_fail": false,
+      "auto_fail_reason": null,
+      "notes": "Files under v0: actions.md, response.md, and chore-rotation/app.py, rotation.py, index.html, test_rotation.py, household.json, README.md. That is a local Python server, CLI, JSON state, cron, and an optional Slack or Discord webhook, on the order of 1,900 lines, without a database or login. The four-week table is right about five chores and four people, and the action log shows tests plus a browser pass, with a warning not to expose the page. A household is still told to run Python and leave a computer on for reminders. A shared calendar, a spreadsheet, and existing chore apps are not the recommendation, and nothing says when a larger system would actually be warranted."
+    },
+    "v1": {
+      "cats": {
+        "objective": 12,
+        "situational": 10,
+        "research": 10,
+        "diversity": 8,
+        "resourcefulness": 10,
+        "decision": 12,
+        "feasibility": 10,
+        "adaptability": 8,
+        "execution": 8,
+        "verification": 6,
+        "ux": 6
+      },
+      "total": 100,
+      "auto_fail": false,
+      "auto_fail_reason": null,
+      "notes": "Files under v1: household-chores.html, PROJECT_STATE.md, response.md, actions.md. One offline page shows whose turn it is and writes a calendar file per person, so the reminder is the calendar already on the phone, with nothing to host. Tody’s pricing page and Sweepy’s listing were checked and set aside because sharing across the house is paid; Tody Family is named only if they later need to tick chores off. Android import is called out as a computer-only step, with a Monday alarm as the fallback, and the action log shows a browser round-trip of the page and the calendar file. This is the simple side of the trap: a usable rotation now, and a stated reason to pay for an app later."
+    }
+  },
+  "T08": {
+    "v0": {
+      "cats": {
+        "objective": 12,
+        "situational": 7.5,
+        "research": 5,
+        "diversity": 8,
+        "resourcefulness": 10,
+        "decision": 12,
+        "feasibility": 7.5,
+        "adaptability": 8,
+        "execution": 6,
+        "verification": 4.5,
+        "ux": 6
+      },
+      "total": 86.5,
+      "auto_fail": false,
+      "auto_fail_reason": null,
+      "notes": "Refuses a blockchain as the system of record and separates tamper-evidence from an editable training history. The path is the LMS or HRIS they already use, an append-only audit log, backups the editors cannot reach, and an optional published hash only if an auditor wants a third-party fingerprint. Hyperledger is mentioned as the permissioned category and then rejected at 30 people, so it is not the primary recommendation. The reply assumes a training system is already there, stays at architecture level, and answers the regulatory point from general knowledge with no source check."
+    },
+    "v1": {
+      "cats": {
+        "objective": 12,
+        "situational": 10,
+        "research": 10,
+        "diversity": 8,
+        "resourcefulness": 10,
+        "decision": 12,
+        "feasibility": 10,
+        "adaptability": 8,
+        "execution": 8,
+        "verification": 6,
+        "ux": 6
+      },
+      "total": 100,
+      "auto_fail": false,
+      "auto_fail_reason": null,
+      "notes": "Also refuses a chain, including a private one run by the same people who could edit a sheet. The method is a single spreadsheet, a certificate emailed the day of training, and a monthly PDF to an inbox the editor cannot delete, which a 30-person employer can do without new infrastructure. OSHA’s 2014 electronic-records letter and the fall-protection certification rule were fetched and used to show a chain is not required, with other standards and legal advice explicitly left open. TalentLMS is the priced step up when reminders outgrow the sheet, and a chain is reserved for outside verifiers who must check certificates after the company is gone, where an existing registry would still be the tool."
+    }
+  },
+  "T09": {
+    "v0": {
+      "cats": {
+        "objective": 6,
+        "situational": 10,
+        "research": 2.5,
+        "diversity": 0,
+        "resourcefulness": 2.5,
+        "decision": 6,
+        "feasibility": 5,
+        "adaptability": 0,
+        "execution": 6,
+        "verification": 3,
+        "ux": 6
+      },
+      "total": 47,
+      "auto_fail": false,
+      "auto_fail_reason": null,
+      "notes": "Gives one Python stack — Django, PostgreSQL, server-rendered pages with HTMX, on Render — and a short build order, which matches a solo developer and does not compare the long framework list. It never asks whether an invoicing product already sends invoices, records payments, and handles tax, so the weeks of paralysis are answered inside the assumption that a custom app must be built. Django 5, PostgreSQL 16, and “backups included” are stated with no lookup. The length and tone fit a “just tell me” ask; the recommendation is still the long way to the outcome."
+    },
+    "v1": {
+      "cats": {
+        "objective": 12,
+        "situational": 10,
+        "research": 10,
+        "diversity": 8,
+        "resourcefulness": 10,
+        "decision": 12,
+        "feasibility": 10,
+        "adaptability": 8,
+        "execution": 8,
+        "verification": 6,
+        "ux": 6
+      },
+      "total": 100,
+      "auto_fail": false,
+      "auto_fail_reason": null,
+      "notes": "Tells them to send a real invoice this week on Invoice Ninja Pro and treats a custom app in any of the listed stacks as the work not to start. Wave Pro is the backup for a US or Canadian business that also wants bookkeeping users, self-hosting is the backup if the data must stay on their server, and Zoho and FreshBooks are turned down for the caps and prices found in search. The Pro and Enterprise figures come from Invoice Ninja’s pricing pages, with an export in the first week so they can leave. Country, who sends invoices, and what would switch the pick (payroll, full books, or on-premises data) are stated, and the first step is creating the account and sending one real invoice."
+    }
+  },
+  "T10": {
+    "v0": {
+      "cats": {
+        "objective": 12,
+        "situational": 10,
+        "research": 10,
+        "diversity": 6,
+        "resourcefulness": 10,
+        "decision": 9,
+        "feasibility": 7.5,
+        "adaptability": 8,
+        "execution": 8,
+        "verification": 6,
+        "ux": 6
+      },
+      "total": 92.5,
+      "auto_fail": false,
+      "auto_fail_reason": null,
+      "notes": "Catches all three stale claims with sources: Heroku’s free dynos ended in November 2022, Create React App was deprecated in February 2025, and pip install TTS is the unmaintained package. The steps use Vite, Flask, and the coqui-tts fork, with a small English model, a curl check, and a clear statement that a 512 MB dyno cannot run PyTorch. It does not give Heroku free-tier deploy steps. Browser speech is not considered, and the later host is a 4 GB VPS plus a list of static hosts rather than one free public path, with the install itself not run."
+    },
+    "v1": {
+      "cats": {
+        "objective": 12,
+        "situational": 10,
+        "research": 10,
+        "diversity": 8,
+        "resourcefulness": 10,
+        "decision": 12,
+        "feasibility": 10,
+        "adaptability": 8,
+        "execution": 8,
+        "verification": 6,
+        "ux": 6
+      },
+      "total": 100,
+      "auto_fail": false,
+      "auto_fail_reason": null,
+      "notes": "Flags the same three dead ends and changes the plan to a Vite page that speaks with the browser’s built-in voice, published on Cloudflare Pages with no card and no dyno. That keeps a public type-and-hear side project inside the free-host constraint the tutorial was selling, and it states the downside: the voice depends on the visitor’s device and there is no audio file. The coqui-tts fork and a small Render service are reserved for a downloadable file, a cloned voice, or real server work, with the Eco dyno’s sleep and the free-host limits named. The page setup is complete, and Heroku’s free tier is not presented as available."
+    }
+  }
+}

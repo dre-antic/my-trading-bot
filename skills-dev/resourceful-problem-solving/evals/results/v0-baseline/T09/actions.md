@@ -1,0 +1,3 @@
+- Shell: `mkdir -p /tmp/evals/v0/T09` and `ls -la /tmp/evals/v0/T09` to confirm the output directory existed and was empty.
+- No web search, web fetch, or other tools. The stack recommendation is from the stated constraints (solo developer, Python, internal invoicing for 10 people).
+- Write: saved the user-facing answer to `/tmp/evals/v0/T09/response.md` and this log to `/tmp/evals/v0/T09/actions.md`.

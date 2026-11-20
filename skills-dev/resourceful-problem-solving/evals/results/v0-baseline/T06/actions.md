@@ -1,0 +1,5 @@
+- Shell: listed `/tmp/evals/v0/T06` (empty before the response files).
+- WebSearch: beginner platforms for selling handmade candles and running a subscription in 2026.
+- WebSearch: Shopify Subscriptions app pricing and limits in 2026.
+- WebSearch: US candle label, net-weight, fire-safety, and lead-wick requirements.
+- WebFetch: `https://www.shopify.com/pricing` for current Basic plan price, card rates, trial offer, and the listed tax-calculation fee.

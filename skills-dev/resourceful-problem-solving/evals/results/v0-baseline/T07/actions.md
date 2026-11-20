@@ -1,0 +1,4 @@
+- Shell: created `/tmp/evals/v0/T07`, confirmed 2026-11-16 is a Monday and that `America/New_York` loads, ran `python3 test_rotation.py`, and printed `week`, `cycle`, and `remind` for 2026-11-20.
+- Shell: started `python3 app.py serve` on port 8765, syntax-checked the page script with Node, and drove the page in headless Chrome (load, mark done, swap a chore, open the next week, then undo). Captured desktop and phone-sized screenshots, then removed the screenshots, the driver scripts, and the temporary Chrome profiles.
+- Write and StrReplace: added and edited `/tmp/evals/v0/T07/chore-rotation/` (`rotation.py`, `app.py`, `index.html`, `household.json`, `test_rotation.py`, `README.md`).
+- Read, Grep, and Glob: inspected the app source, `state.json`, and the screenshots inside `/tmp/evals/v0/T07`.

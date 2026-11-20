@@ -1,0 +1,9 @@
+- Read `/agent/repos/my-trading-bot/.agents/skills/resourceful-problem-solving/SKILL.md`
+- Read its references: `project-memory.md`, `decide-and-recover.md`, `constraints.md`, `discovery.md`
+- Listed `/tmp/evals/v1/A07` and read `PROJECT_STATE.md`, `clipcaps.py`, `transcribe.py`, `sample_segments.json`
+- Bright Data `search_engine` (AssemblyAI pricing; faster-whisper VRAM): both calls failed authentication
+- Web search: AssemblyAI speech-to-text pricing; faster-whisper large-v3 int8 VRAM; AssemblyAI upload and retention
+- Web fetch: GitHub blob of the faster-whisper README (empty), AssemblyAI pricing page, raw faster-whisper README
+- Wrote `captions.py`, updated `clipcaps.py` and `PROJECT_STATE.md`
+- Ran Python checks on `sample_segments.json` and edge cases (line length, line count, word order, clip times)
+- Ran `ffmpeg` to burn a short synthetic video and compared a frame with the black source (5750 lit pixels vs 0); `ffprobe` showed h264 video and aac audio; removed the test files

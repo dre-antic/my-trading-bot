@@ -1,0 +1,4 @@
+order_id,customer,amount,note
+2001,Acme Corp,1500.00,
+2002,"Jones, Smith & Co",249.99,repeat customer
+2003,Zoë Designs,75.50,

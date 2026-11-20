@@ -1,0 +1,202 @@
+{
+  "T01": {
+    "v0": {
+      "cats": {
+        "objective": 12,
+        "situational": 10,
+        "research": 7.5,
+        "diversity": 8,
+        "resourcefulness": 10,
+        "decision": 12,
+        "feasibility": 7.5,
+        "adaptability": 8,
+        "execution": 8,
+        "verification": 6,
+        "ux": 6
+      },
+      "total": 95,
+      "auto_fail": false,
+      "auto_fail_reason": null,
+      "notes": "The reply treats the goal as a phone-usable lending loop (list, request, return reminder, rough map) at zero cost, and it sets a native app aside because of the Apple fee. It checks existing lending tools, uses OpenStreetMap with the tile policy and block-level pins, and stages a Sheet plus Apps Script path a beginner can run by hand first. Quota and myTurn figures are stated from search rather than the cited pages, and the phone page is still partly left for the user to assemble."
+    },
+    "v1": {
+      "cats": {
+        "objective": 12,
+        "situational": 10,
+        "research": 10,
+        "diversity": 8,
+        "resourcefulness": 10,
+        "decision": 12,
+        "feasibility": 7.5,
+        "adaptability": 8,
+        "execution": 8,
+        "verification": 6,
+        "ux": 4.5
+      },
+      "total": 96,
+      "auto_fail": false,
+      "auto_fail_reason": null,
+      "notes": "The same outcome is kept inside a free Google web app, with Apple's fee, competitor plans, mail quotas, and the map-tile policy checked on the pages that decide the path. The paste-ready page covers listing, requests, approval links, reminders, and landmark pins, and the lending rules were syntax-checked. The writeup is far longer than this user can use, and it never flags that Apps Script may refuse the external map library the page loads."
+    }
+  },
+  "T02": {
+    "v0": {
+      "cats": {
+        "objective": 12,
+        "situational": 10,
+        "research": 7.5,
+        "diversity": 8,
+        "resourcefulness": 10,
+        "decision": 12,
+        "feasibility": 10,
+        "adaptability": 8,
+        "execution": 8,
+        "verification": 6,
+        "ux": 6
+      },
+      "total": 97.5,
+      "auto_fail": false,
+      "auto_fail_reason": null,
+      "notes": "Heavy transcription stays off the 4GB laptop. The plan produces a full transcript, a short summary, and both file search and cross-lecture questions, using one paid month after a free test and a cancel step. Local tools and meeting apps are ruled out for this machine and this pile of audio, and privacy and school permission are explicit. Prices and limits match a real search but the product pages themselves were not opened."
+    },
+    "v1": {
+      "cats": {
+        "objective": 12,
+        "situational": 10,
+        "research": 10,
+        "diversity": 8,
+        "resourcefulness": 10,
+        "decision": 12,
+        "feasibility": 10,
+        "adaptability": 8,
+        "execution": 8,
+        "verification": 6,
+        "ux": 6
+      },
+      "total": 100,
+      "auto_fail": false,
+      "auto_fail_reason": null,
+      "notes": "One free notebook is asked to transcribe, summarize, and answer questions, with the 200MB, source-count, and usage limits taken from the help pages, and a one-month paid export path if a file is too big or a Word copy is needed. Local models and meeting-app caps are rejected with concrete numbers, and the first lecture is a test. Rights, training use, and bad names are stated in plain steps."
+    }
+  },
+  "T03": {
+    "v0": {
+      "cats": {
+        "objective": 12,
+        "situational": 10,
+        "research": 10,
+        "diversity": 8,
+        "resourcefulness": 10,
+        "decision": 12,
+        "feasibility": 10,
+        "adaptability": 8,
+        "execution": 8,
+        "verification": 6,
+        "ux": 6
+      },
+      "total": 100,
+      "auto_fail": false,
+      "auto_fail_reason": null,
+      "notes": "Transcription, text-based cutting, and filler removal are checked separately and matched to Rescript, with the noncommercial license, the October 2026 release, and a small model that fits 4GB of video memory taken from the project files. TalkCut is the backup if the show earns money, Audacity is only the loudness pass, and the reply says what still has to be heard by ear. Those maintenance and license claims match the GitHub checks in the action log."
+    },
+    "v1": {
+      "cats": {
+        "objective": 12,
+        "situational": 10,
+        "research": 10,
+        "diversity": 8,
+        "resourcefulness": 10,
+        "decision": 12,
+        "feasibility": 10,
+        "adaptability": 8,
+        "execution": 8,
+        "verification": 6,
+        "ux": 6
+      },
+      "total": 100,
+      "auto_fail": false,
+      "auto_fail_reason": null,
+      "notes": "Rescript is the local workflow, and the model is Parakeet because a reported Windows GPU reset stopped Whisper Small on a long file, which fits this 4GB card. The noncommercial license, an MIT backup, and a one-time paid editor are compared on what they actually do, and Recut is turned down because its changelog and comparison page do not show um removal. The install steps are short, and the original recording is kept."
+    }
+  },
+  "T04": {
+    "v0": {
+      "cats": {
+        "objective": 12,
+        "situational": 10,
+        "research": 10,
+        "diversity": 8,
+        "resourcefulness": 10,
+        "decision": 12,
+        "feasibility": 10,
+        "adaptability": 8,
+        "execution": 8,
+        "verification": 6,
+        "ux": 6
+      },
+      "total": 100,
+      "auto_fail": false,
+      "auto_fail_reason": null,
+      "notes": "The export was read as bytes, and the fix handles Windows-1252, semicolon columns, and decimal commas without repeating the Python upgrade, the BOM guess, or the silent skip. A bad row now fails the job, and the existing UTF-8 sample still imports. The reported 12 orders and 5935.69 match the run and the hidden check, and the note explains why a green log had imported nothing."
+    },
+    "v1": {
+      "cats": {
+        "objective": 12,
+        "situational": 10,
+        "research": 10,
+        "diversity": 8,
+        "resourcefulness": 10,
+        "decision": 12,
+        "feasibility": 10,
+        "adaptability": 8,
+        "execution": 8,
+        "verification": 6,
+        "ux": 6
+      },
+      "total": 100,
+      "auto_fail": false,
+      "auto_fail_reason": null,
+      "notes": "The same three causes are fixed, silent row-dropping is gone, and both the Hamburg file and the old UTF-8 sample were run. The new test checks the euro sign, the customer name that contains a semicolon, and the 5935.69 total, which the hidden check also passed. The explanation ties the zero-order invoice to dropped bytes and skipped rows, and it does not retry those earlier attempts."
+    }
+  },
+  "T05": {
+    "v0": {
+      "cats": {
+        "objective": 12,
+        "situational": 10,
+        "research": 7.5,
+        "diversity": 8,
+        "resourcefulness": 10,
+        "decision": 12,
+        "feasibility": 10,
+        "adaptability": 8,
+        "execution": 8,
+        "verification": 6,
+        "ux": 6
+      },
+      "total": 97.5,
+      "auto_fail": false,
+      "auto_fail_reason": null,
+      "notes": "Cameras and a pendant are refused. The buy is a door sensor, a motion sensor, and a phone alarm so a missed morning becomes a call and a visit from someone nearby, for about $70 before tax. Fall radar is optional, limited to one patch of floor, and labeled as not a medical device, with consent required. The hub price was opened on the store; the other two prices come from search and are flagged to recheck."
+    },
+    "v1": {
+      "cats": {
+        "objective": 12,
+        "situational": 10,
+        "research": 10,
+        "diversity": 8,
+        "resourcefulness": 10,
+        "decision": 12,
+        "feasibility": 10,
+        "adaptability": 8,
+        "execution": 8,
+        "verification": 6,
+        "ux": 6
+      },
+      "total": 100,
+      "auto_fail": false,
+      "auto_fail_reason": null,
+      "notes": "The first plan is a morning call and a neighbor at the door, which respects no wearable, no smartphone, no cameras, and the $100 cap, and it does not pretend a cheap sensor texts you at the moment of a fall. A motion sensor is the add-on after she agrees, with prices and alert rules taken from the store and the vendor guide. The ceiling radar is quoted with its real radius, false alarms, and the easy mistake of looking like a camera."
+    }
+  }
+}

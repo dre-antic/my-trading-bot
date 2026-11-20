@@ -1,0 +1,13 @@
+order_id;customer;amount;note
+1001;Müller GmbH;1.234,56;Rabatt 5 €
+1002;Café Ñandú;89,90;
+1003;"Smith; Sons";2.000,00;Expresslieferung
+1004;Björk AB;15,00;
+1005;Señora Pérez;310,25;bezahlt
+1006;Ångström Labs;7,50;
+1007;Dupont & Fils;1.050,00;
+1008;Zoë Café;42,00;"note with ""quotes"""
+1009;Øresund ApS;999,99;
+1010;Garçon Bistro;120,40;
+1011;Straße 12 KG;65,10;€ Gutschrift
+1012;Jürgen Groß;0,99;
